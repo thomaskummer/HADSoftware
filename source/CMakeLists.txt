@@ -19,9 +19,9 @@ add_executable(HADController main.cpp)
 
 target_link_libraries(HADController EposCmd)
 
-#file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/data
-#    DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/data
+    DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-install (TARGETS HADController DESTINATION bin)
+#install (TARGETS HADContoller DESTINATION bin)
 #install (FILES source.cpp DESTINATION include)
 
