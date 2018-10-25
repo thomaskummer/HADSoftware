@@ -1,0 +1,12 @@
+#!/bin/bash
+
+mkdir -p build
+
+pushd build/ || return 1
+cmake \
+\
+-D CMAKE_CXX_FLAGS="-O2 -std=c++11" \
+\
+../source/ || return 1
+popd
+
