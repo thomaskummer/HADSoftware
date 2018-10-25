@@ -10,13 +10,14 @@ This package requires the EPOS-Linux-Library
 abc
 ```
 
-*Build*
+***Build***
 
-1. `cd build`
-2. ./config
-3. make
-4. make install
+1. `./config`
+2. `cd build`
+3. `make`
 
 
 *Installing*
+
+`make install`
 
