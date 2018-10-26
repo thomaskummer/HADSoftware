@@ -9,6 +9,32 @@
 #ifndef HADController_hpp
 #define HADController_hpp
 
+
+
+#include <iostream>
+#include "Definitions.h"
+#include <string.h>
+#include <sstream>
+#include <unistd.h>
+#include <getopt.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <list>
+#include <math.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <sys/times.h>
+#include <sys/time.h>
+#include <chrono>
+#include <thread>
+
+typedef void* HANDLE;
+typedef int BOOL;
+
+
+
+
 #include <stdio.h>
 
 
