@@ -8,7 +8,7 @@ SET(CMAKE_BUILD_TYPE RELEASE)
 #target_link_libraries(EposCmd -L/opt/software/epos/lib/)
 
 
-file(GLOB SOURCES "src/*.hpp")
+file(GLOB SOURCES "src/*pp")
 include_directories(include)
 
 
