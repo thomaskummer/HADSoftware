@@ -187,6 +187,18 @@ protected:
         }
     }
     
+    //Return Number of Device Errors
+    unsigned char GetNbDeviceError()
+    {
+        unsigned int pErrorCode;
+        unsigned char pNbDeviceError;
+        auto ErrorNb= VCS_GetNbOfDeviceError(KeyHandle, 1, &pNbDeviceError, &pErrorCode);
+        if(!ErrorNb)
+            cout<<"Error getting Number of Device Error: "<<pErrorCode<<endl;
+        cout<<"Number of Device Error: "<<static_cast<signed>(pNbDeviceError)<<endl;
+        return pNbDeviceError;
+    }
+    
 };
 
 #endif /* HADController_hpp */
