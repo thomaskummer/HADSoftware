@@ -7,6 +7,6 @@ cmake \
 \
 -D CMAKE_CXX_FLAGS="-O2 -std=c++11" \
 \
-../source/ || return 1
+../src/ || return 1
 popd
 

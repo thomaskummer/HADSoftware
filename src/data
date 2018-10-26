@@ -1,0 +1,38 @@
+//======================================//
+// Finite element analysis              //
+// Input file                           //
+//======================================//
+
+
+//--------------------------------------//
+// Mesh                                 //
+//--------------------------------------//
+
+MeshPath        = /Users/thomas/Dropbox/FiniteElementAnalysis/FiniteElementAnalysis/
+MeshName        = ConeP2_coarse.msh
+
+
+//--------------------------------------//
+// Quadrature rules                     //
+//--------------------------------------//
+
+TriangleP1      = QuadRuleTriangle1pt
+TriangleP2      = QuadRuleTriangle3pt
+QuadQ1          = QuadRuleQuadrilateral4pt
+QuadQ2          = QuadRuleQuadrilateral9pt
+
+
+//--------------------------------------//
+// Material                             //
+//--------------------------------------//
+
+YoungsModulus   = 2
+PoissonRatio    = 0.3
+
+
+//--------------------------------------//
+// Boundary conditions                  //
+//--------------------------------------//
+
+BC  Essential   Full    4   0
+BC  Natural     Normal  7   5e-3
