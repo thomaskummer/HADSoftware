@@ -4,25 +4,22 @@ project (HADController)
 SET(CMAKE_BUILD_TYPE RELEASE)
 
 
-#target_link_libraries(EposCmd -lEposCmd)
-#target_link_libraries(EposCmd -L/opt/software/epos/lib/)
-
-
-file(GLOB SOURCES "src/*pp")
 include_directories(include)
 
 
-#add_executable(HADController src/main.cpp)
+add_library(HADLib
+	src/main.cpp
+	src/Engine.hpp
+	src/HADController.hpp
+)
+target_link_libraries(HADLib -lEposCmd)
+target_link_libraries(HADLib -L/opt/software/epos/lib/)
 
-add_executable(HADController ${SOURCES})
 
+add_executable(HADController src/main.cpp)
+target_link_libraries(HADController HADLib)
 
-target_link_libraries(HADController EposCmd)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/data
     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-
-#install (TARGETS HADContoller DESTINATION bin)
-#install (FILES source.cpp DESTINATION include)
-
 
