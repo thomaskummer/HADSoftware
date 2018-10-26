@@ -172,6 +172,20 @@ protected:
         cout << GetPositionIs << " " << PositionIsError <<" Position: " << PositionIs << endl;
     }
 
+    //Return Device Error Code
+    void GetDeviceErrorCode()
+    {
+        unsigned int pErrorCode;
+        unsigned int pDeviceErrorCode;
+        unsigned char DeviceNbError=GetNbDeviceError();
+        for(unsigned int ErrorNumber=1; ErrorNumber<=DeviceNbError; ErrorNumber++)
+        {
+            auto GetErrorCode=VCS_GetDeviceErrorCode(KeyHandle, 1, ErrorNumber, &pDeviceErrorCode, &pErrorCode);
+            if(!GetErrorCode)
+                cout<<"GetErrorCode Error: "<<pErrorCode<<endl;
+            cout<<"Device Error Code: "<<pDeviceErrorCode<<endl;
+        }
+    }
     
 };
 
