@@ -23,5 +23,6 @@ public:
     
 protected:
     
-}
+};
+
 #endif /* HADController_hpp */

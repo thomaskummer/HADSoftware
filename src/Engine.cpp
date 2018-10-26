@@ -3,6 +3,10 @@
 //Jonas Conrad
 //=================
 
+#ifndef Engine_cpp
+#define Engine_cpp
+
+
 #include <iostream>
 #include "Definitions.h"
 #include <string.h>
@@ -882,3 +886,5 @@ protected:
 
 
 };
+
+#endif /* Engine_cpp */
