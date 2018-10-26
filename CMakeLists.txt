@@ -11,9 +11,11 @@ target_link_libraries(EposCmd -lEposCmd)
 target_link_libraries(EposCmd -L/opt/software/epos/lib/)
 
 
-#include_directories(source)
+
+include_directories(include)
+
 #set(SOURCES src/mainapp.cpp src/Student.cpp)
-file(GLOB SOURCES "source/*.hpp")
+file(GLOB SOURCES "src/*.hpp")
 
 
 #target_link_libraries(-lEposCmd)
@@ -29,6 +31,5 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/data
 
 #install (TARGETS HADContoller DESTINATION bin)
 #install (FILES source.cpp DESTINATION include)
-
 
 
