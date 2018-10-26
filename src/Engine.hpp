@@ -359,14 +359,7 @@ public:
                 cout<<"Restore Error: "<<pErrorCode<<endl;
         }
 
-	//clear fault state (red LED==unresponisve state)
-	void ClearFault()
-	{	unsigned int pErrorCode;
-		auto clearFault = VCS_ClearFault(KeyHandle, 1, &pErrorCode);
-		if (!clearFault)
-			cout<<"Clear Fault Error: "<<pErrorCode<<endl;
-		this_thread::sleep_for(chrono::milliseconds(4000));		
-	}
+
 	
 	//Get Faul State Error Code
 	void GetFaultState()

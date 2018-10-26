@@ -27,35 +27,47 @@
 
 int main(int argc, char** argv)
 {
- 
-    //-----------------------------------------------
-    //  Create finite element space
-    //-----------------------------------------------
+    HADController controller;
+    controller.setup();
+    controller.move(argv[1]);
     
-	Engine maxonMotor;	
-         maxonMotor.ClearFault();
-//        maxonMotor.Restore();
-	maxonMotor.SetAll();
-      maxonMotor.GetDeviceErrorCode();
-	maxonMotor.ActivateProfileMode();
-//        maxonMotor.SetPosition_ProfileMode(0);
+    
+    
+//  Engine maxonMotor;
+//  maxonMotor.ClearFault();
+//  maxonMotor.Restore();
+//  maxonMotor.SetAll();
+//  maxonMotor.GetDeviceErrorCode();
+//  maxonMotor.ActivateProfileMode();
+//  maxonMotor.SetPosition_ProfileMode(0);
 //	maxonMotor.ActivateIPMode();
 //	maxonMotor.SetMainPositionsFromCurrent();
-//       maxonMotor.InterpolatedPositionMode(-20000, 1000, 250, 10000, 500);
+//  maxonMotor.InterpolatedPositionMode(-20000, 1000, 250, 10000, 500);
 //	maxonMotor.GetPTV(10000,1,800,50,500);
-//        maxonMotor.SetObject(0x6062,0x00,0,4);
-	maxonMotor.GetObject(0x6064,0x00,4);
-	maxonMotor.GetObject(0x6062,0x00,4);
+//  maxonMotor.SetObject(0x6062,0x00,0,4);
+//	maxonMotor.GetObject(0x6064,0x00,4);
+//	maxonMotor.GetObject(0x6062,0x00,4);
 //	maxonMotor.InterpolatedPositionMode();
 //	maxonMotor.PositionMode();
-         maxonMotor.MoveXBackward(10000);
+//  maxonMotor.MoveXBackward(10000);
 //	maxonMotor.MoveXForward(20000);
-//        maxonMotor.SetCurrentToHome();
+//  maxonMotor.SetCurrentToHome();
 //	maxonMotor.SetMainPositions();
 //	maxonMotor.GoToMid();
 //	maxonMotor.GoToMax();
 //	maxonMotor.MoveXBackward(20000);
 //	maxonMotor.ProfilePositionMode();
 //	maxonMotor.GoToMid();
-	maxonMotor.PrintPosition();
+//  maxonMotor.PrintPosition();
+    
+//    Engine maxonMotor;
+//    maxonMotor.ClearFault();
+//    maxonMotor.SetAll();
+//    maxonMotor.GetDeviceErrorCode();
+//    maxonMotor.ActivateProfileMode();
+//    maxonMotor.GetObject(0x6064,0x00,4);
+//    maxonMotor.GetObject(0x6062,0x00,4);
+//    maxonMotor.MoveXBackward(10000);
+//    maxonMotor.PrintPosition();
+
 }
