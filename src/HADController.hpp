@@ -35,6 +35,8 @@ public:
     
 protected:
   
+    void* KeyHandle;
+
     void setParameters()
     {
         // Set protocol stack settings
