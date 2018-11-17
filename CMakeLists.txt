@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 
 project (HADController)
-SET(CMAKE_BUILD_TYPE DEBUG)
+SET(CMAKE_BUILD_TYPE RELEASE)
 
 
 include_directories(include)

@@ -32,10 +32,9 @@
 typedef void* HANDLE;
 typedef int BOOL;
 
-
-
-
 #include <stdio.h>
+
+#include "InputFileParser.hpp"
 
 
 class HADController
@@ -65,6 +64,9 @@ protected:
 
     void setParameters()
     {
+        InputFileParser inputFile("data");
+        
+        
         // Set protocol stack settings
         unsigned int pErrorCodeProtocol;
         auto protocol = VCS_SetProtocolStackSettings(KeyHandle, 1e6, 500, &pErrorCodeProtocol);

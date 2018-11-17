@@ -9,10 +9,10 @@
 #ifndef InputFileParser_hpp
 #define InputFileParser_hpp
 
-#include "BCHandler.hpp"
+// #include "BCHandler.hpp"
 
 
-namespace FiniteElementAnalysis {
+// namespace HADController {
     
 class InputFileParser {
 public:
@@ -68,31 +68,31 @@ public:
         return 0;
     }
 
-    void operator()(BCHandler& bcHandler) const
-    {
-        std::ifstream file (m_filename.c_str());
-        assert(file.is_open());
-        
-        std::string line;
-        while (std::getline(file, line))
-        {
-            std::istringstream iss(line);
-            std::string a, b, c, d, e;
-            
-            if (!(iss >> a >> b >> c >> d >> e)) continue;
-                        
-            if (a == "BC")
-            {
-                if (b == "Essential" && c == "Full") bcHandler.addBC(Essential, Full, std::stoi(d), std::stod(e));
-                if (b == "Essential" && c == "Component") bcHandler.addBC(Essential, Component, std::stoi(d), std::stod(e));
-                
-                if (b == "Natural" && c == "Full") bcHandler.addBC(Natural, Full, std::stoi(d), std::stod(e));
-                if (b == "Natural" && c == "Component") bcHandler.addBC(Natural, Component, std::stoi(d), std::stod(e));
-                if (b == "Natural" && c == "Normal") bcHandler.addBC(Natural, Normal, std::stoi(d), std::stod(e));
-            }
-        }
-    }
-        
+//    void operator()(BCHandler& bcHandler) const
+//    {
+//        std::ifstream file (m_filename.c_str());
+//        assert(file.is_open());
+//
+//        std::string line;
+//        while (std::getline(file, line))
+//        {
+//            std::istringstream iss(line);
+//            std::string a, b, c, d, e;
+//
+//            if (!(iss >> a >> b >> c >> d >> e)) continue;
+//
+//            if (a == "BC")
+//            {
+//                if (b == "Essential" && c == "Full") bcHandler.addBC(Essential, Full, std::stoi(d), std::stod(e));
+//                if (b == "Essential" && c == "Component") bcHandler.addBC(Essential, Component, std::stoi(d), std::stod(e));
+//
+//                if (b == "Natural" && c == "Full") bcHandler.addBC(Natural, Full, std::stoi(d), std::stod(e));
+//                if (b == "Natural" && c == "Component") bcHandler.addBC(Natural, Component, std::stoi(d), std::stod(e));
+//                if (b == "Natural" && c == "Normal") bcHandler.addBC(Natural, Normal, std::stoi(d), std::stod(e));
+//            }
+//        }
+//    }
+    
         
 protected:
 
@@ -107,9 +107,7 @@ protected:
 };
     
 
-}
-
-
+// }
 
 
 #endif /* InputFileParser_hpp */
