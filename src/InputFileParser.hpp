@@ -46,7 +46,7 @@ public:
         return "Variable not found.";
     }
     
-    const Real operator[](const std::string& variable) const
+    const double operator[](const std::string& variable) const
     {
         std::ifstream file (m_filename.c_str());
         assert(file.is_open());
