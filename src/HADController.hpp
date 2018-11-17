@@ -130,10 +130,10 @@ protected:
     
     //clear fault state (red LED==unresponisve state)
     void clearFault()
-    {    unsigned int pErrorCode;
+    {
+        unsigned int pErrorCode;
         auto clearFault = VCS_ClearFault(KeyHandle, 1, &pErrorCode);
-        if (!clearFault)
-            cout<<"Clear Fault Error: "<<pErrorCode<<endl;
+        if (!clearFault) cout<<"Clear Fault Error: "<<pErrorCode<<endl;
         this_thread::sleep_for(chrono::milliseconds(4000));
     }
     
