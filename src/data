@@ -1,12 +1,18 @@
 //======================================//
-// Finite element analysis              //
+// Heart assist device motion control   //
+// Maxon EPOS 2 70/10                   //
 // Input file                           //
 //======================================//
 
+//--------------------------------------//
+// Sensor                               //
+//--------------------------------------//
 
-//--------------------------------------//
-// Mesh                                 //
-//--------------------------------------//
+a               = 22000
+b               = 15000
+c               = 15000
+
+
 
 MeshPath        = /Users/thomas/Dropbox/FiniteElementAnalysis/FiniteElementAnalysis/
 MeshName        = ConeP2_coarse.msh

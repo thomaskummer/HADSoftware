@@ -64,9 +64,6 @@ protected:
 
     void setParameters()
     {
-        InputFileParser inputFile("data");
-        
-        
         // Set protocol stack settings
         unsigned int pErrorCodeProtocol;
         auto protocol = VCS_SetProtocolStackSettings(KeyHandle, 1e6, 500, &pErrorCodeProtocol);
@@ -125,6 +122,8 @@ protected:
         cout << profilePosMode << " " << pErrorProfilePosMode << endl;
         
         // Set sensor parameter
+        InputFileParser inputFile("data");
+        std::cout << "Sensor input a: " << inputFile["a"] << std::endl;
         unsigned int pErrorSetPosProfile;
         auto posProfile = VCS_SetPositionProfile(KeyHandle, 1, 22000, 15000, 15000, &pErrorSetPosProfile); // Node ID, position profile velocity,..acceleration,..deceleration
         std::cout << posProfile << " " << pErrorSetPosProfile << std::endl;
