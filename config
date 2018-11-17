@@ -6,6 +6,7 @@ pushd build/ || return 1
 cmake \
 \
 -D CMAKE_CXX_FLAGS="-O2 -std=c++11" \
+-D CMAKE_CXX_COMPILER="/usr/bin/g++" \
 \
 ../ || return 1
 popd
