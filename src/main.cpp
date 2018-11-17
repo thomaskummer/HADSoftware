@@ -33,7 +33,11 @@ int main(int argc, char** argv)
 {
     HADController controller;
     controller.setup();
-    controller.move(int(*argv[1]));
+    
+    InputFileParser inputFile("data");
+    std::cout << "Motion distance: " << inputFile["a"] << std::endl;
+    int dist = int(*argv[1]);
+    controller.move(inputFile["a"]);
     
     
     

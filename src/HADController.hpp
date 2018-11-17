@@ -124,6 +124,7 @@ protected:
         // Set sensor parameter
         InputFileParser inputFile("data");
         std::cout << "Sensor input a: " << inputFile["a"] << std::endl;
+        
         unsigned int pErrorSetPosProfile;
         auto posProfile = VCS_SetPositionProfile(KeyHandle, 1, 22000, 15000, 15000, &pErrorSetPosProfile); // Node ID, position profile velocity,..acceleration,..deceleration
         std::cout << posProfile << " " << pErrorSetPosProfile << std::endl;
