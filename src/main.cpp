@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 {
     HADController controller;
     controller.setup();
-    controller.move(argv[1]);
+    controller.move(int(*argv[1]));
     
     
     

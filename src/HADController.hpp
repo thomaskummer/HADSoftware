@@ -151,6 +151,57 @@ protected:
         }
     }
     
+    //give out position
+    int PositionIs_Fct()
+    {
+        unsigned int PositionIsError;
+        int PositionIs;
+        auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
+        return PositionIs;
+    }
+    
+    struct Positions
+    {
+        int Min;
+        int Max;
+        int Mid;
+    };
+    Positions MainPositions={-60000,2100,-30000};
+    
+    //wait until movement is finished; does not work with position mode!
+    void Wait()
+    {
+        unsigned int Timeout = 3000; //max waiting time in ms
+        unsigned int pErrorCode;
+        
+        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
+        if (!WaitForTarget)
+            cout<<"Error in Wait Function! Error Code: "<<pErrorCode<<endl;
+    }
+    
+    //move cylinder to x using ProfileMode (ActivateProfileMode must be called first)
+    bool SetPosition_ProfileMode(int position)
+    {
+        // Move to position
+        unsigned int pErrorMoveToPos;
+        bool absoluteMovement = true;
+        bool immediately = false;
+        bool  MoveToPos;
+        
+        if (position >= MainPositions.Min && position <= MainPositions.Max)
+        {
+            MoveToPos = VCS_MoveToPosition(KeyHandle, 1, position, absoluteMovement, immediately, &pErrorMoveToPos);
+            cout <<"MoveToPos: "<< MoveToPos << " ErrorCode:  "  << pErrorMoveToPos << endl;
+            Wait();
+            printPosition();
+            return 1;
+        }
+        else
+        {    cout <<"Out of bounds! No further movement in this direction!";
+            return 0;
+        }
+    }
+    
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
     bool moveCentimeter(const int& distance)
     {
