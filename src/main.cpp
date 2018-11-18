@@ -31,14 +31,20 @@
 
 int main(int argc, char** argv)
 {
-//    HADController controller;
-//    controller.setup();
-//
+    
+    std::string type = std::string(*argv[1]);
+    int dist = int(*argv[2]);
+
+        
+    if ( type == "-h" )
+        
+    HADController controller;
+    controller.setup();
+
     InputFileParser inputFile("data");
-//    std::cout << "Motion distance: " << inputFile["a"] << std::endl;
-    int dist = int(*argv[1]);
-//    // controller.move(inputFile["a"]);
-//    controller.move(dist);
+    std::cout << "Motion distance: " << inputFile["a"] << std::endl;
+    // controller.move(inputFile["a"]);
+    controller.move(dist);
 
     
     
