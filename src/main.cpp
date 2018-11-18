@@ -37,8 +37,9 @@ int main(int argc, char** argv)
     InputFileParser inputFile("data");
     std::cout << "Motion distance: " << inputFile["a"] << std::endl;
     int dist = int(*argv[1]);
-    controller.move(inputFile["a"]);
-    
+    // controller.move(inputFile["a"]);
+    controller.move(dist);
+
     
     
 //  Engine maxonMotor;

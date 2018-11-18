@@ -5,7 +5,7 @@
 //======================================//
 
 //--------------------------------------//
-// Sensor                               //
+// Sensor parameters                    //
 //--------------------------------------//
 
 a               = 22000
@@ -13,19 +13,13 @@ b               = 15000
 c               = 15000
 
 
-
-MeshPath        = /Users/thomas/Dropbox/FiniteElementAnalysis/FiniteElementAnalysis/
-MeshName        = ConeP2_coarse.msh
-
-
 //--------------------------------------//
-// Quadrature rules                     //
+// Motion parameters                    //
 //--------------------------------------//
 
-TriangleP1      = QuadRuleTriangle1pt
-TriangleP2      = QuadRuleTriangle3pt
-QuadQ1          = QuadRuleQuadrilateral4pt
-QuadQ2          = QuadRuleQuadrilateral9pt
+MotionMode      = ProfilePositionMode
+MotionAmplitude = 40
+MotionPeriod    = 800
 
 
 //--------------------------------------//
@@ -34,11 +28,3 @@ QuadQ2          = QuadRuleQuadrilateral9pt
 
 YoungsModulus   = 2
 PoissonRatio    = 0.3
-
-
-//--------------------------------------//
-// Boundary conditions                  //
-//--------------------------------------//
-
-BC  Essential   Full    4   0
-BC  Natural     Normal  7   5e-3

@@ -188,7 +188,7 @@ protected:
         unsigned int pErrorMoveToPos;
         bool absoluteMovement = true;
         bool immediately = false;
-        bool  MoveToPos;
+        bool MoveToPos;
         
         if (position >= MainPositions.Min && position <= MainPositions.Max)
         {
