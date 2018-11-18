@@ -46,6 +46,9 @@ public:
     
     void setup()
     {
+        close();
+        open();
+        
         clearFault();
         setParameters();
         getDeviceErrorCode();
@@ -254,6 +257,32 @@ protected:
             cout<<"Error getting Number of Device Error: "<<pErrorCode<<endl;
         cout<<"Number of Device Error: "<<static_cast<signed>(pNbDeviceError)<<endl;
         return pNbDeviceError;
+    }
+    
+    // Close all devices
+    void close()
+    {
+        unsigned int pErrorCode = 0;
+        auto closed = VCS_CloseAllDevices(&pErrorCode);
+        cout << closed << " " << pErrorCode << endl;
+    }
+    
+    // Open device
+    void open()
+    {
+        unsigned int pErrorCodeOpen;
+        
+        string deviceNameStr = "EPOS2";
+        char* deviceNameCharPtr = const_cast<char*> (deviceNameStr.c_str());
+        string protocolStackNameStr = "MAXON SERIAL V2";
+        char* protocolStackNameCharPtr = const_cast<char*> (protocolStackNameStr.c_str());
+        string interfaceNameStr = "USB";
+        char* interfaceNameCharPtr = const_cast<char*> (interfaceNameStr.c_str());
+        string portNameStr = "USB0";
+        char* portNameCharPtr = const_cast<char*> (portNameStr.c_str());
+        
+        KeyHandle = VCS_OpenDevice(deviceNameCharPtr, protocolStackNameCharPtr, interfaceNameCharPtr, portNameCharPtr, &pErrorCodeOpen);
+        cout << KeyHandle << " " << pErrorCodeOpen << endl;
     }
     
 };
