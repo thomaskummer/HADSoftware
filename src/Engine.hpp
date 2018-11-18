@@ -155,7 +155,7 @@ public:
 	}
 
     //clear fault state (red LED==unresponisve state)
-    void clearFault()
+    void ClearFault()
     {
         unsigned int pErrorCode;
         auto clearFault = VCS_ClearFault(KeyHandle, 1, &pErrorCode);
