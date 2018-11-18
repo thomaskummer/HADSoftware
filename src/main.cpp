@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 //    InputFileParser inputFile("data");
 //    std::cout << "Motion distance: " << inputFile["a"] << std::endl; // controller.move(inputFile["a"]);
         
-    if ( type.compare("h") )
+    if ( type.compare("h") == 0 )
     {
         HADController controller;
         controller.setup();
@@ -80,7 +80,7 @@ int main(int argc, char** argv)
 //  maxonMotor.PrintPosition();
     
     
-    if ( type.compare("e") )
+    if ( type.compare("e") == 0 )
     {
         Engine maxonMotor;
         
