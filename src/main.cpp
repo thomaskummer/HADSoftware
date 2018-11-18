@@ -20,8 +20,8 @@
 #include <sys/time.h>
 #include <chrono>
 #include <thread>
-#include "Engine.hpp"
 
+#include "Engine.hpp"
 #include "HADController.hpp"
 
 
@@ -31,14 +31,14 @@
 
 int main(int argc, char** argv)
 {
-    HADController controller;
-    controller.setup();
-    
-    InputFileParser inputFile("data");
-    std::cout << "Motion distance: " << inputFile["a"] << std::endl;
-    int dist = int(*argv[1]);
-    // controller.move(inputFile["a"]);
-    controller.move(dist);
+//    HADController controller;
+//    controller.setup();
+//
+//    InputFileParser inputFile("data");
+//    std::cout << "Motion distance: " << inputFile["a"] << std::endl;
+//    int dist = int(*argv[1]);
+//    // controller.move(inputFile["a"]);
+//    controller.move(dist);
 
     
     
@@ -69,14 +69,14 @@ int main(int argc, char** argv)
 //	maxonMotor.GoToMid();
 //  maxonMotor.PrintPosition();
     
-//    Engine maxonMotor;
-//    maxonMotor.ClearFault();
-//    maxonMotor.SetAll();
-//    maxonMotor.GetDeviceErrorCode();
-//    maxonMotor.ActivateProfileMode();
-//    maxonMotor.GetObject(0x6064,0x00,4);
-//    maxonMotor.GetObject(0x6062,0x00,4);
-//    maxonMotor.MoveXBackward(10000);
-//    maxonMotor.PrintPosition();
+    Engine maxonMotor;
+    maxonMotor.ClearFault();
+    maxonMotor.SetAll();
+    maxonMotor.GetDeviceErrorCode();
+    maxonMotor.ActivateProfileMode();
+    maxonMotor.GetObject(0x6064,0x00,4);
+    maxonMotor.GetObject(0x6062,0x00,4);
+    maxonMotor.MoveXBackward(-100);
+    maxonMotor.PrintPosition();
 
 }
