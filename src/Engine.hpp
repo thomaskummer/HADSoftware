@@ -154,6 +154,15 @@ public:
 		auto PositionMode = VCS_ActivatePositionMode(KeyHandle, 1, &pErrorCodeMode);
 	}
 
+    //clear fault state (red LED==unresponisve state)
+    void clearFault()
+    {
+        unsigned int pErrorCode;
+        auto clearFault = VCS_ClearFault(KeyHandle, 1, &pErrorCode);
+        if (!clearFault) cout<<"Clear Fault Error: "<<pErrorCode<<endl;
+        this_thread::sleep_for(chrono::milliseconds(4000));
+    }
+
 	//activate Profile Position Mode
 	void ActivateProfileMode()
 	{
