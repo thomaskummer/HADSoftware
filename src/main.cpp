@@ -37,15 +37,14 @@ int main(int argc, char** argv)
 
         
     if ( type == "-h" )
-        
-    HADController controller;
-    controller.setup();
+    {
+        HADController controller;
+        controller.setup();
 
-    InputFileParser inputFile("data");
-    std::cout << "Motion distance: " << inputFile["a"] << std::endl;
-    // controller.move(inputFile["a"]);
-    controller.move(dist);
-
+        InputFileParser inputFile("data");
+        std::cout << "Motion distance: " << inputFile["a"] << std::endl; // controller.move(inputFile["a"]);
+        controller.move(dist);
+    }
     
     
 //  Engine maxonMotor;
@@ -71,18 +70,21 @@ int main(int argc, char** argv)
 //	maxonMotor.GoToMid();
 //	maxonMotor.GoToMax();
 //	maxonMotor.MoveXBackward(20000);
-//	maxonMotor.ProfilePositionMode();
+//	maxonMotor.ProfilePositionMode();s
 //	maxonMotor.GoToMid();
 //  maxonMotor.PrintPosition();
     
-    Engine maxonMotor;
-    maxonMotor.ClearFault();
-    maxonMotor.SetAll();
-    maxonMotor.GetDeviceErrorCode();
-    maxonMotor.ActivateProfileMode();
-    maxonMotor.GetObject(0x6064,0x00,4);
-    maxonMotor.GetObject(0x6062,0x00,4);
-    maxonMotor.MoveXBackward(dist);
-    maxonMotor.PrintPosition();
-
+    if ( type == "-e" )
+    {
+        Engine maxonMotor;
+        maxonMotor.ClearFault();
+        maxonMotor.SetAll();
+        maxonMotor.GetDeviceErrorCode();
+        maxonMotor.ActivateProfileMode();
+        maxonMotor.GetObject(0x6064,0x00,4);
+        maxonMotor.GetObject(0x6062,0x00,4);
+        maxonMotor.MoveXBackward(dist);
+        maxonMotor.PrintPosition();
+    }
+    
 }
