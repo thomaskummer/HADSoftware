@@ -64,6 +64,21 @@ public:
         printPosition();
     }
     
+    //activate Profile Position Mode
+    void activateProfileMode()
+    {
+        unsigned int pErrorProfilePosMode;
+        auto profilePosMode = VCS_ActivateProfilePositionMode(KeyHandle, 1, &pErrorProfilePosMode);
+        cout << profilePosMode << " " << pErrorProfilePosMode << endl;
+        
+        // Set sensor parameter
+        InputFileParser inputFile("data");
+        std::cout << "Sensor input a: " << inputFile["a"] << std::endl;
+        
+        unsigned int pErrorSetPosProfile;
+        auto posProfile = VCS_SetPositionProfile(KeyHandle, 1, 22000, 15000, 15000, &pErrorSetPosProfile); // Node ID, position profile velocity,..acceleration,..deceleration
+        std::cout << posProfile << " " << pErrorSetPosProfile << std::endl;
+    }
     
 protected:
   
@@ -119,22 +134,6 @@ protected:
         unsigned int pErrorState;
         auto state = VCS_SetEnableState(KeyHandle, 1, &pErrorState);
         cout << state << " " << pErrorState << endl;
-    }
-    
-    //activate Profile Position Mode
-    void activateProfileMode()
-    {
-        unsigned int pErrorProfilePosMode;
-        auto profilePosMode = VCS_ActivateProfilePositionMode(KeyHandle, 1, &pErrorProfilePosMode);
-        cout << profilePosMode << " " << pErrorProfilePosMode << endl;
-        
-        // Set sensor parameter
-        InputFileParser inputFile("data");
-        std::cout << "Sensor input a: " << inputFile["a"] << std::endl;
-        
-        unsigned int pErrorSetPosProfile;
-        auto posProfile = VCS_SetPositionProfile(KeyHandle, 1, 22000, 15000, 15000, &pErrorSetPosProfile); // Node ID, position profile velocity,..acceleration,..deceleration
-        std::cout << posProfile << " " << pErrorSetPosProfile << std::endl;
     }
     
     //clear fault state (red LED==unresponisve state)
