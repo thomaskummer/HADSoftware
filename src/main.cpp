@@ -43,7 +43,7 @@ int main(int argc, char** argv)
     {
         HADController controller;
         controller.setup();
-        controller.activateProfileMode()
+        controller.activateProfileMode();
         controller.move(dist);
         controller.printSpindlePosition();
     }
