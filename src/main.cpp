@@ -36,17 +36,21 @@ int main(int argc, char** argv)
     std::cout << type_char << std::endl;
     int dist = int(*argv[2]);
 
+//    InputFileParser inputFile("data");
+//    std::cout << "Motion distance: " << inputFile["a"] << std::endl; // controller.move(inputFile["a"]);
         
     if ( type.compare("h") )
     {
         HADController controller;
         controller.setup();
-        InputFileParser inputFile("data");
-        std::cout << "Motion distance: " << inputFile["a"] << std::endl; // controller.move(inputFile["a"]);
+        controller.activateProfileMode()
         controller.move(dist);
+        controller.printSpindlePosition();
     }
     
 
+// Classes for different activation modes
+// Classes for reading sensores
     
 //  Engine maxonMotor;
 //  maxonMotor.ClearFault();
@@ -75,15 +79,24 @@ int main(int argc, char** argv)
 //	maxonMotor.GoToMid();
 //  maxonMotor.PrintPosition();
     
+    
     if ( type.compare("e") )
     {
         Engine maxonMotor;
+        
+        // setup
         maxonMotor.ClearFault();
         maxonMotor.SetAll();
         maxonMotor.GetDeviceErrorCode();
+        
+        // activateProfileMode
         maxonMotor.ActivateProfileMode();
+        
+        // missing above
         maxonMotor.GetObject(0x6064,0x00,4);
         maxonMotor.GetObject(0x6062,0x00,4);
+        
+        // move
         maxonMotor.MoveXBackward(dist);
         maxonMotor.PrintPosition();
     }

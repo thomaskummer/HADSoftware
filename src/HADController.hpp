@@ -54,6 +54,10 @@ public:
     void move(const int& distance)
     {
         moveCentimeter(distance);
+    }
+    
+    void printSpindlePosition()
+    {
         printPosition();
     }
     
