@@ -31,21 +31,22 @@
 
 int main(int argc, char** argv)
 {
-    
-    std::string type = std::string(*argv[1]);
+    char type_char = *argv[1];
+    std::string type = "" + type_char;
+    std::cout << type_char << std::endl;
     int dist = int(*argv[2]);
 
         
-    if ( type == "-h" )
+    if ( type.compare("h") )
     {
         HADController controller;
         controller.setup();
-
         InputFileParser inputFile("data");
         std::cout << "Motion distance: " << inputFile["a"] << std::endl; // controller.move(inputFile["a"]);
         controller.move(dist);
     }
     
+
     
 //  Engine maxonMotor;
 //  maxonMotor.ClearFault();
@@ -70,11 +71,11 @@ int main(int argc, char** argv)
 //	maxonMotor.GoToMid();
 //	maxonMotor.GoToMax();
 //	maxonMotor.MoveXBackward(20000);
-//	maxonMotor.ProfilePositionMode();s
+//	maxonMotor.ProfilePositionMode();
 //	maxonMotor.GoToMid();
 //  maxonMotor.PrintPosition();
     
-    if ( type == "-e" )
+    if ( type.compare("e") )
     {
         Engine maxonMotor;
         maxonMotor.ClearFault();
