@@ -31,22 +31,22 @@
 
 int main(int argc, char** argv)
 {
-    char type_char = *argv[1];
-    std::string type = "" + type_char;
-    std::cout << type_char << std::endl;
-    int dist = int(*argv[2]);
-
-//    InputFileParser inputFile("data");
-//    std::cout << "Motion distance: " << inputFile["a"] << std::endl; // controller.move(inputFile["a"]);
-        
-    if ( type.compare("h") == 0 )
-    {
-        HADController controller;
-        controller.setup();
-        controller.activateProfileMode();
-        controller.move(dist);
-        controller.printSpindlePosition();
-    }
+//    char type_char = *argv[1];
+//    std::string type = "" + type_char;
+//    std::cout << type_char << std::endl;
+//    int dist = int(*argv[2]);
+//
+////    InputFileParser inputFile("data");
+////    std::cout << "Motion distance: " << inputFile["a"] << std::endl; // controller.move(inputFile["a"]);
+//
+//    if ( type.compare("h") == 0 )
+//    {
+//        HADController controller;
+//        controller.setup();
+//        controller.activateProfileMode();
+//        controller.move(dist);
+//        controller.printSpindlePosition();
+//    }
     
 
 // Classes for different activation modes
@@ -97,7 +97,7 @@ int main(int argc, char** argv)
         maxonMotor.GetObject(0x6062,0x00,4);
         
         // move
-        maxonMotor.MoveXBackward(dist);
+        maxonMotor.MoveXBackward(-2000);
         maxonMotor.PrintPosition();
     }
     
