@@ -45,7 +45,7 @@ int main(int argc, char** argv)
     std::cout << "====================================================" << std::endl;
     
     std::string mode;
-    std::cout << "\nType 'run' to start-up the controller or 'help' for more information. \n>>> " << std::endl;
+    std::cout << "\nType 'run' to start-up the controller or 'help' for \nmore information. \n>>> ";
     std::cin >> mode;
     if ( mode.compare("help") == 0 ) std::cout << "This is the still todo help page" << std::endl;
     
@@ -65,6 +65,7 @@ int main(int argc, char** argv)
         
         if (iss >> a >> b)
         {
+            std::cout << a << " " << b << std::endl;
             if ( a.compare("move") == 0 )
             {
                 HADController controller;
