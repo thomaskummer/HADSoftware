@@ -33,24 +33,24 @@
 
 int main(int argc, char** argv)
 {
-
+    std::cout << "Number of input arguments: " << argc << std::endl;
     assert (argc >= 2);
-    
+
     std::map<std::string, double> tasks;
 
     for (int i(1); i < argc; ++i)
     {
         std::istringstream issType (argv[i]);
         std::string type;
-        if (iss1 >> type)
+        if (issType >> type)
         {
             if ( type.compare("-m") == 0 )
             {
-                std::istringstream issVal (argv[i++]);
+                std::istringstream issVal (argv[++i]);
                 double val;
                 if (issVal >> val)
                 {
-                    tasks.emplace("move", val);
+                    tasks.emplace("-m", val);
                 }
             }
             
@@ -58,18 +58,18 @@ int main(int argc, char** argv)
     }
     
     
-    std::endl << "Tasks:" << std::endl;
-    for (auto& task : tasks) std::cout << task-first() << "\t" << task-second() << std::endl;
+    std::cout << "Tasks:" << std::endl;
+    for (auto& task : tasks) std::cout << " [" << task.first << ':' << task.second << ']' << std::endl;
+
     
-    
-    if ( type.compare("-m") == 0 )
-    {
+//    if ( type.compare("-m") == 0 )
+//    {
         HADController controller;
-        controller.setup();
         controller.activateProfileMode();
+        auto val = tasks["-m"];
         controller.move(val mm);
         controller.printSpindlePosition();
-    }
+//    }
     
 
 // Classes for different activation modes

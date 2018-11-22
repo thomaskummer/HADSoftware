@@ -101,7 +101,7 @@ protected:
   
     void* KeyHandle;
 
-    Positions MainPositions={25000, 205000, 137000};
+    Positions MainPositions={0, 205000, 137000};
     
 
     void setParameters()
@@ -228,6 +228,7 @@ protected:
         int PositionIs = PositionIs_Fct();
         int NewPosition = PositionIs - distance;
         bool moved = SetPosition_ProfileMode(NewPosition);
+        std::cout << "From " << PositionIs << " to " << NewPosition << " by " << distance << " mm" << std::endl;
         if(moved)
             return 1;
         else
