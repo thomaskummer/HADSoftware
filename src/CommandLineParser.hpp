@@ -42,7 +42,7 @@ public:
     
     const double operator()(const std::string type) const
     {
-        return m_tasks.find(type)-second;
+        return m_tasks.find(type)->second;
     }
     
     void printAll()
