@@ -67,7 +67,7 @@ int main(int argc, char** argv)
             HADController controller;
             controller.activateProfileMode();
             auto val = cmdLineParser("-m");
-            controller.move(b mm);
+            controller.move(std::stoi(b) mm);
             controller.printSpindlePosition();
         }
         
