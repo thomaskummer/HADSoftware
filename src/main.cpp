@@ -39,15 +39,18 @@ int main(int argc, char** argv)
 {
     CommandLineParser cmdLineParser(argc, argv);
 
-    std::cout << "====================================================" << std::endl;
+    std::cout << "\n====================================================" << std::endl;
     std::cout << "Heartrate-controller for Maxon EPOS2 70/10" << std::endl;
     std::cout << "Institute of fluid dynamics - ETH Zurich" << std::endl;
     std::cout << "====================================================" << std::endl;
-    std::cout << "\nType 'run' to start-up the controller or 'help' for more information." << std::endl;
-
+    
+    std::string mode;
+    std::cout << "\nType 'run' to start-up the controller or 'help' for more information. \n>>> " << std::endl;
+    std::cin >> mode;
+    if ( mode.compare("help") == 0 ) std::cout << "This is the still todo help page" << std::endl;
     
     std::cout << "\nDefine the mode of motion (for help type h or help) \n>>> ";
-    std::string mode;
+
     while ( std::cin >> mode )
     {
         if ( mode.compare("exit") == 0 || mode.compare("quit") == 0 || mode.compare("q") == 0 )
