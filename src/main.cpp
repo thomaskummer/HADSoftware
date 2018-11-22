@@ -43,7 +43,7 @@ int main(int argc, char** argv)
     std::cout << "Heartrate-controller for Maxon EPOS2 70/10" << std::endl;
     std::cout << "Institute of fluid dynamics - ETH Zurich" << std::endl;
     std::cout << "====================================================" << std::endl;
-    std::cout << "\nType \"run\" to start-up the controller or \"help\" for more information. << std::endl;
+    std::cout << "\nType 'run' to start-up the controller or 'help' for more information. << std::endl;
 
     
     std::cout << "\nDefine the mode of motion (for help type h or help) \n>>> ";
