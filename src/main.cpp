@@ -38,13 +38,11 @@
 int main(int argc, char** argv)
 {
     CommandLineParser cmdLineParser(argc, argv);
-    cmdLineParser.printAll();
-    
-    std::string mode;
-    std::cin >> mode;
 
-    while ( std::cin >> mode != "exit" )
+    std::cout << "Define the mode of motion (for help type h or help)"
+    while ( std::cin >> mode )
     {
+        if ( mode.compare("exit") = 0 || mode.compare("quit") == 0 || mode.compare("q") == 0 )
         if ( mode.compare("move") == 0 )
         {
             HADController controller;
