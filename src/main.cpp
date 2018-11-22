@@ -20,33 +20,56 @@
 #include <sys/time.h>
 #include <chrono>
 #include <thread>
+#include <assert.h>
+#include <map>
 
 #include "Engine.hpp"
 #include "HADController.hpp"
 
-
+#define mm * -1600
 
 //enum mode { profilePosition, position, interpolatedPosition };
 
 
 int main(int argc, char** argv)
 {
-//    char type_char = *argv[1];
-//    std::string type = "" + type_char;
-//    std::cout << type_char << std::endl;
-//    int dist = int(*argv[2]);
-//
-////    InputFileParser inputFile("data");
-////    std::cout << "Motion distance: " << inputFile["a"] << std::endl; // controller.move(inputFile["a"]);
-//
-//    if ( type.compare("h") == 0 )
-//    {
-//        HADController controller;
-//        controller.setup();
-//        controller.activateProfileMode();
-//        controller.move(dist);
-//        controller.printSpindlePosition();
-//    }
+
+    assert (argc >= 2);
+    
+    std::map<std::string, double> tasks;
+
+    for (int i(1); i < argc; ++i)
+    {
+        std::istringstream issType (argv[i]);
+        std::string type;
+        if (iss1 >> type)
+        {
+            if ( type.compare("-m") == 0 )
+            {
+                std::istringstream issVal (argv[i++]);
+                double val;
+                if (issVal >> val)
+                {
+                    tasks.emplace("move", val);
+                }
+            }
+            
+        }
+    }
+    
+    
+    std::endl << "Tasks:" << std::endl;
+    for (auto& task : tasks) std::cout << task-first() << "\t" << task-second() << std::endl;
+    
+    
+    if ( type.compare("-m") == 0 )
+    {
+        HADController controller;
+        controller.setup();
+        controller.activateProfileMode();
+        controller.move(val mm);
+        controller.printSpindlePosition();
+    }
     
 
 // Classes for different activation modes
@@ -80,25 +103,27 @@ int main(int argc, char** argv)
 //  maxonMotor.PrintPosition();
     
     
-    if ( type.compare("e") == 0 )
-    {
-        Engine maxonMotor;
-        
-        // setup
-        maxonMotor.ClearFault();
-        maxonMotor.SetAll();
-        maxonMotor.GetDeviceErrorCode();
-        
-        // activateProfileMode
-        maxonMotor.ActivateProfileMode();
-        
-        // missing above
-        maxonMotor.GetObject(0x6064,0x00,4);
-        maxonMotor.GetObject(0x6062,0x00,4);
-        
-        // move
-        maxonMotor.MoveXBackward(-2000);
-        maxonMotor.PrintPosition();
-    }
+//    // if ( type.compare("e") == 0 )
+//    {
+//        Engine maxonMotor;
+//        //maxonMotor.Reset();
+//        //maxonMotor.setup();
+//
+//        // setup
+//        maxonMotor.ClearFault();
+//        maxonMotor.SetAll();
+//        maxonMotor.GetDeviceErrorCode();
+//
+//        // activateProfileMode
+//        maxonMotor.ActivateProfileMode();
+//
+//        // missing above
+//        maxonMotor.GetObject(0x6064,0x00,4);
+//        maxonMotor.GetObject(0x6062,0x00,4);
+//
+//        // move
+//        maxonMotor.MoveXBackward(val mm);
+//        maxonMotor.PrintPosition();
+//    }
     
 }

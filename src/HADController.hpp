@@ -37,11 +37,28 @@ typedef int BOOL;
 #include "InputFileParser.hpp"
 
 
+struct Positions
+{
+    int Min;
+    int Max;
+    int Mid;
+};
+
+struct PTV
+{
+    int P, T, V;
+};
+
+
 class HADController
 {
 public:
     
-    HADController(){}
+    HADController()
+    {
+        setup();
+    }
+    
     ~HADController(){}
     
     void setup()
@@ -83,6 +100,9 @@ public:
 protected:
   
     void* KeyHandle;
+
+    Positions MainPositions={25000, 205000, 137000};
+    
 
     void setParameters()
     {
@@ -167,14 +187,6 @@ protected:
         auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
         return PositionIs;
     }
-    
-    struct Positions
-    {
-        int Min;
-        int Max;
-        int Mid;
-    };
-    Positions MainPositions={-60000,2100,-30000};
     
     //wait until movement is finished; does not work with position mode!
     void Wait()
