@@ -43,15 +43,17 @@ int main(int argc, char** argv)
     std::string mode;
     std::cin >> mode;
 
-    if ( mode.compare("move") )
+    while ( std::cin >> mode )
     {
-        HADController controller;
-        controller.activateProfileMode();
-        auto val = cmdLineParser("-m");
-        controller.move(val mm);
-        controller.printSpindlePosition();
+        if ( mode.compare("move") == 0 )
+        {
+            HADController controller;
+            controller.activateProfileMode();
+            auto val = cmdLineParser("-m");
+            controller.move(val mm);
+            controller.printSpindlePosition();
+        }
     }
-    
 
 // Classes for different activation modes
 // Classes for reading sensores
