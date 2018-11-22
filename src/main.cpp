@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 //    {
         HADController controller;
         controller.activateProfileMode();
-        auto val = tasks["-m"];
+        auto val = cmdLineParser("-m");
         controller.move(val mm);
         controller.printSpindlePosition();
 //    }
