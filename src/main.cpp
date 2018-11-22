@@ -61,17 +61,18 @@ int main(int argc, char** argv)
         
         
         std::istringstream iss(mode);
-        std::string a, b, c;
+        std::string a, b;
         
-        if (!(iss >> a >> b >> c)) continue;
-        
-        if ( a.compare("move") == 0 )
+        if (iss >> a >> b)
         {
-            HADController controller;
-            controller.activateProfileMode();
-            auto val = cmdLineParser("-m");
-            controller.move(std::stoi(b) mm);
-            controller.printSpindlePosition();
+            if ( a.compare("move") == 0 )
+            {
+                HADController controller;
+                controller.activateProfileMode();
+                auto val = cmdLineParser("-m");
+                controller.move(std::stoi(b) mm);
+                controller.printSpindlePosition();
+            }
         }
         
         std::cout << "Define the mode of motion (for help type h or help) \n>>> ";
