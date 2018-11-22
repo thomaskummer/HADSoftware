@@ -47,8 +47,8 @@ public:
     
     void printAll()
     {
-        std::cout << "CommandLineParser::printAll()" << std::endl
-        for (auto& task : tasks)
+        std::cout << "CommandLineParser::printAll()" << std::endl;
+        for (auto& task : m_tasks)
         {
             std::cout << "  [" << task.first << ':' << task.second << ']' << std::endl;
         }
