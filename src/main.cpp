@@ -43,7 +43,8 @@ int main(int argc, char** argv)
     std::string mode;
     while ( std::cin >> mode )
     {
-        if ( mode.compare("exit") = 0 || mode.compare("quit") == 0 || mode.compare("q") == 0 )
+        if ( mode.compare("exit") == 0 || mode.compare("quit") == 0 || mode.compare("q") == 0 )
+        
         if ( mode.compare("move") == 0 )
         {
             HADController controller;
