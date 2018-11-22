@@ -65,7 +65,7 @@ int main(int argc, char** argv)
         
         if (iss >> a >> b)
         {
-            std::cout << a << " " << b << std::endl;
+            std::cout << "iss: " << a << " " << b << std::endl;
             if ( a.compare("move") == 0 )
             {
                 HADController controller;
