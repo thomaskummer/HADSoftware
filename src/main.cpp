@@ -43,7 +43,7 @@ int main(int argc, char** argv)
     std::string mode;
     std::cin >> mode;
 
-    while ( std::cin >> mode )
+    while ( std::cin >> mode != "exit" )
     {
         if ( mode.compare("move") == 0 )
         {
