@@ -39,31 +39,39 @@ int main(int argc, char** argv)
 {
     CommandLineParser cmdLineParser(argc, argv);
 
-    std::cout << "----------------------------------------------------" << std::endl;
-    std::cout << "welcome to ifd's heartrate-controller" << std::endl;
-    std::cout << "maxon epos2 70/10" << std::endl;
-    std::cout << "----------------------------------------------------" << std::endl;
+    std::cout << "====================================================" << std::endl;
+    std::cout << "Heartrate-controller for Maxon EPOS2 70/10" << std::endl;
+    std::cout << "Institute of fluid dynamics - ETH Zurich" << std::endl;
+    std::cout << "====================================================" << std::endl;
+    std::cout << "\nType \"run\" to start-up the controller or \"help\" for more information. << std::endl;
 
-    std::cout << "\ndefine the mode of motion (for help type h or help) \n... ";
+    
+    std::cout << "\nDefine the mode of motion (for help type h or help) \n>>> ";
     std::string mode;
     while ( std::cin >> mode )
     {
         if ( mode.compare("exit") == 0 || mode.compare("quit") == 0 || mode.compare("q") == 0 )
         {
-            std::cout << "exiting the heartrate-controller...";
+            std::cout << ">>> Exiting heartrate-controller.";
             break;
         }
         
-        if ( mode.compare("move") == 0 )
+        
+        std::istringstream iss(mode);
+        std::string a, b, c;
+        
+        if (!(iss >> a >> b >> c)) continue;
+        
+        if ( a.compare("move") == 0 )
         {
             HADController controller;
             controller.activateProfileMode();
             auto val = cmdLineParser("-m");
-            controller.move(val mm);
+            controller.move(b mm);
             controller.printSpindlePosition();
         }
         
-        std::cout << "define the mode of motion (for help type h or help) \n... ";
+        std::cout << "Define the mode of motion (for help type h or help) \n>>> ";
     }
 
 // Classes for different activation modes
