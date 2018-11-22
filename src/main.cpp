@@ -50,7 +50,7 @@ int main(int argc, char** argv)
     {
         if ( mode.compare("exit") == 0 || mode.compare("quit") == 0 || mode.compare("q") == 0 )
         {
-            std::cout << "exiting the heartrate-controller..."
+            std::cout << "exiting the heartrate-controller...";
             break;
         }
         
