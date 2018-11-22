@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 {
     CommandLineParser cmdLineParser(argc, argv);
 
-    std::cout << "Define the mode of motion (for help type h or help)"
+    std::cout << "Define the mode of motion (for help type h or help)" << std::endl;
     while ( std::cin >> mode )
     {
         if ( mode.compare("exit") = 0 || mode.compare("quit") == 0 || mode.compare("q") == 0 )
