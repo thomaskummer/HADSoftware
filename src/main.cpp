@@ -1,7 +1,10 @@
-//==================
-//main
-//Jonas Conrad
-//==================
+//
+//  main.cpp
+//  HeartrateController
+//
+//  Created by Thomas Kummer on 20.11.18.
+//  Copyright © 2018 Thomas Kummer. All rights reserved.
+//
 
 #include <iostream>
 #include "Definitions.h"
@@ -25,6 +28,7 @@
 
 #include "Engine.hpp"
 #include "HADController.hpp"
+#include "CommandLineParser.hpp"
 
 #define mm * -1600
 
@@ -33,35 +37,10 @@
 
 int main(int argc, char** argv)
 {
-    std::cout << "Number of input arguments: " << argc << std::endl;
-    assert (argc >= 2);
-
-    std::map<std::string, double> tasks;
-
-    for (int i(1); i < argc; ++i)
-    {
-        std::istringstream issType (argv[i]);
-        std::string type;
-        if (issType >> type)
-        {
-            if ( type.compare("-m") == 0 )
-            {
-                std::istringstream issVal (argv[++i]);
-                double val;
-                if (issVal >> val)
-                {
-                    tasks.emplace("-m", val);
-                }
-            }
-            
-        }
-    }
+    CommandLineParser cmdLineParser(argc, argv);
+    cmdLineParser.printAll();
     
-    
-    std::cout << "Tasks:" << std::endl;
-    for (auto& task : tasks) std::cout << " [" << task.first << ':' << task.second << ']' << std::endl;
 
-    
 //    if ( type.compare("-m") == 0 )
 //    {
         HADController controller;

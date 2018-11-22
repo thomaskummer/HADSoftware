@@ -1,9 +1,9 @@
 //
 //  Factory.hpp
-//  FiniteElementAnalysis
+//  HeartrateController
 //
-//  Created by Thomas Kummer on 05.05.17.
-//  Copyright © 2017 Thomas Kummer. All rights reserved.
+//  Created by Thomas Kummer on 20.11.18.
+//  Copyright © 2018 Thomas Kummer. All rights reserved.
 //
 
 #ifndef Factory_hpp
