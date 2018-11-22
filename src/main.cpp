@@ -39,11 +39,20 @@ int main(int argc, char** argv)
 {
     CommandLineParser cmdLineParser(argc, argv);
 
-    std::cout << "Define the mode of motion (for help type h or help) \n ... ";
+    std::cout << "----------------------------------------------------" << std::endl;
+    std::cout << "welcome to ifd's heartrate-controller" << std::endl;
+    std::cout << "maxon epos2 70/10" << std::endl;
+    std::cout << "----------------------------------------------------" << std::endl;
+
+    std::cout << "\ndefine the mode of motion (for help type h or help) \n... ";
     std::string mode;
     while ( std::cin >> mode )
     {
-        if ( mode.compare("exit") == 0 || mode.compare("quit") == 0 || mode.compare("q") == 0 ) break;
+        if ( mode.compare("exit") == 0 || mode.compare("quit") == 0 || mode.compare("q") == 0 )
+        {
+            std::cout << "exiting the heartrate-controller..."
+            break;
+        }
         
         if ( mode.compare("move") == 0 )
         {
@@ -53,6 +62,8 @@ int main(int argc, char** argv)
             controller.move(val mm);
             controller.printSpindlePosition();
         }
+        
+        std::cout << "define the mode of motion (for help type h or help) \n... ";
     }
 
 // Classes for different activation modes
