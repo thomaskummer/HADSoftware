@@ -40,15 +40,17 @@ int main(int argc, char** argv)
     CommandLineParser cmdLineParser(argc, argv);
     cmdLineParser.printAll();
     
+    std::string mode;
+    std::cin >> mode;
 
-//    if ( type.compare("-m") == 0 )
-//    {
+    if ( mode.compare("move") )
+    {
         HADController controller;
         controller.activateProfileMode();
         auto val = cmdLineParser("-m");
         controller.move(val mm);
         controller.printSpindlePosition();
-//    }
+    }
     
 
 // Classes for different activation modes
