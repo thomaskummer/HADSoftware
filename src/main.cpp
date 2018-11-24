@@ -33,7 +33,7 @@
 #include "InteractiveMode.hpp"
 
 #define mm * -1600
-#define cm * -160
+
 
 //enum mode { profilePosition, position, interpolatedPosition };
 
@@ -47,8 +47,11 @@ int main(int argc, char** argv)
     
     ProfileMode pMode;
     pMode.setup();
-    pMode.activateProfileMode();
-    pMode.move(10 mm);
+    
+    HeartrateController hrc;
+    hrc.activateProfileMode();
+    hrc.move(10 mm);
+    
     pMode.printPosition();
     
     
