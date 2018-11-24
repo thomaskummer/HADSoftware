@@ -27,6 +27,7 @@
 #include <map>
 
 #include "Engine.hpp"
+#include "HADController.hpp"
 #include "HeartrateController.hpp"
 #include "ProfileMode.hpp"
 #include "CommandLineParser.hpp"
