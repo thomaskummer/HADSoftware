@@ -13,15 +13,16 @@
 #include <fstream>
 #include <assert.h>
 
+#define mm * -1600
 
 // namespace HADController {
     
 class InteractiveMode {
 public:
     
-    InteractiveMode(int argc, char** argv){}
+    InteractiveMode(){}
     
-    virtual InteractiveMode(){}
+    virtual ~InteractiveMode(){}
     
     void run()
     {
@@ -56,7 +57,6 @@ public:
                 {
                     HADController controller;
                     controller.activateProfileMode();
-                    auto val = cmdLineParser("-m");
                     controller.move(std::stoi(b) mm);
                     controller.printSpindlePosition();
                 }
