@@ -52,7 +52,7 @@ public:
     }
     
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
-    bool moveCentimeter(const int& distance)
+    bool move(const int& distance)
     {
         int PositionIs = PositionIs_Fct();
         int NewPosition = PositionIs - distance;
@@ -180,12 +180,47 @@ protected:
         }
     }
 
+    //Return Number of Device Errors
+    unsigned char GetNbDeviceError()
+    {
+        unsigned int pErrorCode;
+        unsigned char pNbDeviceError;
+        auto ErrorNb= VCS_GetNbOfDeviceError(KeyHandle, 1, &pNbDeviceError, &pErrorCode);
+        if(!ErrorNb)
+            cout<<"Error getting Number of Device Error: "<<pErrorCode<<endl;
+        cout<<"Number of Device Error: "<<static_cast<signed>(pNbDeviceError)<<endl;
+        return pNbDeviceError;
+    }
+    
     int PositionIs_Fct()
     {
         unsigned int PositionIsError;
         int PositionIs;
         auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
         return PositionIs;
+    }
+    
+    //move cylinder to x using ProfileMode (ActivateProfileMode must be called first)
+    bool SetPosition_ProfileMode(int position)
+    {
+        // Move to position
+        unsigned int pErrorMoveToPos;
+        bool absoluteMovement = true;
+        bool immediately = false;
+        bool MoveToPos;
+        
+        if (position >= MainPositions.Min && position <= MainPositions.Max)
+        {
+            MoveToPos = VCS_MoveToPosition(KeyHandle, 1, position, absoluteMovement, immediately, &pErrorMoveToPos);
+            cout <<"MoveToPos: "<< MoveToPos << " ErrorCode:  "  << pErrorMoveToPos << endl;
+            Wait();
+            printPosition();
+            return 1;
+        }
+        else
+        {    cout <<"Out of bounds! No further movement in this direction!";
+            return 0;
+        }
     }
     
 };
