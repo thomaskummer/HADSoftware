@@ -13,8 +13,14 @@
 #include <fstream>
 #include <assert.h>
 
-
 #define mm * -1600
+
+struct Positions
+{
+    int Min;
+    int Max;
+    int Mid;
+};
 
 // namespace HADController {
 
