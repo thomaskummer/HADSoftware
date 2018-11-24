@@ -15,6 +15,7 @@
 #include <stdio.h>
 
 #include "InputFileParser.hpp"
+#include "MotionMode.hpp"
 
 #define mm * -1600
 
@@ -61,6 +62,7 @@ protected:
     Positions MainPositions={0, 205000, 137000};
     
     MotionMode* motionMode;
+    
     
     // Close all devices
     void close()
