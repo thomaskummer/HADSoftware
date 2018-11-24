@@ -28,10 +28,12 @@
 
 #include "Engine.hpp"
 #include "HADController.hpp"
+#include "ProfileMode.hpp"
 #include "CommandLineParser.hpp"
 #include "InteractiveMode.hpp"
 
 #define mm * -1600
+#define cm * -160
 
 //enum mode { profilePosition, position, interpolatedPosition };
 
@@ -40,8 +42,16 @@ int main(int argc, char** argv)
 {
     CommandLineParser cmdLineParser(argc, argv);
 
-    InteractiveMode iMode;
-    iMode.run();
+    // InteractiveMode iMode;
+    // iMode.run();
+    
+    ProfileMode pMode;
+    pMode.setup();
+    pMode.activateProfileMode();
+    pMode.move(10 mm);
+    pMode.printPosition();
+    
+    
 
 // Classes for different activation modes
 // Classes for reading sensores

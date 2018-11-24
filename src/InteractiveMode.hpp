@@ -1,5 +1,5 @@
 //
-//  CommandLineParser.hpp
+//  InteractiveMode.hpp
 //  HeartrateController
 //
 //  Created by Thomas Kummer on 20.11.18.
