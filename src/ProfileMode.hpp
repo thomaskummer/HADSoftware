@@ -15,13 +15,6 @@
 
 #define mm * -1600
 
-struct Positions
-{
-    int Min;
-    int Max;
-    int Mid;
-};
-
 // namespace HADController {
 
 class ProfileMode {
@@ -40,8 +33,8 @@ public:
         cout << profilePosMode << " " << pErrorProfilePosMode << endl;
         
         // Set sensor parameter
-        InputFileParser inputFile("data");
-        std::cout << "Sensor input a: " << inputFile["a"] << std::endl;
+//        InputFileParser inputFile("data");
+//        std::cout << "Sensor input a: " << inputFile["a"] << std::endl;
         
         unsigned int pErrorSetPosProfile;
         auto posProfile = VCS_SetPositionProfile(KeyHandle, 1, 22000, 15000, 15000, &pErrorSetPosProfile); // Node ID, position profile velocity,..acceleration,..deceleration
