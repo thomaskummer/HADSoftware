@@ -29,6 +29,7 @@
 #include "Engine.hpp"
 #include "HADController.hpp"
 #include "CommandLineParser.hpp"
+#include "InteractiveMode.hpp"
 
 #define mm * -1600
 
