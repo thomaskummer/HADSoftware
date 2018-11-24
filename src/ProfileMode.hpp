@@ -13,11 +13,11 @@
 #include <fstream>
 #include <assert.h>
 
-#define mm * -1600
+
 
 // namespace HADController {
 
-class ProfileMode {
+class ProfileMode : public MotionMode {
 public:
     
     ProfileMode(){}

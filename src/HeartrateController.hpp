@@ -12,7 +12,9 @@
 #include <iostream>
 #include <fstream>
 #include <assert.h>
+#include <stdio.h>
 
+#include "InputFileParser.hpp"
 
 #define mm * -1600
 
@@ -58,6 +60,7 @@ protected:
     void* KeyHandle;
     Positions MainPositions={0, 205000, 137000};
     
+    MotionMode* motionMode;
     
     // Close all devices
     void close()
