@@ -1,13 +1,13 @@
 //
-//  ProfileMode.hpp
+//  HeartrateController.hpp
 //  HeartrateController
 //
 //  Created by Thomas Kummer on 20.11.18.
 //  Copyright © 2018 Thomas Kummer. All rights reserved.
 //
 
-#ifndef ProfileMode_hpp
-#define ProfileMode_hpp
+#ifndef HeartrateController_hpp
+#define HeartrateController_hpp
 
 #include <iostream>
 #include <fstream>
@@ -25,12 +25,12 @@ struct Positions
 
 // namespace HADController {
 
-class ProfileMode {
+class HeartrateController {
 public:
     
-    ProfileMode(){}
+    HeartrateController(){}
     
-    virtual ~ProfileMode(){}
+    virtual ~HeartrateController(){}
     
     void setup()
     {
@@ -185,5 +185,5 @@ protected:
 // }
 
 
-#endif /* ProfileMode_hpp */
+#endif /* HeartrateController_hpp */
 
