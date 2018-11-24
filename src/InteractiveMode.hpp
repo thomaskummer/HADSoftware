@@ -38,6 +38,9 @@ public:
         
         std::cout << "\nDefine the mode of motion (for help type h or help) \n>>> ";
         
+        HADController controller;
+        controller.activateProfileMode();
+        
         while ( std::cin >> mode )
         {
             if ( mode.compare("exit") == 0 || mode.compare("quit") == 0 || mode.compare("q") == 0 )
@@ -55,8 +58,6 @@ public:
                 std::cout << "iss: " << a << " " << b << std::endl;
                 if ( a.compare("move") == 0 )
                 {
-                    HADController controller;
-                    controller.activateProfileMode();
                     controller.move(std::stoi(b) mm);
                     controller.printSpindlePosition();
                 }
