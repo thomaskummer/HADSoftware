@@ -104,6 +104,15 @@ protected:
             cout<<"Error in Wait Function! Error Code: "<<pErrorCode<<endl;
     }
     
+    //print position to console
+    void printPosition()
+    {
+        unsigned int PositionIsError;
+        int PositionIs;
+        auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
+        cout << GetPositionIs << " " << PositionIsError <<" Position: " << PositionIs << endl;
+    }
+
 };
 
 

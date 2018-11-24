@@ -45,14 +45,14 @@ int main(int argc, char** argv)
     // InteractiveMode iMode;
     // iMode.run();
     
-    ProfileMode pMode;
-    pMode.setup();
-    
     HeartrateController hrc;
-    hrc.activateProfileMode();
-    hrc.move(10 mm);
+    hrc.setup();
     
-    pMode.printPosition();
+    ProfileMode pMode;
+    pMode.activateProfileMode();
+    pMode.move(10 mm);
+    
+    hrc.printPosition();
     
     
 
