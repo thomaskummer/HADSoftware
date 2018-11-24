@@ -36,11 +36,11 @@ public:
         std::cin >> mode;
         if ( mode.compare("help") == 0 ) std::cout << "This is the still todo help page" << std::endl;
         
-        std::cout << "\nDefine the mode of motion (for help type h or help) \n>>> ";
-        
         HADController controller;
         controller.activateProfileMode();
         
+        std::cout << "\nDefine the mode of motion (for help type h or help) \n>>> ";
+
         while ( std::cin >> mode )
         {
             if ( mode.compare("exit") == 0 || mode.compare("quit") == 0 || mode.compare("q") == 0 )
@@ -49,6 +49,7 @@ public:
                 break;
             }
             
+            std::cout << mode << std::endl;
             
             std::istringstream iss(mode);
             std::string a, b;
@@ -63,7 +64,7 @@ public:
                 }
             }
             
-            std::cout << "Define the mode of motion (for help type h or help) \n>>> ";
+            std::cout << "Define the mode of motion (for help type h or help) >>> ";
         }
     }
     
