@@ -85,6 +85,14 @@ protected:
         }
     }
     
+    int PositionIs_Fct()
+    {
+        unsigned int PositionIsError;
+        int PositionIs;
+        auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
+        return PositionIs;
+    }
+    
     //wait until movement is finished; does not work with position mode!
     void Wait()
     {
