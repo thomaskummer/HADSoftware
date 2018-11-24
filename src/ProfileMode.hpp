@@ -223,6 +223,17 @@ protected:
         }
     }
     
+    //wait until movement is finished; does not work with position mode!
+    void Wait()
+    {
+        unsigned int Timeout = 3000; //max waiting time in ms
+        unsigned int pErrorCode;
+        
+        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
+        if (!WaitForTarget)
+            cout<<"Error in Wait Function! Error Code: "<<pErrorCode<<endl;
+    }
+    
 };
 
 
