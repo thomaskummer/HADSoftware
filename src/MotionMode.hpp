@@ -10,13 +10,14 @@
 #define MotionMode_hpp
 
 class MotionMode {
+public:
     
     MotionMode(){}
     
     virtual ~MotionMode(){}
     
     
-public:
+protected:
     
 };
 
