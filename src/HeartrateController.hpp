@@ -19,12 +19,6 @@
 
 #define mm * -1600
 
-struct Positions
-{
-    int Min;
-    int Max;
-    int Mid;
-};
 
 // namespace HADController {
 
@@ -45,8 +39,22 @@ public:
         getDeviceErrorCode();
     }
     
+    void setMotionMode(const std::string& motionMode)
+    {
+        m_motionMode = CREATE(MotionMode, motionMode);
+        m_motionMode->setKeyHandle(KeyHandle);
+    }
     
-    //print position to console
+    void activateMode()
+    {
+        m_motionMode->activateMode();
+    }
+    
+    bool move(const int& distance)
+    {
+        m_motionMode->move(distance);
+    }
+
     void printPosition()
     {
         unsigned int PositionIsError;
@@ -54,14 +62,24 @@ public:
         auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
         cout << GetPositionIs << " " << PositionIsError <<" Position: " << PositionIs << endl;
     }
+    
+    void* keyHandle()
+    {
+        return KeyHandle;
+    }
 
+    MotionMode* motionMode()
+    {
+        return m_motionMode;
+    }
+    
     
 protected:
     
     void* KeyHandle;
-    Positions MainPositions={0, 205000, 137000};
+    Positions MainPositions={-500000, 500000, 0};
     
-    MotionMode* motionMode;
+    MotionMode* m_motionMode;
     
     
     // Close all devices

@@ -14,7 +14,7 @@
 #include <typeinfo>
 
 
-namespace FiniteElementAnalysis {
+//namespace FiniteElementAnalysis {
 
 template<class factory_type>
 class Factory;
@@ -95,7 +95,7 @@ Creator<factory_type, product_type>::Creator(const std::string& key)
 #define CREATE(factory_type, product_type) Factory<factory_type>::Instance().Create(product_type)
 #define PRINT_FACTORY(factory_type) Factory<factory_type>::Instance().printRegisteredCreators(#factory_type)
 
-}
+//}
 
 
 

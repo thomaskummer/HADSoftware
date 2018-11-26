@@ -26,7 +26,7 @@ public:
     
     
     //activate Profile Position Mode
-    void activateProfileMode()
+    void activateMode()
     {
         unsigned int pErrorProfilePosMode;
         auto profilePosMode = VCS_ActivateProfilePositionMode(KeyHandle, 1, &pErrorProfilePosMode);
@@ -57,9 +57,7 @@ public:
     
 protected:
     
-    void* KeyHandle;
-    Positions MainPositions={0, 205000, 137000};
-    
+
     
     //move cylinder to x using ProfileMode (ActivateProfileMode must be called first)
     bool SetPosition_ProfileMode(int position)
@@ -117,6 +115,7 @@ protected:
 
 // }
 
+REGISTER(MotionMode, ProfileMode);
 
 #endif /* ProfileMode_hpp */
 

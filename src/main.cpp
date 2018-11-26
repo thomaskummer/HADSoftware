@@ -48,11 +48,19 @@ int main(int argc, char** argv)
     
     HeartrateController hrc;
     hrc.setup();
+    hrc.setMotionMode("ProfileMode");
+    hrc.activateMode();
+    hrc.move(-30 mm);
+    hrc.move(60 mm);
+    hrc.move(-30 mm);
+
     
-    ProfileMode pMode;
-    pMode.activateProfileMode();
-    pMode.move(10 mm);
-    
+//    ProfileMode pMode(hrc.keyHandle());
+//    pMode.activateProfileMode();
+//    pMode.move(-30 mm);
+//    pMode.move(60 mm);
+//    pMode.move(-30 mm);
+
     hrc.printPosition();
     
     
