@@ -71,7 +71,8 @@ class Engine
 		int Max;
 		int Mid;
 	};
-	Positions MainPositions={25000, 205000, 137000};
+	//Positions MainPositions={25000, 205000, 137000};
+    Positions MainPositions={-60000,2100,-30000};
 
 	struct PTV
 	{

@@ -1,9 +1,9 @@
 //
-//  HADController
-//  HeartrateController
+//  HADController.hpp
+//  HADSoftware
 //
-//  Created by Thomas Kummer on 20.11.18.
-//  Copyright © 2018 Thomas Kummer. All rights reserved.
+//  Created by Thomas Kummer on 26.10.18.
+//  Copyright © 2018 Institute of Fluid Dynamics. All rights reserved.
 //
 
 #ifndef HADController_hpp
