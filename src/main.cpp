@@ -46,7 +46,7 @@ int main(int argc, char** argv)
     // InteractiveMode iMode;
     // iMode.run();
     
-    if ( cmd("-m") )
+    if ( cmdLineParser("-m") )
     {
         HeartrateController hrc;
         hrc.setup();
