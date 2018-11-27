@@ -41,7 +41,7 @@ public:
     
     virtual ~CommandLineParser(){}
     
-    const double operator()(const std::string type) const
+    const std::string operator()(const std::string type) const
     {
         return m_tasks.find(type)->second;
     }
