@@ -150,6 +150,20 @@ protected:
             cout<<"Starting Trajectory"<<endl;
     }
     
+    //Get buffer parameters for ipm
+    void IpmBufferParameter()
+    {
+        unsigned short pUnderflowWarningLimit;
+        unsigned short pOverflowWarningLimit;
+        unsigned int pMaxBufferSize;
+        unsigned int pErrorCode;
+        
+        auto GetParameter = VCS_GetIpmBufferParameter(KeyHandle, 1, &pUnderflowWarningLimit, &pOverflowWarningLimit, &pMaxBufferSize, &pErrorCode);
+        
+        cout<<GetParameter<<": GetParameter "<<pUnderflowWarningLimit<<": UFlowWarninglimit "<<pOverflowWarningLimit<<": OFlowWarningLimit "
+        <<pMaxBufferSize<<": MaxBufferSize "<<pErrorCode<<": ErrorCode"<<endl;
+    }
+    
 };
 
 
