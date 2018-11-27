@@ -57,7 +57,7 @@ public:
         
 protected:
     
-    std::map<std::string, double> m_tasks;
+    std::map<std::string, std::string> m_tasks;
 
 };
     
