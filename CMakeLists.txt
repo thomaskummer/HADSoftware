@@ -9,11 +9,18 @@ include_directories(include)
 
 add_library(HADLib
 	src/main.cpp
-	src/Engine.hpp
-	src/HADController.hpp
+#src/Engine.hpp
+#src/HADController.hpp
+    src/CommandLineParser.hpp
 	src/InputFileParser.hpp
+    src/InteractiveMode.hpp
 	src/Factory.hpp
+    src/HeartrateController.hpp
+    src/MotionMode.hpp
+    src/ProfileMode.hpp
+    src/InterpolatedPositionMode.hpp
 )
+
 target_link_libraries(HADLib -lEposCmd)
 target_link_libraries(HADLib -L/opt/software/epos/lib/)
 
