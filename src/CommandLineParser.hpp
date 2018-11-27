@@ -28,7 +28,7 @@ public:
             if (issType >> type)
             {
                 std::istringstream issVal (argv[++i]);
-                double val (0.);
+                double val (0.0);
                 if (issVal >> val)
                 {
                     m_tasks.emplace(type, val);
