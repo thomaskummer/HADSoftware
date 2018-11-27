@@ -50,9 +50,9 @@ public:
         m_motionMode->activateMode();
     }
     
-    bool move(const int& distance)
+    void run(const int& distance)
     {
-        m_motionMode->move(distance);
+        m_motionMode->run(distance);
     }
 
     void printPosition()
