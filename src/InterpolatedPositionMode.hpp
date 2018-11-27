@@ -24,40 +24,53 @@ public:
     
     virtual ~InterpolatedPositionMode(){}
     
-    
-    //activate Profile Position Mode
+    //activate interpolated position mode
     void activateMode()
     {
-        unsigned int pErrorProfilePosMode;
-        auto profilePosMode = VCS_ActivateProfilePositionMode(KeyHandle, 1, &pErrorProfilePosMode);
-        cout << profilePosMode << " " << pErrorProfilePosMode << endl;
+        unsigned int pErrorActivate;
+        unsigned int pErrorClearBuffer;
         
-        // Set sensor parameter
-//        InputFileParser inputFile("data");
-//        std::cout << "Sensor input a: " << inputFile["a"] << std::endl;
+        auto IPMode = VCS_ActivateInterpolatedPositionMode(KeyHandle, 1, &pErrorActivate);
+        if (!IPMode)
+            cout<<"Activate IP Mode Error: "<<pErrorActivate<<endl;
         
-        unsigned int pErrorSetPosProfile;
-        auto posProfile = VCS_SetPositionProfile(KeyHandle, 1, 22000, 15000, 15000, &pErrorSetPosProfile); // Node ID, position profile velocity,..acceleration,..deceleration
-        std::cout << posProfile << " " << pErrorSetPosProfile << std::endl;
+        // auto setIpmBuffer = VCS_SetIpmBufferParameter(KeyHandle, 1, -100, 100, &pErrorIntPosMode);
+        auto ClearIpmBuffer = VCS_ClearIpmBuffer(KeyHandle, 1, &pErrorClearBuffer);
+        if (!ClearIpmBuffer)
+            cout<<"Clear Buffer Error: "<<pErrorClearBuffer<<endl;
+        
     }
     
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
-    bool move(const int& distance)
+    void run(const int& distance)
     {
-        int PositionIs = PositionIs_Fct();
-        int NewPosition = PositionIs - distance;
-        bool moved = SetPosition_InterpolatedPositionMode(NewPosition);
-        std::cout << "From " << PositionIs << " to " << NewPosition << " by " << distance << " mm" << std::endl;
-        if(moved)
-            return 1;
-        else
-            return 0;
+        runIPM(-20000, 1000, 250, 10000, 500);
+    }
+    
+    //Get status of interpolated position mode
+    void IpmStatus()
+    {
+        int pTrajectoryRunning;
+        int pIsUnderflowWarning;
+        int pIsOverflowWarning;
+        int pIsVelocityWarning;
+        int pIsAccelerationWarning;
+        int pIsUnderflowError;
+        int pIsOverflowError;
+        int pIsVelocityError;
+        int pIsAccelerationError;
+        unsigned int pErrorCode;
+        
+        auto GetStatus = VCS_GetIpmStatus(KeyHandle, 1, &pTrajectoryRunning, &pIsUnderflowWarning, &pIsOverflowWarning, &pIsVelocityWarning, &pIsAccelerationWarning,
+                                          &pIsUnderflowError, &pIsOverflowError, &pIsVelocityError, &pIsAccelerationError, &pErrorCode);
+        
+        cout<<GetStatus<<": Status "<<pTrajectoryRunning<<": TrajectoryRunning "<<pIsUnderflowWarning<<": UFlowWarnig "<<pIsOverflowWarning<<": OFlowWarning "
+        <<pIsVelocityWarning<<": VelocityWarning "<<pIsAccelerationWarning<<": AccelerationWarning "<<pIsUnderflowError<<": UFlowError "<<pIsOverflowError<<": OFlowError "
+        <<pIsVelocityError<<": VelocityError "<<pIsAccelerationError<<": AccelerationError "<<pErrorCode<<": ErrorCode"<<endl;
     }
     
     
 protected:
-    
-
     
     //move cylinder to x using InterpolatedPositionMode (ActivateInterpolatedPositionMode must be called first)
     bool SetPosition_InterpolatedPositionMode(int position)
@@ -82,34 +95,61 @@ protected:
         }
     }
     
-    int PositionIs_Fct()
+    //Interpolated position mode
+    bool runIPM(int Amplitude, int Periode, int dt, int RunTime, int Resolution)
     {
-        unsigned int PositionIsError;
-        int PositionIs;
-        auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
-        return PositionIs;
-    }
-    
-    //wait until movement is finished; does not work with position mode!
-    void Wait()
-    {
-        unsigned int Timeout = 3000; //max waiting time in ms
-        unsigned int pErrorCode;
+        int PointNbr=1;
+        int time=dt;
+        unsigned int pErrorAddPvt, pErrorStartTrajectory;
         
-        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
-        if (!WaitForTarget)
-            cout<<"Error in Wait Function! Error Code: "<<pErrorCode<<endl;
+        //start with point 0
+        auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, 0, 0, dt, &pErrorAddPvt);
+        if(!addPvt)
+            cout<<"Add PVT Error: "<<pErrorAddPvt<<endl;
+        else
+            cout<<"PointNumber: "<<0<<" P: "<<0<<" T: "<<200<<" V: "<<0<<endl;
+        
+        
+        while (time<=RunTime)
+        {
+            auto PTV=GetPTV(Amplitude,PointNbr,Periode,dt,Resolution);
+            if (PTV.P<=MainPositions.Max&&PTV.P>=MainPositions.Min)
+            {
+                auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, PTV.P, PTV.V, PTV.T, &pErrorAddPvt);
+                if(!addPvt)
+                    cout<<"Add PVT Error: "<<pErrorAddPvt<<endl;
+            }
+            else
+            {
+                cout<<"Out of Bounds! No further Movement in this direction!"<<endl;
+                break;
+            }
+            PointNbr+=1;
+            time+=dt;
+        }
+        
+        //end point with last position value
+        auto PTV=GetPTV(Amplitude,PointNbr,Periode,dt,Resolution);
+        if (PTV.P<=MainPositions.Max&&PTV.P>=MainPositions.Min)
+        {
+            auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, PTV.P, 0, 0, &pErrorAddPvt);
+            if(!addPvt)
+                cout<<"Add PVT Error: "<<pErrorAddPvt<<endl;
+        }
+        else
+        {
+            cout<<"Out of Bounds! No further Movement in this direction!"<<endl;
+            return 0;
+        }
+        
+        
+        auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
+        if (!StartIpmTraj)
+            cout<<"StartIPModeTrajectory Error: "<<pErrorStartTrajectory<<endl;
+        else
+            cout<<"Starting Trajectory"<<endl;
     }
     
-    //print position to console
-    void printPosition()
-    {
-        unsigned int PositionIsError;
-        int PositionIs;
-        auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
-        cout << GetPositionIs << " " << PositionIsError <<" Position: " << PositionIs << endl;
-    }
-
 };
 
 

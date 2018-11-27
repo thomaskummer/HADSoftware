@@ -48,12 +48,15 @@ int main(int argc, char** argv)
     
     HeartrateController hrc;
     hrc.setup();
+    
     hrc.setMotionMode("ProfileMode");
+    hrc.setMotionMode("InterpolatedPositionMode");
+
     hrc.activateMode();
     
-    hrc.move(-30 mm);
-    hrc.move(60 mm);
-    hrc.move(-30 mm);
+    hrc.run(-30 mm);
+    hrc.run(60 mm);
+    hrc.run(-30 mm);
 
     hrc.printPosition();
     

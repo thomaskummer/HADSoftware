@@ -7,10 +7,8 @@ SET(CMAKE_BUILD_TYPE RELEASE)
 include_directories(include)
 
 
-add_library(HADLib
+add_library(MaxonHeartrateController
 	src/main.cpp
-#src/Engine.hpp
-#src/HADController.hpp
     src/CommandLineParser.hpp
 	src/InputFileParser.hpp
     src/InteractiveMode.hpp
@@ -21,12 +19,12 @@ add_library(HADLib
     src/InterpolatedPositionMode.hpp
 )
 
-target_link_libraries(HADLib -lEposCmd)
-target_link_libraries(HADLib -L/opt/software/epos/lib/)
+target_link_libraries(MaxonHeartrateController -lEposCmd)
+target_link_libraries(MaxonHeartrateController -L/opt/software/epos/lib/)
 
 
 add_executable(HeartbeatController src/main.cpp)
-target_link_libraries(HeartbeatController HADLib)
+target_link_libraries(HeartbeatController MaxonHeartrateController)
 
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/data

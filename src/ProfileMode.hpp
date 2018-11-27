@@ -42,16 +42,16 @@ public:
     }
     
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
-    bool move(const int& distance)
+    void run(const int& distance)
     {
         int PositionIs = PositionIs_Fct();
         int NewPosition = PositionIs - distance;
         bool moved = SetPosition_ProfileMode(NewPosition);
         std::cout << "From " << PositionIs << " to " << NewPosition << " by " << distance << " mm" << std::endl;
-        if(moved)
-            return 1;
-        else
-            return 0;
+//        if(moved)
+//            return 1;
+//        else
+//            return 0;
     }
     
     
@@ -82,34 +82,6 @@ protected:
         }
     }
     
-    int PositionIs_Fct()
-    {
-        unsigned int PositionIsError;
-        int PositionIs;
-        auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
-        return PositionIs;
-    }
-    
-    //wait until movement is finished; does not work with position mode!
-    void Wait()
-    {
-        unsigned int Timeout = 3000; //max waiting time in ms
-        unsigned int pErrorCode;
-        
-        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
-        if (!WaitForTarget)
-            cout<<"Error in Wait Function! Error Code: "<<pErrorCode<<endl;
-    }
-    
-    //print position to console
-    void printPosition()
-    {
-        unsigned int PositionIsError;
-        int PositionIs;
-        auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
-        cout << GetPositionIs << " " << PositionIsError <<" Position: " << PositionIs << endl;
-    }
-
 };
 
 
