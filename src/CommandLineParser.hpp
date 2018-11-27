@@ -28,6 +28,7 @@ public:
             if (issType >> type)
             {
                 std::istringstream issVal (argv[++i]);
+                std::string val;
                 if (issVal >> val)
                 {
                     std::cout << type << ":" << val << std::endl;
