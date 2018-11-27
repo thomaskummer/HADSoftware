@@ -28,11 +28,15 @@ public:
             if (issType >> type)
             {
                 std::istringstream issVal (argv[++i]);
-                std::string val ("1");
                 if (issVal >> val)
                 {
                     std::cout << type << ":" << val << std::endl;
                     m_tasks.emplace(type, val);
+                }
+                else
+                {
+                    //std::cout << type << ":" << val << std::endl;
+                    m_tasks.emplace(type, "1");
                 }
             }
             
