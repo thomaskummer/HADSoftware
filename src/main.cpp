@@ -46,20 +46,22 @@ int main(int argc, char** argv)
     // InteractiveMode iMode;
     // iMode.run();
     
-    HeartrateController hrc;
-    hrc.setup();
-    
-    hrc.setMotionMode("ProfileMode");
-    hrc.setMotionMode("InterpolatedPositionMode");
+    if ( cmd("-m") )
+    {
+        HeartrateController hrc;
+        hrc.setup();
+        
+        hrc.setMotionMode("ProfileMode");
+        hrc.setMotionMode("InterpolatedPositionMode");
 
-    hrc.activateMode();
-    
-    hrc.run(-30 mm);
-    hrc.run(60 mm);
-    hrc.run(-30 mm);
+        hrc.activateMode();
+        
+        hrc.run(-30 mm);
+        hrc.run(60 mm);
+        hrc.run(-30 mm);
 
-    hrc.printPosition();
-    
+        hrc.printPosition();
+    }
     
 
 // Classes for different activation modes
