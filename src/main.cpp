@@ -46,7 +46,7 @@ int main(int argc, char** argv)
     // InteractiveMode iMode;
     // iMode.run();
     
-    if ( cmdLineParser("-m") )
+    if ( std::stoi(cmdLineParser("-m")) )
     {
         HeartrateController hrc;
         hrc.setup();
