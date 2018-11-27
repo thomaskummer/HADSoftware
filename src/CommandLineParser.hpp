@@ -31,6 +31,7 @@ public:
                 double val (0.0);
                 if (issVal >> val)
                 {
+                    std::cout << type << ":" << val << std::endl;
                     m_tasks.emplace(type, val);
                 }
             }
