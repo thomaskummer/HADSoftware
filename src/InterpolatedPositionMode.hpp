@@ -32,19 +32,25 @@ public:
         
         auto IPMode = VCS_ActivateInterpolatedPositionMode(KeyHandle, 1, &pErrorActivate);
         if (!IPMode)
-            cout<<"Activate IP Mode Error: "<<pErrorActivate<<endl;
+            std::cout<<"Activate IP Mode Error: "<<pErrorActivate<<std::endl;
         
         // auto setIpmBuffer = VCS_SetIpmBufferParameter(KeyHandle, 1, -100, 100, &pErrorIntPosMode);
         auto ClearIpmBuffer = VCS_ClearIpmBuffer(KeyHandle, 1, &pErrorClearBuffer);
         if (!ClearIpmBuffer)
-            cout<<"Clear Buffer Error: "<<pErrorClearBuffer<<endl;
+            std::cout<<"Clear Buffer Error: "<<pErrorClearBuffer<<std::endl;
         
     }
     
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
-    void run(const int& distance)
+    void run()
     {
-        runIPM(-20000, 1000, 250, 10000, 500);
+        auto distance = m_args.find("-ipm")->second;
+        auto periode = m_args.find("-ip")->second;
+        auto timestep = m_args.find("-it")->second;
+        auto runtime = m_args.find("-irt")->second;
+        auto resolution = m_args.find("-ir")->second;
+
+        runIPM(distance, periode, timestep, runtime, resolution);
     }
     
     //Get status of interpolated position mode
@@ -64,9 +70,9 @@ public:
         auto GetStatus = VCS_GetIpmStatus(KeyHandle, 1, &pTrajectoryRunning, &pIsUnderflowWarning, &pIsOverflowWarning, &pIsVelocityWarning, &pIsAccelerationWarning,
                                           &pIsUnderflowError, &pIsOverflowError, &pIsVelocityError, &pIsAccelerationError, &pErrorCode);
         
-        cout<<GetStatus<<": Status "<<pTrajectoryRunning<<": TrajectoryRunning "<<pIsUnderflowWarning<<": UFlowWarnig "<<pIsOverflowWarning<<": OFlowWarning "
+        std::cout<<GetStatus<<": Status "<<pTrajectoryRunning<<": TrajectoryRunning "<<pIsUnderflowWarning<<": UFlowWarnig "<<pIsOverflowWarning<<": OFlowWarning "
         <<pIsVelocityWarning<<": VelocityWarning "<<pIsAccelerationWarning<<": AccelerationWarning "<<pIsUnderflowError<<": UFlowError "<<pIsOverflowError<<": OFlowError "
-        <<pIsVelocityError<<": VelocityError "<<pIsAccelerationError<<": AccelerationError "<<pErrorCode<<": ErrorCode"<<endl;
+        <<pIsVelocityError<<": VelocityError "<<pIsAccelerationError<<": AccelerationError "<<pErrorCode<<": ErrorCode"<<std::endl;
     }
     
     
@@ -84,13 +90,13 @@ protected:
         if (position >= MainPositions.Min && position <= MainPositions.Max)
         {
             MoveToPos = VCS_MoveToPosition(KeyHandle, 1, position, absoluteMovement, immediately, &pErrorMoveToPos);
-            cout <<"MoveToPos: "<< MoveToPos << " ErrorCode:  "  << pErrorMoveToPos << endl;
+            std::cout <<"MoveToPos: "<< MoveToPos << " ErrorCode:  "  << pErrorMoveToPos << std::endl;
             Wait();
             printPosition();
             return 1;
         }
         else
-        {    cout <<"Out of bounds! No further movement in this direction!";
+        {    std::cout <<"Out of bounds! No further movement in this direction!";
             return 0;
         }
     }
@@ -105,9 +111,9 @@ protected:
         //start with point 0
         auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, 0, 0, dt, &pErrorAddPvt);
         if(!addPvt)
-            cout<<"Add PVT Error: "<<pErrorAddPvt<<endl;
+            std::cout<<"Add PVT-0 Error: "<<pErrorAddPvt<<std::endl;
         else
-            cout<<"PointNumber: "<<0<<" P: "<<0<<" T: "<<200<<" V: "<<0<<endl;
+            std::cout<<"PointNumber: "<<0<<" P: "<<0<<" T: "<<200<<" V: "<<0<<std::endl;
         
         
         while (time<=RunTime)
@@ -117,11 +123,11 @@ protected:
             {
                 auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, PTV.P, PTV.V, PTV.T, &pErrorAddPvt);
                 if(!addPvt)
-                    cout<<"Add PVT Error: "<<pErrorAddPvt<<endl;
+                    std::cout<<"Add PVT-while Error: "<<pErrorAddPvt<<std::endl;
             }
             else
             {
-                cout<<"Out of Bounds! No further Movement in this direction!"<<endl;
+                std::cout<<"Out of Bounds! No further Movement in this direction!"<<std::endl;
                 break;
             }
             PointNbr+=1;
@@ -134,20 +140,20 @@ protected:
         {
             auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, PTV.P, 0, 0, &pErrorAddPvt);
             if(!addPvt)
-                cout<<"Add PVT Error: "<<pErrorAddPvt<<endl;
+                std::cout<<"Add PVT-endl Error: "<<pErrorAddPvt<<std::endl;
         }
         else
         {
-            cout<<"Out of Bounds! No further Movement in this direction!"<<endl;
+            std::cout<<"Out of Bounds! No further Movement in this direction!"<<std::endl;
             return 0;
         }
         
         
         auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
         if (!StartIpmTraj)
-            cout<<"StartIPModeTrajectory Error: "<<pErrorStartTrajectory<<endl;
+            std::cout<<"StartIPModeTrajectory Error: "<<pErrorStartTrajectory<<std::endl;
         else
-            cout<<"Starting Trajectory"<<endl;
+            std::cout<<"Starting Trajectory"<<std::endl;
     }
     
     //Get buffer parameters for ipm
@@ -160,8 +166,19 @@ protected:
         
         auto GetParameter = VCS_GetIpmBufferParameter(KeyHandle, 1, &pUnderflowWarningLimit, &pOverflowWarningLimit, &pMaxBufferSize, &pErrorCode);
         
-        cout<<GetParameter<<": GetParameter "<<pUnderflowWarningLimit<<": UFlowWarninglimit "<<pOverflowWarningLimit<<": OFlowWarningLimit "
-        <<pMaxBufferSize<<": MaxBufferSize "<<pErrorCode<<": ErrorCode"<<endl;
+        std::cout<<GetParameter<<": GetParameter "<<pUnderflowWarningLimit<<": UFlowWarninglimit "<<pOverflowWarningLimit<<": OFlowWarningLimit "
+        <<pMaxBufferSize<<": MaxBufferSize "<<pErrorCode<<": ErrorCode"<<std::endl;
+    }
+    
+    //Get IPMode PTV
+    PTV GetPTV(int Amplitude,int PointNumber,int Periode, int dt, int Resolution)
+    {
+        int P=(Amplitude*sin(PointNumber*dt*2*M_PI/Periode-M_PI/2))+Amplitude;
+        int T=dt;
+        int V=(Amplitude*2*M_PI/Periode*cos(PointNumber*dt*2*M_PI/Periode-M_PI/2))*1000/(4*Resolution)*60;
+        
+        std::cout<<"PointNumber: "<<PointNumber<<" P: "<<P<<" T: "<<T<<" V: "<<V<<std::endl;
+        return{P,T,V};
     }
     
 };

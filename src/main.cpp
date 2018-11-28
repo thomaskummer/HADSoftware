@@ -26,96 +26,25 @@
 #include <assert.h>
 #include <map>
 
-#include "Engine.hpp"
-//#include "HADController.hpp"
 #include "HeartrateController.hpp"
-#include "ProfileMode.hpp"
-#include "CommandLineParser.hpp"
-//#include "InteractiveMode.hpp"
+
 
 #define mm * -1600
 
 
-//enum mode { profilePosition, position, interpolatedPosition };
-
-
 int main(int argc, char** argv)
 {
-    CommandLineParser cmdLineParser(argc, argv);
+    HeartrateController hrc;
 
-    // InteractiveMode iMode;
-    // iMode.run();
-    
-    if ( std::stoi(cmdLineParser("-m")) )
-    {
-        HeartrateController hrc;
-        hrc.setup();
-        
-        hrc.setMotionMode("ProfileMode");
-        hrc.setMotionMode("InterpolatedPositionMode");
+    hrc.readCmdLineArguments(argc, argv);
 
-        hrc.activateMode();
-        
-        hrc.run(-30 mm);
-        hrc.run(60 mm);
-        hrc.run(-30 mm);
+    hrc.setup();
+    
+    hrc.setMotionModeFromCmdLine();
 
-        hrc.printPosition();
-    }
-    
+    hrc.activateMotionMode();
 
-// Classes for different activation modes
-// Classes for reading sensores
-    
-//  Engine maxonMotor;
-//  maxonMotor.ClearFault();
-//  maxonMotor.Restore();
-//  maxonMotor.SetAll();
-//  maxonMotor.GetDeviceErrorCode();
-//  maxonMotor.ActivateProfileMode();
-//  maxonMotor.SetPosition_ProfileMode(0);
-//	maxonMotor.ActivateIPMode();
-//	maxonMotor.SetMainPositionsFromCurrent();
-//  maxonMotor.InterpolatedPositionMode(-20000, 1000, 250, 10000, 500);
-//	maxonMotor.GetPTV(10000,1,800,50,500);
-//  maxonMotor.SetObject(0x6062,0x00,0,4);
-//	maxonMotor.GetObject(0x6064,0x00,4);
-//	maxonMotor.GetObject(0x6062,0x00,4);
-//	maxonMotor.InterpolatedPositionMode();
-//	maxonMotor.PositionMode();
-//  maxonMotor.MoveXBackward(10000);
-//	maxonMotor.MoveXForward(20000);
-//  maxonMotor.SetCurrentToHome();
-//	maxonMotor.SetMainPositions();
-//	maxonMotor.GoToMid();
-//	maxonMotor.GoToMax();
-//	maxonMotor.MoveXBackward(20000);
-//	maxonMotor.ProfilePositionMode();
-//	maxonMotor.GoToMid();
-//  maxonMotor.PrintPosition();
-    
-    
-//    // if ( type.compare("e") == 0 )
-//    {
-//        Engine maxonMotor;
-//        //maxonMotor.Reset();
-//        //maxonMotor.setup();
-//
-//        // setup
-//        maxonMotor.ClearFault();
-//        maxonMotor.SetAll();
-//        maxonMotor.GetDeviceErrorCode();
-//
-//        // activateProfileMode
-//        maxonMotor.ActivateProfileMode();
-//
-//        // missing above
-//        maxonMotor.GetObject(0x6064,0x00,4);
-//        maxonMotor.GetObject(0x6062,0x00,4);
-//
-//        // move
-//        maxonMotor.MoveXBackward(val mm);
-//        maxonMotor.PrintPosition();
-//    }
-    
+    hrc.run();
+
+    hrc.printPosition();
 }

@@ -11,12 +11,18 @@
 
 #include "Factory.hpp"
 
+#define mm * -1600
 
 struct Positions
 {
     int Min;
     int Max;
     int Mid;
+};
+
+struct PTV
+{
+    int P, T, V;
 };
 
 
@@ -33,15 +39,21 @@ public:
         KeyHandle = keyHandle;
     }
     
+    virtual void readArguments(const std::map<std::string, double>& argMap)
+    {
+        m_args = argMap;
+    }
+
     virtual void activateMode() = 0;
     
-    virtual void run(const int& distance) = 0;
+    virtual void run() = 0;
     
     
 protected:
     
     void* KeyHandle;
     Positions MainPositions={-500000, 500000, 0};
+    std::map<std::string, double> m_args;
 
     int PositionIs_Fct()
     {
@@ -59,7 +71,7 @@ protected:
         
         auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
         if (!WaitForTarget)
-            cout<<"Error in Wait Function! Error Code: "<<pErrorCode<<endl;
+            std::cout << "Error in Wait Function! Error Code: " << pErrorCode << std::endl;
     }
     
     //print position to console
@@ -68,7 +80,7 @@ protected:
         unsigned int PositionIsError;
         int PositionIs;
         auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
-        cout << GetPositionIs << " " << PositionIsError <<" Position: " << PositionIs << endl;
+        std::cout << GetPositionIs << " " << PositionIsError <<" Position: " << PositionIs << std::endl;
     }
 
 };

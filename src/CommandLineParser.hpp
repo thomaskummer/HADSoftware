@@ -19,34 +19,56 @@
 class CommandLineParser {
 public:
     
+    CommandLineParser(){}
+    
     CommandLineParser(int argc, char** argv)
     {
-        for (int i(1); i < argc; ++i)
+        readCommandLine(argc, argv);
+    }
+    
+    virtual ~CommandLineParser(){}
+    
+    void readCommandLine(int argc, char** argv)
+    {
+        std::istringstream issMode (argv[1]);
+        std::string mode;
+        if (issMode >> mode) m_tasks.emplace(mode, 1.0);
+        
+        for (int i(2); i < argc; ++i)
         {
             std::istringstream issType (argv[i]);
             std::string type;
             if (issType >> type)
             {
                 std::istringstream issVal (argv[++i]);
-                std::string val;
+                double val(0);
                 if (issVal >> val)
                 {
-                    std::cout << type << ":" << val << std::endl;
+                    //std::cout << type << ":" << val << std::endl;
                     m_tasks.emplace(type, val);
                 }
-                else
-                {
-                    //std::cout << type << ":" << val << std::endl;
-                    m_tasks.emplace(type, "1");
-                }
+                
             }
             
         }
     }
     
-    virtual ~CommandLineParser(){}
+    const std::map<std::string, double>& map() const
+    {
+        return m_tasks;
+    }
+
+    const bool& feature(std::string& arg) const
+    {
+        return (m_tasks.map().count(arg) > 0);
+    }
     
-    const std::string operator()(const std::string type) const
+    const std::pair<std::string, double> operator()(const std::string type) const
+    {
+        return std::pair<std::string, double>(type, m_tasks.find(type)->second);
+    }
+    
+    const double operator[](const std::string type) const
     {
         return m_tasks.find(type)->second;
     }
@@ -62,7 +84,7 @@ public:
         
 protected:
     
-    std::map<std::string, std::string> m_tasks;
+    std::map<std::string, double> m_tasks;
 
 };
     
