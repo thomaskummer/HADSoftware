@@ -14,7 +14,6 @@
 #include <assert.h>
 
 
-
 // namespace HADController {
 
 class ProfileMode : public MotionMode {
@@ -43,12 +42,11 @@ public:
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
     void run()
     {
-        if ( m_clp.map().count("-pm") > 0 )
-        auto distance = m_args["-d"] mm;
+        auto distance = readArgument("-pd", 10) mm;
         int PositionIs = PositionIs_Fct();
         int NewPosition = PositionIs - distance;
         bool moved = SetPosition_ProfileMode(NewPosition);
-        std::cout << "From " << PositionIs << " to " << NewPosition << " by " << distance << " mm" << std::endl;
+        std::cout << "From " << PositionIs << " to " << NewPosition << " by " << distance/(1600) << " mm" << std::endl;
 //        if(moved)
 //            return 1;
 //        else

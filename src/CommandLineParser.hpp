@@ -58,17 +58,17 @@ public:
         return m_tasks;
     }
 
-    const bool& feature(std::string& arg) const
+    const bool feature(const std::string& arg) const
     {
-        return (m_tasks.map().count(arg) > 0);
+        return (m_tasks.count(arg) > 0);
     }
     
-    const std::pair<std::string, double> operator()(const std::string type) const
+    const std::pair<std::string, double> operator()(const std::string& type) const
     {
         return std::pair<std::string, double>(type, m_tasks.find(type)->second);
     }
     
-    const double operator[](const std::string type) const
+    const double& operator[](const std::string& type) const
     {
         return m_tasks.find(type)->second;
     }

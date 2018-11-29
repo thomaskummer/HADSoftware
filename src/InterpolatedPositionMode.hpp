@@ -44,13 +44,13 @@ public:
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
     void run()
     {
-        auto distance = m_args.find("-ipm")->second;
-        auto periode = m_args.find("-ip")->second;
-        auto timestep = m_args.find("-it")->second;
-        auto runtime = m_args.find("-irt")->second;
-        auto resolution = m_args.find("-ir")->second;
+        auto distance = 0.5 * readArgument("-ia", 20) mm;
+        auto period = readArgument("-ip", 1000);
+        auto timestep = readArgument("-it", period/60);
+        auto runtime = readArgument("-irt", period);
+        auto resolution = readArgument("-ir", 500);
 
-        runIPM(distance, periode, timestep, runtime, resolution);
+        runIPM(distance, period, timestep, runtime, resolution);
     }
     
     //Get status of interpolated position mode
@@ -150,10 +150,17 @@ protected:
         
         
         auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
+
         if (!StartIpmTraj)
             std::cout<<"StartIPModeTrajectory Error: "<<pErrorStartTrajectory<<std::endl;
         else
             std::cout<<"Starting Trajectory"<<std::endl;
+        
+        
+        unsigned int Timeout = Periode - 1000; //max waiting time in ms
+        unsigned int pErrorCode;
+        
+        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
     }
     
     //Get buffer parameters for ipm

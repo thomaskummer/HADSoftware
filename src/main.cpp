@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <stdlib.h>
 #include "Definitions.h"
 #include <string.h>
 #include <sstream>
@@ -38,13 +39,18 @@ int main(int argc, char** argv)
 
     hrc.readCmdLineArguments(argc, argv);
 
+    if ( hrc.cmdLineParser().feature("-h") ) {hrc.printUsage(); exit(0);}
+        
     hrc.setup();
     
-    hrc.setMotionModeFromCmdLine();
+    hrc.setMotionModeArgsFromCmdLine();
 
     hrc.activateMotionMode();
-
-    hrc.run();
-
+    
+    unsigned int n(1);
+    if ( hrc.cmdLineParser().map().count("-n") > 0 ) n = hrc.cmdLineParser()["-n"];
+    for (unsigned int i(0); i < n; ++i) hrc.run();
+    
+    
     hrc.printPosition();
 }

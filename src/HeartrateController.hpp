@@ -55,16 +55,16 @@ public:
         m_motionMode->setKeyHandle(KeyHandle);
     }
     
-    void setMotionModeFromCmdLine()
+    void setMotionModeArgsFromCmdLine()
     {
         PRINT_FACTORY(MotionMode);
 
-        if ( m_clp.map().count("-pm") > 0 ) m_motionMode = CREATE(MotionMode, "ProfileMode");
-        if ( m_clp.map().count("-ipm") > 0 ) m_motionMode = CREATE(MotionMode, "InterpolatedPositionMode");
+        if ( m_clp.feature("-pm") ) m_motionMode = CREATE(MotionMode, "ProfileMode");
+        if ( m_clp.feature("-ipm") ) m_motionMode = CREATE(MotionMode, "InterpolatedPositionMode");
 
         m_motionMode->setKeyHandle(KeyHandle);
         
-        m_motionMode->readArguments(m_clp.map());
+        m_motionMode->setArguments(m_clp.map());
     }
     
     void activateMotionMode()
@@ -95,9 +95,29 @@ public:
         return m_motionMode;
     }
     
+    const CommandLineParser& cmdLineParser()
+    {
+        return m_clp;
+    }
+    
+    void printUsage()
+    {
+        std::cout << "Usage: HeartrateController" << std::endl;
+        std::cout << "\t-h   : this help" << std::endl;
+        std::cout << "\t-n   : [ARG] number of program repetitions (default 1)" << std::endl;
+        std::cout << "\t-pm  : profile mode"  << std::endl;
+        std::cout << "\t-pd    : [ARG] distance to move (in mm, default 10)"  << std::endl;
+        std::cout << "\t-ipm : interpolated position mode"  << std::endl;
+        std::cout << "\t-ia    : [ARG] amplitude (in mm, default 20)" << std::endl;
+        std::cout << "\t-ip    : [ARG] period, time for one contraction (in ms, default 1000)" << std::endl;
+        std::cout << "\n\texample: ./HeartrateController -ipm -n 2"  << std::endl;
+
+
+    }
+    
     
 protected:
-    
+
     void* KeyHandle;
     Positions MainPositions={-500000, 500000, 0};
     

@@ -39,9 +39,15 @@ public:
         KeyHandle = keyHandle;
     }
     
-    virtual void readArguments(const std::map<std::string, double>& argMap)
+    virtual void setArguments(const std::map<std::string, double>& argMap)
     {
         m_args = argMap;
+    }
+    
+    const double& readArgument(const std::string& arg, const double& defaultArg) const
+    {
+        if ( m_args.count(arg) > 0 ) return m_args.find(arg)->second;
+        else return defaultArg;
     }
 
     virtual void activateMode() = 0;
