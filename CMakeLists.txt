@@ -29,4 +29,3 @@ target_link_libraries(HeartbeatController MaxonHeartrateController)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/data
     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-
