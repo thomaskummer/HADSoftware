@@ -10,9 +10,10 @@ For compiling this package, the EPOS-Linux-Library has to be installed.
 
 
 ## Download
-´´´
+
+```
 git clone https://github.com/thomaskummer/HADSoftware.git
-´´´
+```
 
 ## Build
 
