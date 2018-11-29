@@ -9,6 +9,11 @@ For compiling this package, the EPOS-Linux-Library has to be installed.
 [Epos-Linux-Library](https://www.maxonmotor.com/maxon/view/product/control/Positionierung/375711)
 
 
+## Download
+´´´
+git clone https://github.com/thomaskummer/HADSoftware.git
+´´´
+
 ## Build
 
 ```
