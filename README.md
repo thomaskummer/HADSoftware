@@ -18,6 +18,7 @@ git clone https://github.com/thomaskummer/HADSoftware.git
 ## Build
 
 ```
+cd HADSoftware
 ./config
 cd build
 make
@@ -26,9 +27,14 @@ make
 ## Run
 
 ```
-./HADController -f ... -h ...
+./HeartrateController ...
+-h   : this help
+-n   : [ARG] number of program repetitions (default 1)
+-pm  : profile mode
+-pd    : [ARG] distance to move (in mm, default 10)
+-ipm : interpolated position mode
+-ia    : [ARG] amplitude (in mm, default 20)
+-ip    : [ARG] period, time for one contraction (in ms, default 1000)
 
--f : ...
-
--h : ...
-e 
+example: ./HeartrateController -ipm -n 2
+```
