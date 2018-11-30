@@ -208,7 +208,7 @@ protected:
         int T=dt;
         int V=-(Amplitude*2*M_PI/Periode*cos(PointNumber*dt*2*M_PI/Periode-M_PI/2))*1000/(4*Resolution)*60;
 
-        std::cout<<"  \tPointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return{P,T,V};
     }
     
@@ -221,7 +221,7 @@ protected:
         int T = dt;
         int V = - 2 * M_PI * Amplitude * std::sin(4 * M_PI * t / Periode) / Periode * 60000 / (4 * Resolution);
         
-        std::cout<<"  \tPointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        std::cout<<"  \t[1]PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return{P,T,V};
     }
     
