@@ -29,7 +29,13 @@
 class HeartrateController {
 public:
     
-    HeartrateController(){}
+    HeartrateController()
+    {
+        std::cout << "\n====================================================" << std::endl;
+        std::cout << "Heartrate-controller for Maxon EPOS2 70/10" << std::endl;
+        std::cout << "Institute of fluid dynamics - ETH Zurich" << std::endl;
+        std::cout << "====================================================\n" << std::endl;
+    }
     
     virtual ~HeartrateController(){}
     
@@ -57,10 +63,14 @@ public:
     
     void setMotionModeArgsFromCmdLine()
     {
-        PRINT_FACTORY(MotionMode);
+        //PRINT_FACTORY(MotionMode);
 
-        if ( m_clp.feature("-pm") ) m_motionMode = CREATE(MotionMode, "ProfileMode");
-        if ( m_clp.feature("-ipm") ) m_motionMode = CREATE(MotionMode, "InterpolatedPositionMode");
+        std::string motionMode;
+        if ( m_clp.feature("-pm") ) motionMode = "ProfileMode";
+        if ( m_clp.feature("-ipm") ) motionMode = "InterpolatedPositionMode";
+
+        m_motionMode = CREATE(MotionMode, motionMode);
+        std::cout << "Motion mode set to '" << motionMode << "'" << std::endl;
 
         m_motionMode->setKeyHandle(KeyHandle);
         
@@ -82,7 +92,8 @@ public:
         unsigned int PositionIsError;
         int PositionIs;
         auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
-        std::cout << GetPositionIs << " " << PositionIsError <<" Position: " << PositionIs << std::endl;
+        // std::cout << GetPositionIs << " " << PositionIsError <<" Position: " << PositionIs << std::endl;
+        std::cout << "Motion completed - new coordinate is " << PositionIs << std::endl;
     }
     
     void* keyHandle()
@@ -129,7 +140,7 @@ protected:
     {
         unsigned int pErrorCode = 0;
         auto closed = VCS_CloseAllDevices(&pErrorCode);
-        std::cout << closed << " " << pErrorCode << std::endl;
+        //std::cout << closed << " " << pErrorCode << std::endl;
     }
     
     // Open device
@@ -147,7 +158,8 @@ protected:
         char* portNameCharPtr = const_cast<char*> (portNameStr.c_str());
         
         KeyHandle = VCS_OpenDevice(deviceNameCharPtr, protocolStackNameCharPtr, interfaceNameCharPtr, portNameCharPtr, &pErrorCodeOpen);
-        std::cout << KeyHandle << " " << pErrorCodeOpen << std::endl;
+        //std::cout << KeyHandle << " " << pErrorCodeOpen << std::endl;
+        std::cout << "EPOS2-Controller launched" << std::endl;
     }
     
     //clear fault state (red LED==unresponisve state)
@@ -163,7 +175,7 @@ protected:
         // Set protocol stack settings
         unsigned int pErrorCodeProtocol;
         auto protocol = VCS_SetProtocolStackSettings(KeyHandle, 1e6, 500, &pErrorCodeProtocol);
-        std::cout << protocol << " " << pErrorCodeProtocol << std::endl;
+        //std::cout << protocol << " " << pErrorCodeProtocol << std::endl;
         
         // Disable state
         unsigned int pErrorDisableState;
@@ -172,42 +184,44 @@ protected:
         // Set motor type
         unsigned int pErrorCodeMotor;
         auto motorType = VCS_SetMotorType(KeyHandle, 1, 10, &pErrorCodeMotor);
-        std::cout << motorType << " " << pErrorCodeMotor << std::endl;
+        //std::cout << motorType << " " << pErrorCodeMotor << std::endl;
         
         // Set motor parameters !! units unsure (mA, mA, s/10)
         unsigned int pErrorEc;
         auto ecMotor = VCS_SetEcMotorParameter(KeyHandle, 1, 6210, 10000, 310, 1, &pErrorEc);
-        std::cout << ecMotor << " " << pErrorEc << std::endl;
+        //std::cout << ecMotor << " " << pErrorEc << std::endl;
         
         // Set sensor type
         unsigned int pErrorSensorType;
         auto sensorType = VCS_SetSensorType(KeyHandle, 1, 1, &pErrorSensorType);
-        std::cout << sensorType << " " << pErrorSensorType << std::endl;
+        //std::cout << sensorType << " " << pErrorSensorType << std::endl;
         
         // Set sensor parameter
         unsigned int pErrorSensorParam;
         auto sensorParam = VCS_SetIncEncoderParameter(KeyHandle, 1, 500, 0, &pErrorSensorParam);
-        std::cout << sensorParam << " " << pErrorSensorParam << std::endl;
+        //std::cout << sensorParam << " " << pErrorSensorParam << std::endl;
         
         // Set position regulator gain
         unsigned int pErrorPosRegGain;
         auto positionRegGain = VCS_SetPositionRegulatorGain(KeyHandle, 1, 798, 3151, 1078, &pErrorPosRegGain);
-        std::cout << positionRegGain << " " << pErrorPosRegGain << std::endl;
+        //std::cout << positionRegGain << " " << pErrorPosRegGain << std::endl;
         
         // Set sensor parameter
         unsigned int pErrorVelRegGain;
         auto velocityRegGain = VCS_SetVelocityRegulatorGain(KeyHandle, 1, 2874, 532, &pErrorVelRegGain);
-        std::cout << velocityRegGain << " " << pErrorVelRegGain << std::endl;
+        //std::cout << velocityRegGain << " " << pErrorVelRegGain << std::endl;
         
         // Set sensor parameter
         unsigned int pErrorCurrentRegGain;
         auto currentRegGain = VCS_SetCurrentRegulatorGain(KeyHandle, 1, 335, 60, &pErrorCurrentRegGain);
-        std::cout << currentRegGain << " " << pErrorCurrentRegGain << std::endl;
+        //std::cout << currentRegGain << " " << pErrorCurrentRegGain << std::endl;
         
         // Set enable state
         unsigned int pErrorState;
         auto state = VCS_SetEnableState(KeyHandle, 1, &pErrorState);
-        std::cout << state << " " << pErrorState << std::endl;
+        //std::cout << state << " " << pErrorState << std::endl;
+        
+        std::cout << "EPOS2-Controller parameters set" << std::endl;
     }
     
     void getDeviceErrorCode()
@@ -232,7 +246,8 @@ protected:
         auto ErrorNb= VCS_GetNbOfDeviceError(KeyHandle, 1, &pNbDeviceError, &pErrorCode);
         if(!ErrorNb)
             std::cout<<"Error getting Number of Device Error: "<<pErrorCode<<std::endl;
-        std::cout<<"Number of Device Error: "<<static_cast<signed>(pNbDeviceError)<<std::endl;
+        if (static_cast<signed>(pNbDeviceError) > 0)
+            std::cout<<"Number of Device Error: "<<static_cast<signed>(pNbDeviceError)<<std::endl;
         return pNbDeviceError;
     }
     

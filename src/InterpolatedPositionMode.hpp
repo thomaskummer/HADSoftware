@@ -116,8 +116,8 @@ protected:
         if(!addPvt)
             std::cout<<"Add PVT-0 Error: "<<pErrorAddPvt<<std::endl;
         else
-            std::cout<<"PointNumber: "<<0<<" P: "<<0<<" T: "<<200<<" V: "<<0<<std::endl;
-        
+            // std::cout<<"PointNumber: "<<0<<" P: "<<0<<" T: "<<200<<" V: "<<0<<std::endl;
+
         
         while (time<=RunTime)
         {
@@ -171,13 +171,14 @@ protected:
             return 0;
         }
         
+        std::cout << "Trajectory has been computed" << std::endl;
         
         auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
 
         if (!StartIpmTraj)
             std::cout<<"StartIPModeTrajectory Error: "<<pErrorStartTrajectory<<std::endl;
         else
-            std::cout<<"Starting Trajectory"<<std::endl;
+            std::cout<<"Starting Trajectory..."<<std::endl;
         
         
         unsigned int Timeout = timeout; //max waiting time in ms
@@ -221,7 +222,7 @@ protected:
         int T = dt;
         int V = - 2 * M_PI * Amplitude * std::sin(4 * M_PI * t / Periode) / Periode * 60000 / (4 * Resolution);
         
-        std::cout<<"  \t[1]PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        //std::cout<<"  \t[1]PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return{P,T,V};
     }
     
