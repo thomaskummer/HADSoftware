@@ -47,9 +47,11 @@ int main(int argc, char** argv)
 
     hrc.activateMotionMode();
     
-    unsigned int n(1);
-    if ( hrc.cmdLineParser().map().count("-n") > 0 ) n = hrc.cmdLineParser()["-n"];
-    for (unsigned int i(0); i < n; ++i) hrc.run();
+    hrc.run();
+    
+//    unsigned int n(1);
+//    if ( hrc.cmdLineParser().map().count("-n") > 0 ) n = hrc.cmdLineParser()["-n"];
+//    for (unsigned int i(0); i < n; ++i) hrc.run();
     
     
     hrc.printPosition();

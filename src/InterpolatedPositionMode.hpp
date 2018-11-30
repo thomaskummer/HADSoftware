@@ -157,10 +157,10 @@ protected:
             std::cout<<"Starting Trajectory"<<std::endl;
         
         
-        unsigned int Timeout = Periode - 1000; //max waiting time in ms
-        unsigned int pErrorCode;
-        
-        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
+//        unsigned int Timeout = Periode - 1000; //max waiting time in ms
+//        unsigned int pErrorCode;
+//
+//        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
     }
     
     //Get buffer parameters for ipm
