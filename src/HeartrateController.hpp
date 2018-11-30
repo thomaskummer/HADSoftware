@@ -112,8 +112,6 @@ public:
         std::cout << "\t-ia    : [ARG] amplitude (in mm, default 20)" << std::endl;
         std::cout << "\t-ip    : [ARG] period, time for one contraction (in ms, default 1000)" << std::endl;
         std::cout << "\n\texample: ./HeartrateController -ipm -n 2"  << std::endl;
-
-
     }
     
     
