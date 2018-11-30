@@ -46,7 +46,7 @@ public:
     {
         auto function = readArgument("-if", 0);
 
-        auto distance = readArgument("-ia", 20) mm;
+        auto distance = readArgument("-ia", -20) mm;
         auto period = readArgument("-ip", 1000);
         auto timestep = readArgument("-it", period/59);
         auto runtime = readArgument("-irt", period);

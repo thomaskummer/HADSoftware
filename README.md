@@ -34,7 +34,7 @@ make
 -pd    : [ARG] distance to move (in mm, default 10)
 -ipm : interpolated position mode
 -if    : [ARG] motion function (0 (default) for sin(t), 1 for sin^2(t))
--ia    : [ARG] amplitude (in mm, default 20)
+-ia    : [ARG] amplitude (in mm, default -20)
 -ip    : [ARG] period, time for one contraction (in ms, default 1000)
 
 example: ./HeartrateController -ipm -if 1 -ia 40 -n 2
