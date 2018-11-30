@@ -44,13 +44,16 @@ public:
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
     void run()
     {
-        auto distance = 0.5 * readArgument("-ia", 20) mm;
+        auto function = readArgument("-if", 0);
+
+        auto distance = readArgument("-ia", 20) mm;
         auto period = readArgument("-ip", 1000);
-        auto timestep = readArgument("-it", period/60);
+        auto timestep = readArgument("-it", period/59);
         auto runtime = readArgument("-irt", period);
         auto resolution = readArgument("-ir", 500);
+        auto timeout = readArgument("iti", (period > 2000 ? period - 1000 : period - 700));
 
-        runIPM(distance, period, timestep, runtime, resolution);
+        runIPM(function, distance, period, timestep, runtime, resolution, timeout);
     }
     
     //Get status of interpolated position mode
@@ -78,31 +81,31 @@ public:
     
 protected:
     
-    //move cylinder to x using InterpolatedPositionMode (ActivateInterpolatedPositionMode must be called first)
-    bool SetPosition_InterpolatedPositionMode(int position)
-    {
-        // Move to position
-        unsigned int pErrorMoveToPos;
-        bool absoluteMovement = true;
-        bool immediately = false;
-        bool MoveToPos;
-        
-        if (position >= MainPositions.Min && position <= MainPositions.Max)
-        {
-            MoveToPos = VCS_MoveToPosition(KeyHandle, 1, position, absoluteMovement, immediately, &pErrorMoveToPos);
-            std::cout <<"MoveToPos: "<< MoveToPos << " ErrorCode:  "  << pErrorMoveToPos << std::endl;
-            Wait();
-            printPosition();
-            return 1;
-        }
-        else
-        {    std::cout <<"Out of bounds! No further movement in this direction!";
-            return 0;
-        }
-    }
+//    //move cylinder to x using InterpolatedPositionMode (ActivateInterpolatedPositionMode must be called first)
+//    bool SetPosition_InterpolatedPositionMode(int position)
+//    {
+//        // Move to position
+//        unsigned int pErrorMoveToPos;
+//        bool absoluteMovement = true;
+//        bool immediately = false;
+//        bool MoveToPos;
+//
+//        if (position >= MainPositions.Min && position <= MainPositions.Max)
+//        {
+//            MoveToPos = VCS_MoveToPosition(KeyHandle, 1, position, absoluteMovement, immediately, &pErrorMoveToPos);
+//            std::cout <<"MoveToPos: "<< MoveToPos << " ErrorCode:  "  << pErrorMoveToPos << std::endl;
+//            Wait();
+//            printPosition();
+//            return 1;
+//        }
+//        else
+//        {    std::cout <<"Out of bounds! No further movement in this direction!";
+//            return 0;
+//        }
+//    }
     
     //Interpolated position mode
-    bool runIPM(int Amplitude, int Periode, int dt, int RunTime, int Resolution)
+    bool runIPM(int function, int Amplitude, int Periode, int dt, int RunTime, int Resolution, int timeout)
     {
         int PointNbr=1;
         int time=dt;
@@ -118,10 +121,20 @@ protected:
         
         while (time<=RunTime)
         {
-            auto PTV=GetPTV(Amplitude,PointNbr,Periode,dt,Resolution);
-            if (PTV.P<=MainPositions.Max&&PTV.P>=MainPositions.Min)
+            PTV ptv;
+            switch (function) {
+                case 0:
+                    ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution);
+                    break;
+                case 1:
+                    ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution);
+                default:
+                    break;
+            }
+
+            if (ptv.P<=MainPositions.Max&&ptv.P>=MainPositions.Min)
             {
-                auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, PTV.P, PTV.V, PTV.T, &pErrorAddPvt);
+                auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
                 if(!addPvt)
                     std::cout<<"Add PVT-while Error: "<<pErrorAddPvt<<std::endl;
             }
@@ -135,10 +148,20 @@ protected:
         }
         
         //end point with last position value
-        auto PTV=GetPTV(Amplitude,PointNbr,Periode,dt,Resolution);
-        if (PTV.P<=MainPositions.Max&&PTV.P>=MainPositions.Min)
+        PTV ptv;
+        switch (function) {
+            case 0:
+                ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution);
+                break;
+            case 1:
+                ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution);
+            default:
+                break;
+        }
+
+        if (ptv.P<=MainPositions.Max&&ptv.P>=MainPositions.Min)
         {
-            auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, PTV.P, 0, 0, &pErrorAddPvt);
+            auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, 0, 0, &pErrorAddPvt);
             if(!addPvt)
                 std::cout<<"Add PVT-endl Error: "<<pErrorAddPvt<<std::endl;
         }
@@ -157,10 +180,10 @@ protected:
             std::cout<<"Starting Trajectory"<<std::endl;
         
         
-//        unsigned int Timeout = Periode - 1000; //max waiting time in ms
-//        unsigned int pErrorCode;
-//
-//        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
+        unsigned int Timeout = timeout; //max waiting time in ms
+        unsigned int pErrorCode;
+
+        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
     }
     
     //Get buffer parameters for ipm
@@ -177,14 +200,28 @@ protected:
         <<pMaxBufferSize<<": MaxBufferSize "<<pErrorCode<<": ErrorCode"<<std::endl;
     }
     
-    //Get IPMode PTV
-    PTV GetPTV(int Amplitude,int PointNumber,int Periode, int dt, int Resolution)
+    //Get IPMode PTV sin(t)
+    PTV GetPTVsin(int Amplitude,int PointNumber,int Periode, int dt, int Resolution)
     {
-        int P=(Amplitude*sin(PointNumber*dt*2*M_PI/Periode-M_PI/2))+Amplitude;
+        Amplitude *= 0.5;
+        int P=-(Amplitude*sin(PointNumber*dt*2*M_PI/Periode-M_PI/2))-Amplitude;
         int T=dt;
-        int V=(Amplitude*2*M_PI/Periode*cos(PointNumber*dt*2*M_PI/Periode-M_PI/2))*1000/(4*Resolution)*60;
+        int V=-(Amplitude*2*M_PI/Periode*cos(PointNumber*dt*2*M_PI/Periode-M_PI/2))*1000/(4*Resolution)*60;
+
+        std::cout<<"  \tPointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        return{P,T,V};
+    }
+    
+    //Get IPMode PTV sin^2(t)
+    PTV GetPTVsin2(int Amplitude,int PointNumber,int Periode, int dt, int Resolution)
+    {
+        Periode *= 2;
+        int t = PointNumber * dt;
+        int P = - Amplitude * std::pow(std::sin(2 * M_PI * t / Periode), 2);
+        int T = dt;
+        int V = - 2 * M_PI * Amplitude * std::sin(4 * M_PI * t / Periode) / Periode * 60000 / (4 * Resolution);
         
-        std::cout<<"PointNumber: "<<PointNumber<<" P: "<<P<<" T: "<<T<<" V: "<<V<<std::endl;
+        std::cout<<"  \tPointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return{P,T,V};
     }
     

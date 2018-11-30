@@ -108,6 +108,7 @@ public:
         std::cout << "\t-pm  : profile mode"  << std::endl;
         std::cout << "\t-pd    : [ARG] distance to move (in mm, default 10)"  << std::endl;
         std::cout << "\t-ipm : interpolated position mode"  << std::endl;
+        std::cout << "\t-if    : [ARG] motion function (0 (default) for sin(t), 1 for sin^2(t))" << std::endl;
         std::cout << "\t-ia    : [ARG] amplitude (in mm, default 20)" << std::endl;
         std::cout << "\t-ip    : [ARG] period, time for one contraction (in ms, default 1000)" << std::endl;
         std::cout << "\n\texample: ./HeartrateController -ipm -n 2"  << std::endl;
