@@ -52,6 +52,8 @@ public:
         clearFault();
         setParameters();
         getDeviceErrorCode();
+        
+        setMotionModeFromCmdLine();
     }
     
     void setMotionMode(const std::string& motionMode)
@@ -61,7 +63,7 @@ public:
         m_motionMode->setKeyHandle(KeyHandle);
     }
     
-    void setMotionModeArgsFromCmdLine()
+    void setMotionModeFromCmdLine()
     {
         //PRINT_FACTORY(MotionMode);
 
@@ -111,6 +113,15 @@ public:
         return m_clp;
     }
     
+    void reset()
+    {
+        unsigned int pErrorCode;
+        if(VCS_ResetDevice(KeyHandle,1,&pErrorCode))
+            std::cout <<"Device reset"<<std::endl;
+        else
+            std::cout<<"Reset Error: "<<pErrorCode<<std::endl;
+    }
+    
     void printUsage()
     {
         std::cout << "Usage: HeartrateController" << std::endl;
@@ -122,7 +133,7 @@ public:
         std::cout << "\t-if    : [ARG] motion function (0 (default) for sin(t), 1 for sin^2(t))" << std::endl;
         std::cout << "\t-ia    : [ARG] amplitude (in mm, default 20)" << std::endl;
         std::cout << "\t-ip    : [ARG] period, time for one contraction (in ms, default 1000)" << std::endl;
-        std::cout << "\n\texample: ./HeartrateController -ipm -n 2"  << std::endl;
+        std::cout << "\n\texample: ./HeartrateController -ipm if 1 -ia -40 -n 2"  << std::endl;
     }
     
     
@@ -170,7 +181,8 @@ protected:
         if (!clearFault) std::cout<<"Clear Fault Error: "<<pErrorCode<<std::endl;
         std::this_thread::sleep_for(std::chrono::milliseconds(4000));
     }
-        void setParameters()
+    
+    void setParameters()
     {
         // Set protocol stack settings
         unsigned int pErrorCodeProtocol;
