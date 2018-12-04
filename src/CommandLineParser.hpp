@@ -78,7 +78,7 @@ public:
         std::cout << "CommandLineParser::printAll()" << std::endl;
         for (auto& task : m_tasks)
         {
-            std::cout << "  [" << task.first << ':' << task.second << ']' << std::endl;
+            std::cout << "  [" << task.first << ':' << task.second << "]" << std::endl;
         }
     }
         

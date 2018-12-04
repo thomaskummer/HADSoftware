@@ -46,14 +46,16 @@ public:
     
     void setup()
     {
+        if ( m_clp.feature("-re") ) {reset(); exit(0);}
+        
+        if ( m_clp.feature("-h") ) {printUsage(); exit(0);}
+        
         close();
         open();
         
         clearFault();
         setParameters();
         getDeviceErrorCode();
-        
-        setMotionModeFromCmdLine();
     }
     
     void setMotionMode(const std::string& motionMode)
@@ -86,7 +88,9 @@ public:
     
     void run()
     {
-        m_motionMode->run();
+        unsigned int n(1);
+        if ( m_clp.feature("-n") ) n = m_clp["-n"];
+        for (unsigned int i(0); i < n; ++i) m_motionMode->run();
     }
 
     void printPosition()
@@ -130,7 +134,7 @@ public:
         std::cout << "\t-pm  : profile mode"  << std::endl;
         std::cout << "\t-pd    : [ARG] distance to move (in mm, default 10)"  << std::endl;
         std::cout << "\t-ipm : interpolated position mode"  << std::endl;
-        std::cout << "\t-if    : [ARG] motion function (0 (default) for sin(t), 1 for sin^2(t))" << std::endl;
+        std::cout << "\t-if    : [ARG] motion type (0 for sin(t), 1 for sin^2(t), default 0)" << std::endl;
         std::cout << "\t-ia    : [ARG] amplitude (in mm, default 20)" << std::endl;
         std::cout << "\t-ip    : [ARG] period, time for one contraction (in ms, default 1000)" << std::endl;
         std::cout << "\n\texample: ./HeartrateController -ipm if 1 -ia -40 -n 2"  << std::endl;

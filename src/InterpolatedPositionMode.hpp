@@ -46,12 +46,12 @@ public:
     {
         auto function = readArgument("-if", 0);
 
-        auto distance = readArgument("-ia", -20) mm;
-        auto period = readArgument("-ip", 1000);
-        auto timestep = readArgument("-it", period/59);
+        auto distance = readArgument("-ia", -20.0) mm;
+        auto period = readArgument("-ip", 1000.0);
+        auto timestep = readArgument("-it", period/58.);
         auto runtime = readArgument("-irt", period);
         auto resolution = readArgument("-ir", 500);
-        auto timeout = readArgument("iti", (period > 2000 ? period - 1000 : period - 700));
+        auto timeout = readArgument("ito", (period > 2000 ? period - 1000 : period - 700));
 
         runIPM(function, distance, period, timestep, runtime, resolution, timeout);
     }
@@ -105,10 +105,10 @@ protected:
 //    }
     
     //Interpolated position mode
-    bool runIPM(int function, int Amplitude, int Periode, int dt, int RunTime, int Resolution, int timeout)
+    bool runIPM(int function, double Amplitude, double Periode, double dt, double RunTime, double Resolution, double& timeout)
     {
         int PointNbr=1;
-        int time=dt;
+        double time=dt;
         unsigned int pErrorAddPvt, pErrorStartTrajectory;
         
         //start with point 0
@@ -202,27 +202,27 @@ protected:
     }
     
     //Get IPMode PTV sin(t)
-    PTV GetPTVsin(int Amplitude,int PointNumber,int Periode, int dt, int Resolution)
+    PTV GetPTVsin(double Amplitude,double PointNumber,double Periode, double dt, double Resolution)
     {
         Amplitude *= 0.5;
-        int P=-(Amplitude*sin(PointNumber*dt*2*M_PI/Periode-M_PI/2))-Amplitude;
-        int T=dt;
-        int V=-(Amplitude*2*M_PI/Periode*cos(PointNumber*dt*2*M_PI/Periode-M_PI/2))*1000/(4*Resolution)*60;
+        int P= (int) -(Amplitude*sin(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))-Amplitude;
+        int T= (int) dt;
+        int V= (int) -(Amplitude*2.0*M_PI/Periode*cos(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))*1000.0/(4.0*Resolution)*60.0;
 
         std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return{P,T,V};
     }
     
     //Get IPMode PTV sin^2(t)
-    PTV GetPTVsin2(int Amplitude,int PointNumber,int Periode, int dt, int Resolution)
+    PTV GetPTVsin2(double Amplitude,double PointNumber,double Periode, double dt, double Resolution)
     {
-        Periode *= 2;
-        int t = PointNumber * dt;
-        int P = - Amplitude * std::pow(std::sin(2 * M_PI * t / Periode), 2);
-        int T = dt;
-        int V = - 2 * M_PI * Amplitude * std::sin(4 * M_PI * t / Periode) / Periode * 60000 / (4 * Resolution);
+        Periode *= 2.0;
+        int t = (int) PointNumber * dt;
+        int P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode), 2.0);
+        int T = (int) dt;
+        int V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
         
-        //std::cout<<"  \t[1]PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        std::cout<<"  \t[1]PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return{P,T,V};
     }
     
