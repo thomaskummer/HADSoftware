@@ -1,13 +1,13 @@
 //
-//  InteractiveMode.hpp
+//  InteractiveParser.hpp
 //  HeartrateController
 //
 //  Created by Thomas Kummer on 20.11.18.
 //  Copyright © 2018 Thomas Kummer. All rights reserved.
 //
 
-#ifndef InteractiveMode_hpp
-#define InteractiveMode_hpp
+#ifndef InteractiveParser_hpp
+#define InteractiveParser_hpp
 
 #include <iostream>
 #include <fstream>
@@ -17,12 +17,12 @@
 
 namespace HeartrateControllerSpace {
     
-class InteractiveMode {
+class InteractiveParser {
 public:
     
-    InteractiveMode(){}
+    InteractiveParser(){}
     
-    virtual ~InteractiveMode(){}
+    virtual ~InteractiveParser(){}
     
     void run()
     {
@@ -78,4 +78,4 @@ protected:
 }
 
 
-#endif /* InteractiveMode_hpp */
+#endif /* InteractiveParser_hpp */
