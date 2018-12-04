@@ -182,7 +182,7 @@ protected:
         
         unsigned int Timeout = timeout; //max waiting time in ms
         unsigned int pErrorCode;
-
+        sleep(1.2);
         auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
     }
     
@@ -208,7 +208,7 @@ protected:
         int T= (int) dt;
         int V= (int) -(Amplitude*2.0*M_PI/Periode*cos(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))*1000.0/(4.0*Resolution)*60.0;
 
-        std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        //std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return{P,T,V};
     }
     
@@ -221,7 +221,7 @@ protected:
         int T = (int) dt;
         int V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
         
-        std::cout<<"  \t[1]PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        //std::cout<<"  \t[1]PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return{P,T,V};
     }
     

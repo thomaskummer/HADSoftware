@@ -37,19 +37,5 @@ using namespace HeartrateControllerSpace;
 int main(int argc, char** argv)
 {
     HeartrateController hrc;
-
-    std::thread guiInterfaceThread( &HeartrateController::readGuiActions, &hrc, 5 );
-    guiInterfaceThread.join();
-    
-    hrc.readCmdLineArguments(argc, argv);
-
-    hrc.setup();
-    
-    hrc.setMotionModeFromCmdLine();
-    
-    hrc.activateMotionMode();
-    
-    hrc.run();
-
-    hrc.printPosition();
+    hrc.runConrollerFromCmdLine(argc, argv);
 }

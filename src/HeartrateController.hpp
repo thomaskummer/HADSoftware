@@ -87,7 +87,7 @@ public:
         m_motionMode->activateMode();
     }
     
-    void run()
+    void runMotion()
     {
         unsigned int n(1);
         if ( m_clp.feature("-n") ) n = m_clp["-n"];
@@ -101,6 +101,21 @@ public:
         auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
         // std::cout << GetPositionIs << " " << PositionIsError <<" Position: " << PositionIs << std::endl;
         std::cout << "Motion completed - new coordinate is " << PositionIs << std::endl;
+    }
+    
+    void runConrollerFromCmdLine(int argc, char** argv)
+    {
+        readCmdLineArguments(argc, argv);
+        
+        setup();
+        
+        setMotionModeFromCmdLine();
+        
+        activateMotionMode();
+        
+        runMotion();
+        
+        printPosition();
     }
     
     void* keyHandle()
