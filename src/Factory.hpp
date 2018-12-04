@@ -14,7 +14,7 @@
 #include <typeinfo>
 
 
-//namespace FiniteElementAnalysis {
+using namespace HeartrateControllerSpace;
 
 template<class factory_type>
 class Factory;

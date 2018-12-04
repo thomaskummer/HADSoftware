@@ -33,7 +33,7 @@ make
 -pm  : profile mode
 -pd    : [ARG] distance to move (in mm, default 10)
 -ipm : interpolated position mode
--if    : [ARG] motion function (0 (default) for sin(t), 1 for sin^2(t))
+-if    : [ARG] motion type (0 for sin(t), 1 for sin^2(t), default 0)
 -ia    : [ARG] amplitude (in mm, default -20)
 -ip    : [ARG] period, time for one contraction (in ms, default 1000)
 

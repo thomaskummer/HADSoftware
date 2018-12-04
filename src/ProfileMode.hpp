@@ -14,7 +14,7 @@
 #include <assert.h>
 
 
-// namespace HADController {
+namespace HeartrateControllerSpace {
 
 class ProfileMode : public MotionMode {
 public:
@@ -84,7 +84,7 @@ protected:
 };
 
 
-// }
+}
 
 REGISTER(MotionMode, ProfileMode);
 

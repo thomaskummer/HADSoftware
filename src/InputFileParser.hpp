@@ -14,7 +14,7 @@
 #include <assert.h>
 
 
-// namespace HADController {
+namespace HeartrateControllerSpace {
     
 class InputFileParser {
 public:
@@ -84,7 +84,7 @@ protected:
 };
     
 
-// }
+}
 
 
 #endif /* InputFileParser_hpp */

@@ -15,7 +15,7 @@
 
 #define mm * -1600
 
-// namespace HADController {
+namespace HeartrateControllerSpace {
     
 class InteractiveMode {
 public:
@@ -75,7 +75,7 @@ protected:
 };
     
 
-// }
+}
 
 
 #endif /* InteractiveMode_hpp */

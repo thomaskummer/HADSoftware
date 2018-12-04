@@ -29,55 +29,18 @@
 
 #include "HeartrateController.hpp"
 
+using namespace HeartrateControllerSpace;
 
 #define mm * -1600
-
-class GUIInterface
-{
-public:
-    
-//    GUIInterface()
-//    {
-//        std::cout << "interface created" << std::endl;
-//    }
-//
-//    GUIInterface(const GUIInterface& obj) {}
-    
-    void operator()()
-    {
-        for(int i = 0; i < 10; i++) std::cout<<"display thread executing"<<std::endl;
-    }
-
-    void testf(int x)
-    {
-        std::cout<<"sampleMemberFunction..."<<x<<std::endl;
-    }
-
-};
-
-
-//    int main() {
-//
-//            DummyClass dummyObj;
-//            int x = 10;
-//            std::thread threadObj(&DummyClass::sampleMemberFunction,&dummyObj, x);
-//            threadObj.join();
-//            return 0;
-//    }
 
 
 int main(int argc, char** argv)
 {
-    GUIInterface guiInterface;
-    
-    std::thread guiInterfaceThread( &GUIInterface );
-    std::thread guiInterfaceThread( &GUIInterface::testf, &guiInterface, 5 );
-    guiInterfaceThread.join();
-
-    
-    
     HeartrateController hrc;
 
+    std::thread guiInterfaceThread( &HeartrateController::readGuiActions, &hrc, 5 );
+    guiInterfaceThread.join();
+    
     hrc.readCmdLineArguments(argc, argv);
 
     hrc.setup();

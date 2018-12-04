@@ -11,6 +11,8 @@
 
 #include "Factory.hpp"
 
+namespace HeartrateControllerSpace {
+
 #define mm * -1600
 
 struct Positions
@@ -90,5 +92,7 @@ protected:
     }
 
 };
+    
+}
 
 #endif /* MotionMode_hpp */

@@ -14,8 +14,7 @@
 #include <assert.h>
 
 
-
-// namespace HADController {
+namespace HeartrateControllerSpace {
 
 class InterpolatedPositionMode : public MotionMode {
 public:
@@ -229,7 +228,7 @@ protected:
 };
 
 
-// }
+}
 
 REGISTER(MotionMode, InterpolatedPositionMode);
 

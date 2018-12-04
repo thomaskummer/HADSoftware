@@ -24,7 +24,7 @@
 #define mm * -1600
 
 
-// namespace HADController {
+namespace HeartrateControllerSpace {
 
 class HeartrateController {
 public:
@@ -41,7 +41,8 @@ public:
     
     void readCmdLineArguments(int argc, char** argv)
     {
-        m_clp = CommandLineParser(argc, argv);
+        m_clp = CommandLineParser();
+        m_clp.readCommandLine(argc, argv);
     }
     
     void setup()
@@ -138,6 +139,11 @@ public:
         std::cout << "\t-ia    : [ARG] amplitude (in mm, default 20)" << std::endl;
         std::cout << "\t-ip    : [ARG] period, time for one contraction (in ms, default 1000)" << std::endl;
         std::cout << "\n\texample: ./HeartrateController -ipm if 1 -ia -40 -n 2"  << std::endl;
+    }
+    
+    void readGuiActions(int x)
+    {
+        std::cout<<"sampleMemberFunction..."<<x<<std::endl;
     }
     
     
@@ -278,7 +284,7 @@ protected:
 };
 
 
-// }
+}
 
 
 #endif /* HeartrateController_hpp */
