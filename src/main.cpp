@@ -37,5 +37,11 @@ using namespace HeartrateControllerSpace;
 int main(int argc, char** argv)
 {
     HeartrateController hrc;
-    hrc.runConrollerFromCmdLine(argc, argv);
+    hrc.readCmdLineArguments(argc, argv);
+        
+    if (hrc.cmdLineParser().feature("-gui"))
+    {
+        hrc.runControllerFromGUI();
+    }
+    else hrc.runConrollerFromCmdLine();
 }

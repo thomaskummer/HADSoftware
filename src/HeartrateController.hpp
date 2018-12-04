@@ -13,9 +13,11 @@
 #include <fstream>
 #include <assert.h>
 #include <stdio.h>
+#include <vector>
 
 #include "CommandLineParser.hpp"
 #include "InputFileParser.hpp"
+#include "GUIThreadParser.hpp"
 #include "MotionMode.hpp"
 #include "ProfileMode.hpp"
 #include "InterpolatedPositionMode.hpp"
@@ -61,14 +63,14 @@ public:
     
     void setMotionMode(const std::string& motionMode)
     {
-        PRINT_FACTORY(MotionMode);
+        // PRINT_FACTORY(MotionMode);
         m_motionMode = CREATE(MotionMode, motionMode);
         m_motionMode->setKeyHandle(KeyHandle);
     }
     
     void setMotionModeFromCmdLine()
     {
-        //PRINT_FACTORY(MotionMode);
+        // PRINT_FACTORY(MotionMode);
 
         std::string motionMode;
         if ( m_clp.feature("-pm") ) motionMode = "ProfileMode";
@@ -87,7 +89,7 @@ public:
         m_motionMode->activateMode();
     }
     
-    void runMotion()
+    void run()
     {
         unsigned int n(1);
         if ( m_clp.feature("-n") ) n = m_clp["-n"];
@@ -103,20 +105,66 @@ public:
         std::cout << "Motion completed - new coordinate is " << PositionIs << std::endl;
     }
     
-    void runConrollerFromCmdLine(int argc, char** argv)
+    void runConrollerFromCmdLine()
     {
-        readCmdLineArguments(argc, argv);
-        
         setup();
         
         setMotionModeFromCmdLine();
         
         activateMotionMode();
         
-        runMotion();
+        run();
         
         printPosition();
     }
+    
+    void runControllerFromGUI()
+    {
+        setup();
+
+        GUIThreadParser gtp;
+        std::vector<int> tasks (8, 0);
+        std::thread gtpThread( &GUIThreadParser::readGUIActions , &gtp );
+        // std::thread gtpThread( (GUIThreadParser()) );
+
+        sleep(1);
+        while (gtp.waitingForInput())
+        {
+            // std::cout << gtp.tasks().at(0) << " : " << gtp.tasks().at(1) << std::endl;
+            
+            
+            if ( gtp.taskSubmitted() )
+            {
+                gtp.taskReceived();
+                
+                if ( gtp.task(0) )
+                {
+                    setMotionMode("ProfileMode");
+                    std::cout << ">>> ProfileMode set" << std::endl;
+                    const std::pair<std::string, double> arg ("-pd", gtp.task(1));
+                    const std::map<std::string, double> argMap;
+                    argMap.emplace(arg);
+                    m_motionMode->setArguments(arg);
+                    activateMotionMode();
+                    run();
+                }
+                
+                if ( gtp.task(2) )
+                {
+                    setMotionMode("InterpolatedPositionMode");
+                    std::cout << ">>> InterpolatedPositionMode set" << std::endl;
+                    activateMotionMode();
+                    run();
+                }
+            }
+            
+            
+            sleep (0.01);
+        }
+
+        gtpThread.join();
+    }
+
     
     void* keyHandle()
     {
@@ -154,11 +202,6 @@ public:
         std::cout << "\t-ia    : [ARG] amplitude (in mm, default 20)" << std::endl;
         std::cout << "\t-ip    : [ARG] period, time for one contraction (in ms, default 1000)" << std::endl;
         std::cout << "\n\texample: ./HeartrateController -ipm if 1 -ia -40 -n 2"  << std::endl;
-    }
-    
-    void readGuiActions(int x)
-    {
-        std::cout<<"sampleMemberFunction..."<<x<<std::endl;
     }
     
     
