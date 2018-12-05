@@ -30,13 +30,13 @@ public:
         unsigned int pErrorClearBuffer;
         
         auto IPMode = VCS_ActivateInterpolatedPositionMode(KeyHandle, 1, &pErrorActivate);
-        if (!IPMode)
-            std::cout<<"Activate IP Mode Error: "<<pErrorActivate<<std::endl;
+        // if (!IPMode)
+            //std::cout<<"Activate IP Mode Error: "<<pErrorActivate<<std::endl;
         
         // auto setIpmBuffer = VCS_SetIpmBufferParameter(KeyHandle, 1, -100, 100, &pErrorIntPosMode);
         auto ClearIpmBuffer = VCS_ClearIpmBuffer(KeyHandle, 1, &pErrorClearBuffer);
-        if (!ClearIpmBuffer)
-            std::cout<<"Clear Buffer Error: "<<pErrorClearBuffer<<std::endl;
+        // if (!ClearIpmBuffer)
+            //std::cout<<"Clear Buffer Error: "<<pErrorClearBuffer<<std::endl;
         
     }
     

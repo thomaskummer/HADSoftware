@@ -137,22 +137,18 @@ public:
             {
                 gtp.taskReceived();
                 
-                if ( gtp.task(0) )
+                if ( gtp.interface(0) )
                 {
                     setMotionMode("ProfileMode");
-                    std::cout << ">>> ProfileMode set" << std::endl;
-                    const std::pair<std::string, double> arg ("-pd", gtp.task(1));
-                    const std::map<std::string, double> argMap;
-                    argMap.emplace(arg);
-                    m_motionMode->setArguments(arg);
+                    m_motionMode->setArguments(gtp.map());
                     activateMotionMode();
                     run();
                 }
                 
-                if ( gtp.task(2) )
+                if ( gtp.interface(2) )
                 {
                     setMotionMode("InterpolatedPositionMode");
-                    std::cout << ">>> InterpolatedPositionMode set" << std::endl;
+                    m_motionMode->setArguments(gtp.map());
                     activateMotionMode();
                     run();
                 }

@@ -28,7 +28,7 @@ public:
     {
         unsigned int pErrorProfilePosMode;
         auto profilePosMode = VCS_ActivateProfilePositionMode(KeyHandle, 1, &pErrorProfilePosMode);
-        std::cout << profilePosMode << " " << pErrorProfilePosMode << std::endl;
+        //std::cout << profilePosMode << " " << pErrorProfilePosMode << std::endl;
         
         // Set sensor parameter
 //        InputFileParser inputFile("data");
@@ -36,7 +36,7 @@ public:
         
         unsigned int pErrorSetPosProfile;
         auto posProfile = VCS_SetPositionProfile(KeyHandle, 1, 22000, 15000, 15000, &pErrorSetPosProfile); // Node ID, position profile velocity,..acceleration,..deceleration
-        std::cout << posProfile << " " << pErrorSetPosProfile << std::endl;
+        //std::cout << posProfile << " " << pErrorSetPosProfile << std::endl;
     }
 
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
@@ -46,7 +46,7 @@ public:
         int PositionIs = PositionIs_Fct();
         int NewPosition = PositionIs - distance;
         bool moved = SetPosition_ProfileMode(NewPosition);
-        std::cout << "From " << PositionIs << " to " << NewPosition << " by " << distance/(1600) << " mm" << std::endl;
+        //std::cout << "From " << PositionIs << " to " << NewPosition << " by " << distance/(1600) << " mm" << std::endl;
 //        if(moved)
 //            return 1;
 //        else
@@ -70,9 +70,9 @@ protected:
         if (position >= MainPositions.Min && position <= MainPositions.Max)
         {
             MoveToPos = VCS_MoveToPosition(KeyHandle, 1, position, absoluteMovement, immediately, &pErrorMoveToPos);
-            std::cout <<"MoveToPos: "<< MoveToPos << " ErrorCode:  "  << pErrorMoveToPos << std::endl;
+            //std::cout <<"MoveToPos: "<< MoveToPos << " ErrorCode:  "  << pErrorMoveToPos << std::endl;
             Wait();
-            printPosition();
+            //printPosition();
             return 1;
         }
         else

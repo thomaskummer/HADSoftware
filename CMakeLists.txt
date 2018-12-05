@@ -9,14 +9,16 @@ include_directories(include)
 
 add_library(MaxonHeartrateController
 	src/main.cpp
-    src/CommandLineParser.hpp
+	src/InputParser.hpp
+    	src/CommandLineParser.hpp
 	src/InputFileParser.hpp
-    src/InteractiveMode.hpp
+    	src/InteractiveParser.hpp
+	src/GUIThreadParser.hpp
 	src/Factory.hpp
-    src/HeartrateController.hpp
-    src/MotionMode.hpp
-    src/ProfileMode.hpp
-    src/InterpolatedPositionMode.hpp
+    	src/HeartrateController.hpp
+    	src/MotionMode.hpp
+    	src/ProfileMode.hpp
+    	src/InterpolatedPositionMode.hpp
 )
 
 target_link_libraries(MaxonHeartrateController -lEposCmd)

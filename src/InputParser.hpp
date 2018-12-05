@@ -38,9 +38,14 @@ public:
         return std::pair<std::string, double>(type, m_tasks.find(type)->second);
     }
     
-    const double& operator[](const std::string& type) const
+    double& operator[](const std::string& type)
     {
         return m_tasks.find(type)->second;
+    }
+    
+    const std::map<std::string, double>& tasks()
+    {
+        return m_tasks;
     }
     
     void printAll()

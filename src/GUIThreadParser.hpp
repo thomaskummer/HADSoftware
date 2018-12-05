@@ -19,9 +19,9 @@ namespace HeartrateControllerSpace {
 class GUIThreadParser : public InputParser {
 public:
     
-    GUIThreadParser() : m_tasks (std::vector<int> (10, 0)), m_waitingForInput (true), m_taskSubmitted (false)
+    GUIThreadParser() : m_interface (std::vector<int> (10, 0)), m_waitingForInput (true), m_taskSubmitted (false)
     {
-        std::cout << "GUIThreadParser thread created" << std::endl;
+        std::cout << "GUIThreadParser created" << std::endl;
     }
     
     virtual ~GUIThreadParser(){}
@@ -47,12 +47,22 @@ public:
             
             if (!task.compare("move"))
             {
-                m_tasks[0] = 1;
-                m_tasks[1] = std::stoi(value);
-                std::cout << ">>> moving " << value << " mm..." << std::endl;
+                m_interface[0] = 1;
+                m_interface[1] = std::stoi(value);
+                
+                m_tasks["-pd"] = std::stoi(value);
                 m_taskSubmitted = true;
             }
             
+            if (!task.compare("ipm"))
+            {
+                m_interface[2] = 1;
+                m_interface[3] = std::stoi(value);
+                
+                m_tasks["-ia"] = std::stoi(value);
+                m_taskSubmitted = true;
+            }
+
             if(!task.compare("exit"))
             {
                 m_waitingForInput = false;
@@ -61,14 +71,14 @@ public:
         }
     }
     
-    const std::vector<int>& tasks()
+    const std::vector<int>& interface()
     {
-        return m_tasks;
+        return m_interface;
     }
     
-    const int& task(const int& i)
+    const int& interface(const int& i)
     {
-        return m_tasks[i];
+        return m_interface[i];
     }
     
     const bool& waitingForInput()
@@ -90,7 +100,7 @@ protected:
     
     bool m_waitingForInput;
     bool m_taskSubmitted;
-    std::vector<int> m_tasks;
+    std::vector<int> m_interface;
     
 };
     
