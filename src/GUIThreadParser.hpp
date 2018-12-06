@@ -39,7 +39,7 @@ public:
     
     void readGUIActions()
     {
-        std::cout << "\nThe first word to type in is the action to perform \n or a parameter to change (for help type h or help).\n";
+        std::cout << "\nType help to see available commands.\n";
         std::string line;
 
         while (m_waitingForInput)
@@ -76,11 +76,14 @@ public:
             if(!task.compare("help"))
             {
                 m_interface[4] = 1;
+                m_taskSubmitted = true;
+                sleep(1);
             }
 
             if(!task.compare("reset"))
             {
                 m_interface[6] = 1;
+                m_taskSubmitted = true;
             }
 
             if(!task.compare("stop"))

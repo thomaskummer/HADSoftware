@@ -13,6 +13,7 @@
 #include <fstream>
 #include <assert.h>
 #include <stdio.h>
+#include <iomanip>
 #include <vector>
 
 #include "CommandLineParser.hpp"
@@ -202,7 +203,7 @@ public:
 
     void printUsage()
     {
-        std::cout << "Usage: HeartrateController" << std::endl;
+        std::cout << "HeartrateController help" << std::endl;
         std::cout << "\t-h   : this help" << std::endl;
         std::cout << "\t-n   : [ARG] number of program repetitions (default 1)" << std::endl;
         std::cout << "\t-pm  : profile mode"  << std::endl;
@@ -216,9 +217,9 @@ public:
     
     void printInteractiveHelp()
     {
-        std::cout << "Usage: HeartrateController" << std::endl;
-        std::cout << "\tmove  : ARG1 is the distance in mm, if ARG1 is set to 0, the piston moves to the absolute origin." << std::endl;
-        std::cout << "\tipm   : interpolated position mode. ARG1 is the amplitude in mm (default -10), ARG2 is the period in ms (default 1000), ARG3 is the motion type with 0 for sin and 1 for sin^2 (default 1)." << std::endl;
+        std::cout << "HeartrateController help" << std::endl;
+        std::cout << "\tmove  : ARG1 is the distance in mm, if \n\t\tARG1 is set to 0, the piston \n\t\tmoves to the absolute origin." << std::endl;
+        std::cout << "\tipm   : interpolated position mode. \n\t\tARG1 is the amplitude in mm (default -10), \n\t\tARG2 is the period in ms (default 1000), \n\t\tARG3 is the motion type with 0 for \n\t\tsin and 1 for sin^2 (default 1)." << std::endl;
         std::cout << "\tstop  : terminates motion when cycle is finished."  << std::endl;
         std::cout << "\texit  : exits this control tool."  << std::endl;
     }
