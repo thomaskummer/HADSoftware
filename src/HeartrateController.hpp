@@ -21,6 +21,7 @@
 #include "GUIThreadParser.hpp"
 #include "MotionMode.hpp"
 #include "ProfileMode.hpp"
+#include "ProfileVelocityMode.hpp"
 #include "InterpolatedPositionMode.hpp"
 
 
@@ -137,6 +138,7 @@ public:
             {
                 gtp.taskReceived();
                 
+                // move
                 if ( gtp.interface(0) )
                 {
                     setMotionMode("ProfileMode");
@@ -144,9 +146,9 @@ public:
                     activateMotionMode();
                     run();
                     gtp.interface(0) = 0;
-                    //absPos += gtp.map().find("-id")->second;
                 }
                 
+                // ipm
                 if ( gtp.interface(2) )
                 {
                     setMotionMode("InterpolatedPositionMode");
@@ -156,12 +158,39 @@ public:
                     gtp.interface(2) = 0;
                 }
                 
+                // sensor move
+                if ( gtp.interface(8) )
+                {
+                    setMotionMode("ProfileVelocityMode");
+                    m_motionMode->setArguments(gtp.map());
+                    activateMotionMode();
+                    
+                    while ( gtp.keepRunning() )
+                    {
+                        if (!MaxReached(GetLimitReached()))
+                        {
+                            run();
+                        }
+                        if (MinReached(GetLimitReached()))
+                        {
+                            run();
+                        }
+
+                        sleep(0.5);
+                    }
+                    
+                    std::cout << "sensor on - arrived home" << std::endl;
+                    gtp.interface(8) = 0;
+                }
+                
+                // help
                 if ( gtp.interface(4) )
                 {
                     printInteractiveHelp();
                     gtp.interface(4) = 0;
                 }
-
+                
+                // reset
                 if ( gtp.interface(6) )
                 {
                     reset();
@@ -217,7 +246,7 @@ public:
     
     void printInteractiveHelp()
     {
-        std::cout << "HeartrateController help" << std::endl;
+        std::cout << ">>> HeartrateController help" << std::endl;
         std::cout << "\tmove  : ARG1 is the distance in mm, if \n\t\tARG1 is set to 0, the piston \n\t\tmoves to the absolute origin." << std::endl;
         std::cout << "\tipm   : interpolated position mode. \n\t\tARG1 is the amplitude in mm (default -10), \n\t\tARG2 is the period in ms (default 1000), \n\t\tARG3 is the motion type with 0 for \n\t\tsin and 1 for sin^2 (default 1)." << std::endl;
         std::cout << "\tstop  : terminates motion when cycle is finished."  << std::endl;
@@ -360,6 +389,42 @@ protected:
         int PositionIs;
         auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
         return PositionIs;
+    }
+    
+    //integration of limit switch
+    unsigned short GetLimitReached()
+    {
+        //=====================================================
+        //DigitalInput is a 16 bit value for the 16 input pins  of the position controller.
+        //If any input is detected on a pin, the corresponding bit is written as a 1, otherwise as a zero.
+        //To check for all inputs if they are activated or not, bit masking is used.
+        //=====================================================
+        
+        unsigned short DigitalInput7;
+        unsigned short DigitalInput8;
+        unsigned int ErrorInput;
+        unsigned short DigitalInput;
+        auto GetDigitalInput=VCS_GetAllDigitalInputs(KeyHandle, 1, &DigitalInput, &ErrorInput);
+        DigitalInput7 = DigitalInput & 0x100;
+        DigitalInput8 = DigitalInput & 0x200;
+        std::cout <<"Digital Input Error State:" << GetDigitalInput << " " << ErrorInput << std::endl;
+        std::cout <<"Input 7:" << DigitalInput7 <<" Input 8:"<<DigitalInput8<< std::endl;
+        
+        return (DigitalInput);
+    }
+    
+    //Minimal Position reached?
+    bool MinReached(unsigned short LimitReached)
+    {
+        LimitReached = LimitReached & 0x100;
+        return (LimitReached);
+    }
+    
+    //Maximal Position reached?
+    bool MaxReached(unsigned short LimitReached)
+    {
+        LimitReached = LimitReached & 0x200;
+        return (!LimitReached);
     }
     
 };

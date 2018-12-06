@@ -73,25 +73,36 @@ public:
                 m_taskSubmitted = true;
             }
 
-            if(!task.compare("help"))
+            if (!task.compare("help"))
             {
                 m_interface[4] = 1;
                 m_taskSubmitted = true;
                 sleep(1);
             }
+            
+            if (!task.compare("sensor-move"))
+            {
+                iss >> value1;
+                m_interface[8] = 1;
+                m_interface[9] = (value1.empty() ? -1 : std::stoi(value1));
+                
+                m_tasks["-vs"] = (value1.empty() ? -1 : std::stoi(value1));
+                m_keepRunning = true;
+                m_taskSubmitted = true;
+            }
 
-            if(!task.compare("reset"))
+            if (!task.compare("reset"))
             {
                 m_interface[6] = 1;
                 m_taskSubmitted = true;
             }
 
-            if(!task.compare("stop"))
+            if (!task.compare("stop"))
             {
                 m_keepRunning = false;
             }
             
-            if(!task.compare("exit"))
+            if (!task.compare("exit"))
             {
                 m_waitingForInput = false;
             }
@@ -128,7 +139,7 @@ public:
         return m_keepRunning;
     }
     
-    
+
 protected:
     
     bool m_waitingForInput;
