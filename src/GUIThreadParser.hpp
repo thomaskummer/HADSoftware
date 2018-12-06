@@ -16,10 +16,16 @@
 
 namespace HeartrateControllerSpace {
 
+# define interfaceSize 10
+    
 class GUIThreadParser : public InputParser {
 public:
     
-    GUIThreadParser() : m_interface (std::vector<int> (10, 0)), m_waitingForInput (true), m_taskSubmitted (false)
+    GUIThreadParser() :
+        m_interface (std::vector<int> (interfaceSize, 0)),
+        m_waitingForInput (true),
+        m_taskSubmitted (false),
+        m_keepRunning (false)
     {
         std::cout << "GUIThreadParser created" << std::endl;
     }
@@ -41,32 +47,50 @@ public:
             std::cout << ">>> ";
             std::getline(std::cin, line);
             std::istringstream iss(line);
-            std::string task, value;
-            iss >> task >> value;
-
+            std::string task, value1, value2, value3;
+            iss >> task; // >> value1 >> value2 >> value3;
             
             if (!task.compare("move"))
             {
+                iss >> value1;
                 m_interface[0] = 1;
-                m_interface[1] = std::stoi(value);
+                m_interface[1] = std::stoi(value1);
                 
-                m_tasks["-pd"] = std::stoi(value);
+                m_tasks["-pd"] = std::stoi(value1);
                 m_taskSubmitted = true;
             }
             
             if (!task.compare("ipm"))
             {
+                iss >> value1; iss >> value2; iss >> value3;
                 m_interface[2] = 1;
-                m_interface[3] = std::stoi(value);
+                m_interface[3] = (value1.empty() ? -10 : std::stoi(value1));
                 
-                m_tasks["-ia"] = std::stoi(value);
+                m_tasks["-ia"] = (value1.empty() ? -10 : std::stoi(value1));
+                m_tasks["-ip"] = (value2.empty() ? 1000 : std::stoi(value2));
+                m_tasks["-if"] = (value3.empty() ? 1 : std::stoi(value3));
+                m_keepRunning = true;
                 m_taskSubmitted = true;
             }
 
+            if(!task.compare("help"))
+            {
+                m_interface[4] = 1;
+            }
+
+            if(!task.compare("reset"))
+            {
+                m_interface[6] = 1;
+            }
+
+            if(!task.compare("stop"))
+            {
+                m_keepRunning = false;
+            }
+            
             if(!task.compare("exit"))
             {
                 m_waitingForInput = false;
-                
             }
         }
     }
@@ -76,7 +100,7 @@ public:
         return m_interface;
     }
     
-    const int& interface(const int& i)
+    int& interface(const int& i)
     {
         return m_interface[i];
     }
@@ -96,10 +120,17 @@ public:
         m_taskSubmitted = false;
     }
     
+    const bool& keepRunning()
+    {
+        return m_keepRunning;
+    }
+    
+    
 protected:
     
     bool m_waitingForInput;
     bool m_taskSubmitted;
+    bool m_keepRunning;
     std::vector<int> m_interface;
     
 };

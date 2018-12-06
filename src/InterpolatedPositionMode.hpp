@@ -26,6 +26,8 @@ public:
     //activate interpolated position mode
     void activateMode()
     {
+//        IpmStatus();
+//        IpmBufferParameter();
         unsigned int pErrorActivate;
         unsigned int pErrorClearBuffer;
         
@@ -41,18 +43,18 @@ public:
     }
     
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
-    void run()
+    void run(const int& offset = 0)
     {
-        auto function = readArgument("-if", 0);
+        auto function = readArgument("-if", 1);
 
         auto distance = readArgument("-ia", -20.0) mm;
         auto period = readArgument("-ip", 1000.0);
-        auto timestep = readArgument("-it", period/58.);
+        auto timestep = readArgument("-it", period/40.);
         auto runtime = readArgument("-irt", period);
         auto resolution = readArgument("-ir", 500);
         auto timeout = readArgument("ito", (period > 2000 ? period - 1000 : period - 700));
 
-        runIPM(function, distance, period, timestep, runtime, resolution, timeout);
+        runIPM(function, distance, period, timestep, runtime, resolution, timeout, offset);
     }
     
     //Get status of interpolated position mode
@@ -80,53 +82,35 @@ public:
     
 protected:
     
-//    //move cylinder to x using InterpolatedPositionMode (ActivateInterpolatedPositionMode must be called first)
-//    bool SetPosition_InterpolatedPositionMode(int position)
-//    {
-//        // Move to position
-//        unsigned int pErrorMoveToPos;
-//        bool absoluteMovement = true;
-//        bool immediately = false;
-//        bool MoveToPos;
-//
-//        if (position >= MainPositions.Min && position <= MainPositions.Max)
-//        {
-//            MoveToPos = VCS_MoveToPosition(KeyHandle, 1, position, absoluteMovement, immediately, &pErrorMoveToPos);
-//            std::cout <<"MoveToPos: "<< MoveToPos << " ErrorCode:  "  << pErrorMoveToPos << std::endl;
-//            Wait();
-//            printPosition();
-//            return 1;
-//        }
-//        else
-//        {    std::cout <<"Out of bounds! No further movement in this direction!";
-//            return 0;
-//        }
-//    }
-    
     //Interpolated position mode
-    bool runIPM(int function, double Amplitude, double Periode, double dt, double RunTime, double Resolution, double& timeout)
+    bool runIPM(int function, double Amplitude, double Periode, double dt, double RunTime, double Resolution, double& timeout, const int& offset = 0)
     {
         int PointNbr=1;
         double time=dt;
         unsigned int pErrorAddPvt, pErrorStartTrajectory;
         
+//        std::cout << "Current absolut position: " << PositionIs_Fct() << std::endl;
+//        std::cout << "Current offset " << offset << std::endl;
+        
+        
         //start with point 0
-        auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, 0, 0, dt, &pErrorAddPvt);
+        auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, offset, 0, dt, &pErrorAddPvt);
         if(!addPvt)
             std::cout<<"Add PVT-0 Error: "<<pErrorAddPvt<<std::endl;
         else
             // std::cout<<"PointNumber: "<<0<<" P: "<<0<<" T: "<<200<<" V: "<<0<<std::endl;
 
+            
         
         while (time<=RunTime)
         {
             PTV ptv;
             switch (function) {
                 case 0:
-                    ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution);
+                    ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution, offset);
                     break;
                 case 1:
-                    ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution);
+                    ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution, offset);
                 default:
                     break;
             }
@@ -150,10 +134,10 @@ protected:
         PTV ptv;
         switch (function) {
             case 0:
-                ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution);
+                ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution, offset);
                 break;
             case 1:
-                ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution);
+                ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution, offset);
             default:
                 break;
         }
@@ -170,14 +154,15 @@ protected:
             return 0;
         }
         
-        std::cout << "Trajectory has been computed" << std::endl;
+
+        //std::cout << "Trajectory has been computed" << std::endl;
         
         auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
 
-        if (!StartIpmTraj)
-            std::cout<<"StartIPModeTrajectory Error: "<<pErrorStartTrajectory<<std::endl;
-        else
-            std::cout<<"Starting Trajectory..."<<std::endl;
+//        if (!StartIpmTraj)
+//            std::cout<<"StartIPModeTrajectory Error: "<<pErrorStartTrajectory<<std::endl;
+//        else
+//            std::cout<<"Starting Trajectory..."<<std::endl;
         
         
         unsigned int Timeout = timeout; //max waiting time in ms
@@ -201,10 +186,10 @@ protected:
     }
     
     //Get IPMode PTV sin(t)
-    PTV GetPTVsin(double Amplitude,double PointNumber,double Periode, double dt, double Resolution)
+    PTV GetPTVsin(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
     {
         Amplitude *= 0.5;
-        int P= (int) -(Amplitude*sin(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))-Amplitude;
+        int P= (int) -(Amplitude*sin(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))-Amplitude + offset;
         int T= (int) dt;
         int V= (int) -(Amplitude*2.0*M_PI/Periode*cos(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))*1000.0/(4.0*Resolution)*60.0;
 
@@ -213,11 +198,11 @@ protected:
     }
     
     //Get IPMode PTV sin^2(t)
-    PTV GetPTVsin2(double Amplitude,double PointNumber,double Periode, double dt, double Resolution)
+    PTV GetPTVsin2(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
     {
         Periode *= 2.0;
         int t = (int) PointNumber * dt;
-        int P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode), 2.0);
+        int P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode), 2.0) + offset;
         int T = (int) dt;
         int V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
         

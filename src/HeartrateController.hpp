@@ -31,7 +31,7 @@ namespace HeartrateControllerSpace {
 class HeartrateController {
 public:
     
-    HeartrateController()
+    HeartrateController() : m_absPos(0)
     {
         std::cout << "\n====================================================" << std::endl;
         std::cout << "Heartrate-controller for Maxon EPOS2 70/10" << std::endl;
@@ -91,9 +91,10 @@ public:
     
     void run()
     {
+        int absPos = PositionIs_Fct();
         unsigned int n(1);
         if ( m_clp.feature("-n") ) n = m_clp["-n"];
-        for (unsigned int i(0); i < n; ++i) m_motionMode->run();
+        for (unsigned int i(0); i < n; ++i) m_motionMode->run(absPos);
     }
 
     void printPosition()
@@ -130,8 +131,6 @@ public:
         sleep(1);
         while (gtp.waitingForInput())
         {
-            // std::cout << gtp.tasks().at(0) << " : " << gtp.tasks().at(1) << std::endl;
-            
             
             if ( gtp.taskSubmitted() )
             {
@@ -143,6 +142,8 @@ public:
                     m_motionMode->setArguments(gtp.map());
                     activateMotionMode();
                     run();
+                    gtp.interface(0) = 0;
+                    //absPos += gtp.map().find("-id")->second;
                 }
                 
                 if ( gtp.interface(2) )
@@ -150,10 +151,23 @@ public:
                     setMotionMode("InterpolatedPositionMode");
                     m_motionMode->setArguments(gtp.map());
                     activateMotionMode();
-                    run();
+                    while (gtp.keepRunning()) run();
+                    gtp.interface(2) = 0;
                 }
+                
+                if ( gtp.interface(4) )
+                {
+                    printInteractiveHelp();
+                    gtp.interface(4) = 0;
+                }
+
+                if ( gtp.interface(6) )
+                {
+                    reset();
+                    gtp.interface(6) = 0;
+                }
+
             }
-            
             
             sleep (0.01);
         }
@@ -185,7 +199,7 @@ public:
         else
             std::cout<<"Reset Error: "<<pErrorCode<<std::endl;
     }
-    
+
     void printUsage()
     {
         std::cout << "Usage: HeartrateController" << std::endl;
@@ -200,6 +214,15 @@ public:
         std::cout << "\n\texample: ./HeartrateController -ipm if 1 -ia -40 -n 2"  << std::endl;
     }
     
+    void printInteractiveHelp()
+    {
+        std::cout << "Usage: HeartrateController" << std::endl;
+        std::cout << "\tmove  : ARG1 is the distance in mm, if ARG1 is set to 0, the piston moves to the absolute origin." << std::endl;
+        std::cout << "\tipm   : interpolated position mode. ARG1 is the amplitude in mm (default -10), ARG2 is the period in ms (default 1000), ARG3 is the motion type with 0 for sin and 1 for sin^2 (default 1)." << std::endl;
+        std::cout << "\tstop  : terminates motion when cycle is finished."  << std::endl;
+        std::cout << "\texit  : exits this control tool."  << std::endl;
+    }
+    
     
 protected:
 
@@ -209,6 +232,7 @@ protected:
     MotionMode* m_motionMode;
     CommandLineParser m_clp;
 
+    int m_absPos;
     
     // Close all devices
     void close()
@@ -298,6 +322,8 @@ protected:
         //std::cout << state << " " << pErrorState << std::endl;
         
         std::cout << "EPOS2-Controller parameters set" << std::endl;
+        std::cout << "Current absolut position: " << PositionIs_Fct() << std::endl;
+
     }
     
     void getDeviceErrorCode()

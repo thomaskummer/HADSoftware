@@ -35,16 +35,17 @@ public:
 //        std::cout << "Sensor input a: " << inputFile["a"] << std::endl;
         
         unsigned int pErrorSetPosProfile;
-        auto posProfile = VCS_SetPositionProfile(KeyHandle, 1, 22000, 15000, 15000, &pErrorSetPosProfile); // Node ID, position profile velocity,..acceleration,..deceleration
+        auto posProfile = VCS_SetPositionProfile(KeyHandle, 1, 2200, 15000, 15000, &pErrorSetPosProfile); // Node ID, position profile velocity,..acceleration,..deceleration
         //std::cout << posProfile << " " << pErrorSetPosProfile << std::endl;
     }
 
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
-    void run()
+    void run(const int& offset = 0)
     {
         auto distance = readArgument("-pd", 10) mm;
         int PositionIs = PositionIs_Fct();
         int NewPosition = PositionIs - distance;
+        if (distance == 0) NewPosition *= 0;
         bool moved = SetPosition_ProfileMode(NewPosition);
         //std::cout << "From " << PositionIs << " to " << NewPosition << " by " << distance/(1600) << " mm" << std::endl;
 //        if(moved)
