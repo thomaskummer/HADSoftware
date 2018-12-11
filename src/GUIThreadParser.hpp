@@ -16,7 +16,7 @@
 
 namespace HeartrateControllerSpace {
 
-# define interfaceSize 10
+# define interfaceSize 18
     
 class GUIThreadParser : public InputParser {
 public:
@@ -49,7 +49,7 @@ public:
             std::istringstream iss(line);
             std::string task, value1, value2, value3;
             iss >> task; // >> value1 >> value2 >> value3;
-            
+
             if (!task.compare("move"))
             {
                 iss >> value1;
@@ -72,7 +72,40 @@ public:
                 m_keepRunning = true;
                 m_taskSubmitted = true;
             }
+            
+            if (!task.compare("cp") || !task.compare("cont-plus-push"))
+            {
+                iss >> value1;
+                m_interface[8] = 1;
+                m_interface[9] = (value1.empty() ? -2 : std::stoi(value1));
+                
+                m_tasks["-vs"] = (value1.empty() ? -2 : std::stoi(value1));
+                m_keepRunning = true;
+                m_taskSubmitted = true;
+            }
 
+            if (!task.compare("cm") || !task.compare("cont-minus-push") || !task.compare("home"))
+            {
+                iss >> value1;
+                m_interface[12] = 1;
+                m_interface[13] = (value1.empty() ? 2 : std::stoi(value1));
+                
+                m_tasks["-vs"] = (value1.empty() ? 2 : std::stoi(value1));
+                m_keepRunning = true;
+                m_taskSubmitted = true;
+            }
+            
+            if (!task.compare("cr") || !task.compare("cont-plus-release") || !task.compare("cont-minus-release"))
+            {
+                iss >> value1;
+                m_interface[10] = 1;
+                m_interface[11] = (value1.empty() ? 0 : std::stoi(value1));
+                
+                m_tasks["-vs"] = (value1.empty() ? 0 : std::stoi(value1));
+                m_keepRunning = false;
+                m_taskSubmitted = true;
+            }
+            
             if (!task.compare("help"))
             {
                 m_interface[4] = 1;
@@ -80,17 +113,6 @@ public:
                 sleep(1);
             }
             
-            if (!task.compare("sensor-move"))
-            {
-                iss >> value1;
-                m_interface[8] = 1;
-                m_interface[9] = (value1.empty() ? -1 : std::stoi(value1));
-                
-                m_tasks["-vs"] = (value1.empty() ? -1 : std::stoi(value1));
-                m_keepRunning = true;
-                m_taskSubmitted = true;
-            }
-
             if (!task.compare("reset"))
             {
                 m_interface[6] = 1;
@@ -134,7 +156,7 @@ public:
         m_taskSubmitted = false;
     }
     
-    const bool& keepRunning()
+    bool& keepRunning()
     {
         return m_keepRunning;
     }

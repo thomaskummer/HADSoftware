@@ -126,11 +126,10 @@ public:
         setup();
 
         GUIThreadParser gtp;
-        std::vector<int> tasks (8, 0);
-        std::thread gtpThread( &GUIThreadParser::readGUIActions , &gtp );
-        // std::thread gtpThread( (GUIThreadParser()) );
-
+        std::thread gtpThread( &GUIThreadParser::readGUIActions , &gtp ); // std::thread gtpThread( (GUIThreadParser()) );
+        
         sleep(1);
+        
         while (gtp.waitingForInput())
         {
             
@@ -158,31 +157,34 @@ public:
                     gtp.interface(2) = 0;
                 }
                 
-                // sensor move
+                // continuous-plus-push
                 if ( gtp.interface(8) )
                 {
                     setMotionMode("ProfileVelocityMode");
                     m_motionMode->setArguments(gtp.map());
                     activateMotionMode();
-                    
-                    while ( gtp.keepRunning() )
-                    {
-                        if (!MaxReached(GetLimitReached()))
-                        {
-                            run();
-                        }
-                        if (MinReached(GetLimitReached()))
-                        {
-                            run();
-                        }
-
-                        sleep(0.5);
-                    }
-                    
-                    std::cout << "sensor on - arrived home" << std::endl;
+                    run();
                     gtp.interface(8) = 0;
                 }
                 
+                // continuous-minus-push & home
+                if ( gtp.interface(12) )
+                {
+                    setMotionMode("ProfileVelocityMode");
+                    m_motionMode->setArguments(gtp.map());
+                    activateMotionMode();
+                    run();
+                    gtp.interface(8) = 0;
+                }
+                
+                // continuous-plus-release & continuous-minus-release
+                if ( gtp.interface(10) )
+                {
+                    unsigned int pErrorMoveToPos;
+                    bool halt = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+                    gtp.interface(10) = 0;
+                }
+                    
                 // help
                 if ( gtp.interface(4) )
                 {
@@ -197,6 +199,19 @@ public:
                     gtp.interface(6) = 0;
                 }
 
+            }
+            
+            if ( gtp.keepRunning() )
+            {
+                if ( sensorOne() || sensorTwo() )
+                {
+                    //std::cout << sensorOne() << " : " << sensorTwo() << std::endl;
+                    unsigned int pErrorMoveToPos;
+                    bool halt = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+                    gtp["-vs"] = 0.;
+                    gtp.interface(10) = 0;
+                    gtp.keepRunning() = false;
+                }
             }
             
             sleep (0.01);
@@ -225,9 +240,11 @@ public:
     {
         unsigned int pErrorCode;
         if(VCS_ResetDevice(KeyHandle,1,&pErrorCode))
-            std::cout <<"Device reset"<<std::endl;
+            std::cout << "device reset" << std::endl;
         else
-            std::cout<<"Reset Error: "<<pErrorCode<<std::endl;
+            std::cout << "reset error: " << pErrorCode<<std::endl;
+        
+        setup();
     }
 
     void printUsage()
@@ -407,24 +424,26 @@ protected:
         auto GetDigitalInput=VCS_GetAllDigitalInputs(KeyHandle, 1, &DigitalInput, &ErrorInput);
         DigitalInput7 = DigitalInput & 0x100;
         DigitalInput8 = DigitalInput & 0x200;
-        std::cout <<"Digital Input Error State:" << GetDigitalInput << " " << ErrorInput << std::endl;
-        std::cout <<"Input 7:" << DigitalInput7 <<" Input 8:"<<DigitalInput8<< std::endl;
+        if (!GetDigitalInput) std::cout <<"Digital Input, Error State:" << GetDigitalInput << ", " << ErrorInput << std::endl;
+        //std::cout <<"Input 7: " << DigitalInput7 <<" ,  Input 8: "<<DigitalInput8<< std::endl;
         
         return (DigitalInput);
     }
     
     //Minimal Position reached?
-    bool MinReached(unsigned short LimitReached)
+    bool sensorOne()
     {
+        unsigned short LimitReached = GetLimitReached();
         LimitReached = LimitReached & 0x100;
-        return (LimitReached);
+        return (!LimitReached);
     }
     
     //Maximal Position reached?
-    bool MaxReached(unsigned short LimitReached)
+    bool sensorTwo()
     {
+        unsigned short LimitReached = GetLimitReached();
         LimitReached = LimitReached & 0x200;
-        return (!LimitReached);
+        return (LimitReached);
     }
     
 };

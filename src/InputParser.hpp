@@ -47,7 +47,7 @@ public:
     {
         return m_tasks;
     }
-    
+
     void printAll()
     {
         std::cout << "InputParser::printAll()" << std::endl;
@@ -60,6 +60,7 @@ public:
 protected:
     
     std::map<std::string, double> m_tasks;
+
 
 };
     

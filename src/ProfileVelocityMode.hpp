@@ -34,14 +34,14 @@ public:
 //        std::cout << "Sensor input a: " << inputFile["a"] << std::endl;
         
         unsigned int pErrorSetPosProfile;
-        auto posProfile = VCS_SetVelocityProfile(KeyHandle, 1, 100, 100, &pErrorSetPosProfile); // Node ID, position profile velocity,..acceleration,..deceleration
+        auto posProfile = VCS_SetVelocityProfile(KeyHandle, 1, 5000, 5000, &pErrorSetPosProfile); // Node ID, position profile velocity,..acceleration,..deceleration
         //std::cout << posProfile << " " << pErrorSetPosProfile << std::endl;
     }
 
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
     void run(const int& offset = 0)
     {
-        auto speed = readArgument("-vs", 10) mm;
+        auto speed = readArgument("-vs", 0) mm;
         int PositionIs = PositionIs_Fct();
         int NewPosition = PositionIs - speed;
         if (speed == 0) NewPosition *= 0;
@@ -67,11 +67,12 @@ protected:
         bool immediately = false;
         bool MoveToPos;
         
-//        if (position >= MainPositions.Min && position <= MainPositions.Max)
-//        {
-            MoveToPos = VCS_MoveWithVelocity(KeyHandle, 1, speed, &pErrorMoveToPos);
+        auto speed_ = speed * 0.1;
+        MoveToPos = VCS_MoveWithVelocity(KeyHandle, 1, speed_, &pErrorMoveToPos);
+
+            
             //std::cout <<"MoveToPos: "<< MoveToPos << " ErrorCode:  "  << pErrorMoveToPos << std::endl;
-            Wait();
+            //Wait();
             //printPosition();
             return 1;
 //        }
