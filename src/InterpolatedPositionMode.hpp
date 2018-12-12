@@ -102,7 +102,7 @@ protected:
 
             PointNbr+=1;
             time+=dt;
-        }
+        .}
         
         //end point with last position value
         auto ptv = motionTypeEval(Amplitude,PointNbr,Periode,dt,Resolution, offset, function);
@@ -112,7 +112,7 @@ protected:
 
         unsigned int Timeout = timeout; //max waiting time in ms
         unsigned int pErrorCode;
-        sleep(1.5); // 1.2
+        sleep(1.2); // 1.2
         auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
     }
     
