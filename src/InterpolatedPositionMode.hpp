@@ -102,7 +102,7 @@ protected:
 
             PointNbr+=1;
             time+=dt;
-        .}
+        }
         
         //end point with last position value
         auto ptv = motionTypeEval(Amplitude,PointNbr,Periode,dt,Resolution, offset, function);
