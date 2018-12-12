@@ -77,9 +77,9 @@ public:
             {
                 iss >> value1;
                 m_interface[8] = 1;
-                m_interface[9] = (value1.empty() ? -2 : std::stoi(value1));
+                m_interface[9] = (value1.empty() ? -2 : -std::stoi(value1));
                 
-                m_tasks["-vs"] = (value1.empty() ? -2 : std::stoi(value1));
+                m_tasks["-vs"] = (value1.empty() ? -2 : -std::stoi(value1));
                 m_keepRunning = true;
                 m_taskSubmitted = true;
             }
@@ -88,9 +88,9 @@ public:
             {
                 iss >> value1;
                 m_interface[12] = 1;
-                m_interface[13] = (value1.empty() ? 2 : std::stoi(value1));
+                m_interface[13] = (value1.empty() ? 2 : -std::stoi(value1));
                 
-                m_tasks["-vs"] = (value1.empty() ? 2 : std::stoi(value1));
+                m_tasks["-vs"] = (value1.empty() ? 2 : -std::stoi(value1));
                 m_keepRunning = true;
                 m_taskSubmitted = true;
             }
@@ -99,9 +99,9 @@ public:
             {
                 iss >> value1;
                 m_interface[10] = 1;
-                m_interface[11] = (value1.empty() ? 0 : std::stoi(value1));
+                m_interface[11] = (value1.empty() ? 0 : -std::stoi(value1));
                 
-                m_tasks["-vs"] = (value1.empty() ? 0 : std::stoi(value1));
+                m_tasks["-vs"] = (value1.empty() ? 0 : -std::stoi(value1));
                 m_keepRunning = false;
                 m_taskSubmitted = true;
             }
