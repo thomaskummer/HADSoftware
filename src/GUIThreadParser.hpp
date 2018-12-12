@@ -73,7 +73,7 @@ public:
                 m_taskSubmitted = true;
             }
             
-            if (!task.compare("cp") || !task.compare("cont-plus-push"))
+            if (!task.compare("cp") || !task.compare("cont-plus-push") || !task.compare("home-plus"))
             {
                 iss >> value1;
                 m_interface[8] = 1;
@@ -84,7 +84,7 @@ public:
                 m_taskSubmitted = true;
             }
 
-            if (!task.compare("cm") || !task.compare("cont-minus-push") || !task.compare("home"))
+            if (!task.compare("cm") || !task.compare("cont-minus-push") || !task.compare("home-minus"))
             {
                 iss >> value1;
                 m_interface[12] = 1;

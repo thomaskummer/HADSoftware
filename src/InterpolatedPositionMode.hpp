@@ -92,79 +92,24 @@ protected:
 //        std::cout << "Current absolut position: " << PositionIs_Fct() << std::endl;
 //        std::cout << "Current offset " << offset << std::endl;
         
-        
-        //start with point 0
-        auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, offset, 0, dt, &pErrorAddPvt);
-        if(!addPvt)
-            std::cout<<"Add PVT-0 Error: "<<pErrorAddPvt<<std::endl;
-        else
-            // std::cout<<"PointNumber: "<<0<<" P: "<<0<<" T: "<<200<<" V: "<<0<<std::endl;
-
-            
+        // start with point 0
+        VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, offset, 0, dt, &pErrorAddPvt);
         
         while (time<=RunTime)
         {
-            PTV ptv;
-            switch (function) {
-                case 0:
-                    ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution, offset);
-                    break;
-                case 1:
-                    ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution, offset);
-                default:
-                    break;
-            }
+            auto ptv = motionTypeEval(function, Amplitude,PointNbr,Periode,dt,Resolution, offset);
+            VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
 
-            if (ptv.P<=MainPositions.Max&&ptv.P>=MainPositions.Min)
-            {
-                auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
-                if(!addPvt)
-                    std::cout<<"Add PVT-while Error: "<<pErrorAddPvt<<std::endl;
-            }
-            else
-            {
-                std::cout<<"Out of Bounds! No further Movement in this direction!"<<std::endl;
-                break;
-            }
             PointNbr+=1;
             time+=dt;
         }
         
         //end point with last position value
-        PTV ptv;
-        switch (function) {
-            case 0:
-                ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution, offset);
-                break;
-            case 1:
-                ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution, offset);
-            default:
-                break;
-        }
-
-        if (ptv.P<=MainPositions.Max&&ptv.P>=MainPositions.Min)
-        {
-            auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, 0, 0, &pErrorAddPvt);
-            if(!addPvt)
-                std::cout<<"Add PVT-endl Error: "<<pErrorAddPvt<<std::endl;
-        }
-        else
-        {
-            std::cout<<"Out of Bounds! No further Movement in this direction!"<<std::endl;
-            return 0;
-        }
-        
-
-        //std::cout << "Trajectory has been computed" << std::endl;
+        auto ptv = motionTypeEval(function, Amplitude,PointNbr,Periode,dt,Resolution, offset);
+        VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, 0, 0, &pErrorAddPvt);
         
         auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
 
-//        if (!StartIpmTraj)
-//            std::cout<<"StartIPModeTrajectory Error: "<<pErrorStartTrajectory<<std::endl;
-//        else
-//            std::cout<<"Starting Trajectory..."<<std::endl;
-        
-        
         unsigned int Timeout = timeout; //max waiting time in ms
         unsigned int pErrorCode;
         sleep(1.2);
@@ -183,6 +128,21 @@ protected:
         
         std::cout<<GetParameter<<": GetParameter "<<pUnderflowWarningLimit<<": UFlowWarninglimit "<<pOverflowWarningLimit<<": OFlowWarningLimit "
         <<pMaxBufferSize<<": MaxBufferSize "<<pErrorCode<<": ErrorCode"<<std::endl;
+    }
+    
+    PTV motionTypeEval(double Amplitude,double PointNbr,double Periode, double dt, double Resolution, const int& offset, int function)
+    {
+        PTV ptv;
+        switch (function) {
+            case 0:
+                ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution, offset);
+                break;
+            case 1:
+                ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution, offset);
+            default:
+                break;
+        }
+        return ptv;
     }
     
     //Get IPMode PTV sin(t)
