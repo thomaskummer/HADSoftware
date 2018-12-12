@@ -112,7 +112,7 @@ protected:
 
         unsigned int Timeout = timeout; //max waiting time in ms
         unsigned int pErrorCode;
-        sleep(0.8);
+        sleep(1.5); // 1.2
         auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
     }
     
