@@ -100,7 +100,7 @@ protected:
             for (unsigned int i(0); i <= runTime/dt; ++i)
             {
                 
-                PTV ptv = motiontypeFunction(Amplitude,i,Periode,dt,Resolution, offset, function);
+                PTV ptv = motionTypeFunction(Amplitude,i,Periode,dt,Resolution, offset, function);
  
                 std::cout << time << " - " << i << "-th point added " << std::endl;
                 time+=dt;
@@ -190,7 +190,7 @@ protected:
 //        unsigned int Timeout = timeout; //max waiting time in ms
         unsigned int pErrorCode;
         //sleep(1.2);
-        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, (int) Timeout, &pErrorCode);
+        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, (int) timeout, &pErrorCode);
     }
     
     //Get buffer parameters for ipm
@@ -207,7 +207,7 @@ protected:
         <<pMaxBufferSize<<": MaxBufferSize "<<pErrorCode<<": ErrorCode"<<std::endl;
     }
     
-    PTV motionTypeFunction (double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset, const int function)
+    PTV motionTypeFunction (double Amplitude,int i,double Periode, double dt, double Resolution, const int& offset, const int function)
     {
         PTV ptv;
         switch (function)
