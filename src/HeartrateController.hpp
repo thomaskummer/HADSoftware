@@ -205,7 +205,7 @@ public:
             {
                 if ( sensorOne() || sensorTwo() )
                 {
-                    //std::cout << sensorOne() << " : " << sensorTwo() << std::endl;
+                    std::cout << "sensor state: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
                     unsigned int pErrorMoveToPos;
                     bool halt = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
                     gtp["-vs"] = 0.;

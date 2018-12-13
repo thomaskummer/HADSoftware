@@ -49,10 +49,10 @@ public:
 
         auto distance = readArgument("-ia", -20.0) mm;
         auto period = readArgument("-ip", 1000.0);
-        auto timestep = readArgument("-it", period/30.);
+        auto timestep = readArgument("-it", period/40.);
         auto runtime = readArgument("-irt", period);
         auto resolution = readArgument("-ir", 500);
-        auto timeout = readArgument("-ito", period+1000); // (period > 2000 ? period - 1000 : period - 700));
+        auto timeout = readArgument("-ito", (period > 2000 ? period - 1000 : period - 700));
 
         runIPM(function, distance, period, timestep, runtime, resolution, timeout, offset);
     }
@@ -94,28 +94,34 @@ protected:
         
         //int PointNbr=1;
         double time (0);
+        std::cout << std::endl;
         
         if (m_ptvVec.size() < 1)
         {
-            for (unsigned int i(0); i <= runTime/dt; ++i)
+            for (unsigned int i(0); i < runTime/dt; ++i)
             {
                 
                 PTV ptv = motionTypeFunction(Amplitude,i,Periode,dt,Resolution, offset, function);
  
-                std::cout << time << " - " << i << "-th point added " << std::endl;
+                //std::cout << time << " - " << i << "-th point added " << std::endl;
                 time+=dt;
 
                 m_ptvVec.push_back(ptv);
             }
         }
         
-        for (auto& ptv : m_ptvVec)
-        {
-            auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
-            if(!addPvt) std::cout<< time << " - Add PVT-while Error: "<<pErrorAddPvt<<std::endl;
+//        for (unsigned int i(0); i < 1; ++i)
+//        {
+        
+            for (auto& ptv : m_ptvVec)
+            {
+                auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
+                if(!addPvt) std::cout<< time << " - add to ipm-buffer error: " << pErrorAddPvt << std::endl;
+                
+//                auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
+            }
             
-            auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
-        }
+//        }
         
 //        //start with point 0
 //        auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, offset, 0, dt, &pErrorAddPvt);
@@ -191,7 +197,7 @@ protected:
         
 //        unsigned int Timeout = timeout; //max waiting time in ms
         unsigned int pErrorCode;
-        //sleep(1.2);
+        sleep(1.2);
         auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, (int) timeout, &pErrorCode);
     }
     
@@ -222,6 +228,7 @@ protected:
             default:
                 break;
         }
+        std::cout << ptv.P << " : " << ptv.V << " : " << ptv.T << std::endl;
         return ptv;
     }
     
