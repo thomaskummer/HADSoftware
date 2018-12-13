@@ -49,7 +49,7 @@ public:
 
         auto distance = readArgument("-ia", -20.0) mm;
         auto period = readArgument("-ip", 1000.0);
-        auto timestep = readArgument("-it", period/40.);
+        auto timestep = readArgument("-it", period/30.);
         auto runtime = readArgument("-irt", period);
         auto resolution = readArgument("-ir", 500);
         auto timeout = readArgument("-ito", period+1000); // (period > 2000 ? period - 1000 : period - 700));
@@ -113,6 +113,8 @@ protected:
         {
             auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
             if(!addPvt) std::cout<< time << " - Add PVT-while Error: "<<pErrorAddPvt<<std::endl;
+            
+            auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
         }
         
 //        //start with point 0
