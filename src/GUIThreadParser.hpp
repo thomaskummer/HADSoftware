@@ -88,9 +88,9 @@ public:
             {
                 iss >> value1;
                 m_interface[12] = 1;
-                m_interface[13] = (value1.empty() ? 2 : -std::stoi(value1));
+                m_interface[13] = (value1.empty() ? 2 : std::stoi(value1));
                 
-                m_tasks["-vs"] = (value1.empty() ? 2 : -std::stoi(value1));
+                m_tasks["-vs"] = (value1.empty() ? 2 : std::stoi(value1));
                 m_keepRunning = true;
                 m_taskSubmitted = true;
             }

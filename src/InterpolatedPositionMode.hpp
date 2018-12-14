@@ -98,7 +98,7 @@ protected:
         
         if (m_ptvVec.size() < 1)
         {
-            for (unsigned int i(0); i < runTime/dt; ++i)
+            for (unsigned int i(0); i <= runTime/dt; ++i)
             {
                 PTV ptv = motionTypeFunction(Amplitude,i,Periode,dt,Resolution, offset, function);
                 m_ptvVec.push_back(ptv);
@@ -107,8 +107,8 @@ protected:
                 time+=dt;
             }
         }
-        
-//        for (unsigned int i(0); i < 1; ++i)
+
+        //        for (unsigned int i(0); i < 1; ++i)
 //        {
         
             for (auto& ptv : m_ptvVec)

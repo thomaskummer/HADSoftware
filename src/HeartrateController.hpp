@@ -208,13 +208,25 @@ public:
                     std::cout << "sensor state: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
                     unsigned int pErrorMoveToPos;
                     
+                    char* pOperationMode;
+                    bool om = VCS_GetOperationMode(keyHandle(), 1, pOperationMode, &pErrorMoveToPos);
                     
-                    bool halt = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+                    if ( *pOperationMode == '1' )
+                    {
+                        bool pmStop = VCS_HaltPositionMovement(keyHandle(), 1, &pErrorMoveToPos);
+                    }
+
+                    if ( *pOperationMode == '3' )
+                    {
+                        bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+                        gtp["-vs"] = 0.;
+                    }
+
+                    if ( *pOperationMode == '7' )
+                    {
+                        bool ipmStop = VCS_StopIpmTrajectory(keyHandle(), 1, &pErrorMoveToPos);
+                    }
                     
-                    //bool stop = VCS_StopIpmTrajectory(keyHandle(), 1, &pErrorMoveToPos);
-                    
-                    
-                    gtp["-vs"] = 0.;
                     gtp.keepRunning() = false;
                 }
             }
