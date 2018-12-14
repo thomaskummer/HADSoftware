@@ -92,7 +92,7 @@ protected:
 //        std::cout << "Current absolut position: " << PositionIs_Fct() << std::endl;
 //        std::cout << "Current offset " << offset << std::endl;
         
-        //int PointNbr=1;
+        int PointNbr=1;
         double time (0);
         std::cout << std::endl;
         
