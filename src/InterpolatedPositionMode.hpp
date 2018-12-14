@@ -96,91 +96,91 @@ protected:
         double time (0);
         std::cout << std::endl;
         
-        if (m_ptvVec.size() < 1)
-        {
-            for (unsigned int i(0); i <= runTime/dt; ++i)
-            {
-                PTV ptv = motionTypeFunction(Amplitude,i,Periode,dt,Resolution, offset, function);
-                m_ptvVec.push_back(ptv);
-
-                //std::cout << time << " - " << i << "-th point added " << std::endl;
-                time = i*dt;
-            }
-        }
-
-        //        for (unsigned int i(0); i < 1; ++i)
+//        if (m_ptvVec.size() < 1)
 //        {
-        
-            for (auto& ptv : m_ptvVec)
-            {
-                auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
-                if(!addPvt) std::cout<< time << " " << ptv.P <<  " - add to ipm-buffer error: " << pErrorAddPvt << std::endl;
-                
-//                auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
-            }
-            
-//        }
-        
-//        //start with point 0
-//        auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, offset, 0, dt, &pErrorAddPvt);
-//        if(!addPvt)
-//            std::cout<<"Add PVT-0 Error: "<<pErrorAddPvt<<std::endl;
-//        else
-//            // std::cout<<"PointNumber: "<<0<<" P: "<<0<<" T: "<<200<<" V: "<<0<<std::endl;
+//            for (unsigned int i(0); i <= runTime/dt; ++i)
+//            {
+//                PTV ptv = motionTypeFunction(Amplitude,i,Periode,dt,Resolution, offset, function);
+//                m_ptvVec.push_back(ptv);
 //
-//
-//
-//        while (time<=runTime)
-//        {
-//            PTV ptv;
-//            switch (function) {
-//                case 0:
-//                    ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution, offset);
-//                    break;
-//                case 1:
-//                    ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution, offset);
-//                default:
-//                    break;
+//                //std::cout << time << " - " << i << "-th point added " << std::endl;
+//                time = i*dt;
 //            }
+//        }
 //
-//            if (ptv.P<=MainPositions.Max&&ptv.P>=MainPositions.Min)
+//        //        for (unsigned int i(0); i < 1; ++i)
+////        {
+//
+//            for (auto& ptv : m_ptvVec)
 //            {
 //                auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
-//                if(!addPvt)
-//                    std::cout<< time << " - Add PVT-while Error: "<<pErrorAddPvt<<std::endl;
-//            }
-//            else
-//            {
-//                std::cout<<"Out of Bounds! No further Movement in this direction!"<<std::endl;
-//                break;
-//            }
-//            PointNbr+=1;
-//            time+=dt;
-//        }
+//                if(!addPvt) std::cout<< time << " " << ptv.P <<  " - add to ipm-buffer error: " << pErrorAddPvt << std::endl;
 //
-//        //end point with last position value
-//        PTV ptv;
-//        switch (function) {
-//            case 0:
-//                ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution, offset);
-//                break;
-//            case 1:
-//                ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution, offset);
-//            default:
-//                break;
+////                auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
+//            }
+        
 //        }
-//
-//        if (ptv.P<=MainPositions.Max&&ptv.P>=MainPositions.Min)
-//        {
-//            auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, 0, time, &pErrorAddPvt);
-//            if(!addPvt)
-//                std::cout<<"Add PVT-endl Error: "<<pErrorAddPvt<<std::endl;
-//        }
-//        else
-//        {
-//            std::cout<<"Out of Bounds! No further Movement in this direction!"<<std::endl;
-//            return 0;
-//        }
+        
+        //start with point 0
+        auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, offset, 0, dt, &pErrorAddPvt);
+        if(!addPvt)
+            std::cout<<"Add PVT-0 Error: "<<pErrorAddPvt<<std::endl;
+        else
+            // std::cout<<"PointNumber: "<<0<<" P: "<<0<<" T: "<<200<<" V: "<<0<<std::endl;
+
+
+
+        while (time<=runTime)
+        {
+            PTV ptv;
+            switch (function) {
+                case 0:
+                    ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution, offset);
+                    break;
+                case 1:
+                    ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution, offset);
+                default:
+                    break;
+            }
+
+            if (ptv.P<=MainPositions.Max&&ptv.P>=MainPositions.Min)
+            {
+                auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
+                if(!addPvt)
+                    std::cout<< time << " - Add PVT-while Error: "<<pErrorAddPvt<<std::endl;
+            }
+            else
+            {
+                std::cout<<"Out of Bounds! No further Movement in this direction!"<<std::endl;
+                break;
+            }
+            PointNbr+=1;
+            time+=dt;
+        }
+
+        //end point with last position value
+        PTV ptv;
+        switch (function) {
+            case 0:
+                ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution, offset);
+                break;
+            case 1:
+                ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution, offset);
+            default:
+                break;
+        }
+
+        if (ptv.P<=MainPositions.Max&&ptv.P>=MainPositions.Min)
+        {
+            auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, 0, time, &pErrorAddPvt);
+            if(!addPvt)
+                std::cout<<"Add PVT-endl Error: "<<pErrorAddPvt<<std::endl;
+        }
+        else
+        {
+            std::cout<<"Out of Bounds! No further Movement in this direction!"<<std::endl;
+            return 0;
+        }
         
 
         //std::cout << "Trajectory has been computed" << std::endl;
