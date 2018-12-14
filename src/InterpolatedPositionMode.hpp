@@ -104,7 +104,7 @@ protected:
                 m_ptvVec.push_back(ptv);
 
                 //std::cout << time << " - " << i << "-th point added " << std::endl;
-                time+=dt;
+                time = i*dt;
             }
         }
 
@@ -114,7 +114,7 @@ protected:
             for (auto& ptv : m_ptvVec)
             {
                 auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
-                if(!addPvt) std::cout<< time << " - add to ipm-buffer error: " << pErrorAddPvt << std::endl;
+                if(!addPvt) std::cout<< time << " " << ptv.P <<  " - add to ipm-buffer error: " << pErrorAddPvt << std::endl;
                 
 //                auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
             }
