@@ -207,9 +207,14 @@ public:
                 {
                     std::cout << "sensor state: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
                     unsigned int pErrorMoveToPos;
+                    
+                    
                     bool halt = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+                    
+                    //bool stop = VCS_StopIpmTrajectory(keyHandle(), 1, &pErrorMoveToPos);
+                    
+                    
                     gtp["-vs"] = 0.;
-                    gtp.interface(10) = 0;
                     gtp.keepRunning() = false;
                 }
             }
@@ -435,7 +440,7 @@ protected:
     {
         unsigned short LimitReached = GetLimitReached();
         LimitReached = LimitReached & 0x100;
-        return (!LimitReached);
+        return (LimitReached);
     }
     
     //Maximal Position reached?

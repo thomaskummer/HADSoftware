@@ -100,13 +100,11 @@ protected:
         {
             for (unsigned int i(0); i < runTime/dt; ++i)
             {
-                
                 PTV ptv = motionTypeFunction(Amplitude,i,Periode,dt,Resolution, offset, function);
- 
+                m_ptvVec.push_back(ptv);
+
                 //std::cout << time << " - " << i << "-th point added " << std::endl;
                 time+=dt;
-
-                m_ptvVec.push_back(ptv);
             }
         }
         
