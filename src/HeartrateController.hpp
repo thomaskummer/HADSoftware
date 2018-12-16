@@ -89,6 +89,13 @@ public:
     void activateMotionMode()
     {
         m_motionMode->activateMode();
+
+//        // Determine operation mode
+//        char* pOperationMode;
+//        unsigned int pErrorMoveToPos;
+//        bool om = VCS_GetOperationMode(keyHandle(), 1, pOperationMode, &pErrorMoveToPos);
+//
+//        std::cout << *pOperationMode << std::endl;
     }
     
     void run()
@@ -208,25 +215,38 @@ public:
                     std::cout << "sensor state: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
                     unsigned int pErrorMoveToPos;
                     
-                    char* pOperationMode;
-                    bool om = VCS_GetOperationMode(keyHandle(), 1, pOperationMode, &pErrorMoveToPos);
+//                    char* pOperationMode;
+//                    bool om = VCS_GetOperationMode(keyHandle(), 1, pOperationMode, &pErrorMoveToPos);
+//
+//                    std::cout << *pOperationMode << std::endl;
                     
-                    if ( *pOperationMode == '1' )
-                    {
-                        bool pmStop = VCS_HaltPositionMovement(keyHandle(), 1, &pErrorMoveToPos);
-                    }
-
-                    if ( *pOperationMode == '3' )
-                    {
-                        bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
-                        gtp["-vs"] = 0.;
-                    }
-
-                    if ( *pOperationMode == '7' )
-                    {
-                        bool ipmStop = VCS_StopIpmTrajectory(keyHandle(), 1, &pErrorMoveToPos);
-                    }
+//                    if ( *pOperationMode == '1' )
+//                    {
+//                        std::cout << "sensor state 1: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
+//
+//                        bool pmStop = VCS_HaltPositionMovement(keyHandle(), 1, &pErrorMoveToPos);
+//                    }
+//
+//                    if ( *pOperationMode == '3' )
+//                    {
+//                        std::cout << "sensor state 3: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
+//
+//                        bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+//                        gtp["-vs"] = 0.;
+//                    }
+//
+//                    if ( *pOperationMode == '7' )
+//                    {
+//                        std::cout << "sensor state 7: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
+//
+//                        bool ipmStop = VCS_StopIpmTrajectory(keyHandle(), 1, &pErrorMoveToPos);
+//                    }
                     
+                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+//                    bool pmStop = VCS_HaltPositionMovement(keyHandle(), 1, &pErrorMoveToPos);
+
+                    gtp["-vs"] = 0.;
+
                     gtp.keepRunning() = false;
                 }
             }

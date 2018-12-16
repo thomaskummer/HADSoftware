@@ -88,115 +88,37 @@ protected:
     bool runIPM(int function, double Amplitude, double Periode, double dt, double runTime, double Resolution, double& timeout, const int& offset = 0)
     {
         unsigned int pErrorAddPvt, pErrorStartTrajectory;
-        
-//        std::cout << "Current absolut position: " << PositionIs_Fct() << std::endl;
-//        std::cout << "Current offset " << offset << std::endl;
-        
+
         int PointNbr=1;
         double time (0);
-        std::cout << std::endl;
         
-//        if (m_ptvVec.size() < 1)
-//        {
-//            for (unsigned int i(0); i <= runTime/dt; ++i)
-//            {
-//                PTV ptv = motionTypeFunction(Amplitude,i,Periode,dt,Resolution, offset, function);
-//                m_ptvVec.push_back(ptv);
-//
-//                //std::cout << time << " - " << i << "-th point added " << std::endl;
-//                time = i*dt;
-//            }
-//        }
-//
-//        //        for (unsigned int i(0); i < 1; ++i)
-////        {
-//
-//            for (auto& ptv : m_ptvVec)
-//            {
-//                auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
-//                if(!addPvt) std::cout<< time << " " << ptv.P <<  " - add to ipm-buffer error: " << pErrorAddPvt << std::endl;
-//
-////                auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
-//            }
-        
-//        }
-        
-        //start with point 0
-        auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, offset, 0, dt, &pErrorAddPvt);
-        if(!addPvt)
-            std::cout<<"Add PVT-0 Error: "<<pErrorAddPvt<<std::endl;
-        else
-            // std::cout<<"PointNumber: "<<0<<" P: "<<0<<" T: "<<200<<" V: "<<0<<std::endl;
-
-
-
-        while (time<=runTime)
+        if (m_ptvVec.size() < 1)
         {
-            PTV ptv;
-            switch (function) {
-                case 0:
-                    ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution, offset);
-                    break;
-                case 1:
-                    ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution, offset);
-                default:
-                    break;
-            }
-
-            if (ptv.P<=MainPositions.Max&&ptv.P>=MainPositions.Min)
+            for (unsigned int i(0); i <= runTime/dt; ++i)
             {
-                auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
-                if(!addPvt)
-                    std::cout<< time << " - Add PVT-while Error: "<<pErrorAddPvt<<std::endl;
+                PTV ptv = motionTypeFunction(Amplitude,i,Periode,dt,Resolution, offset, function);
+                m_ptvVec.push_back(ptv);
+                //std::cout << time << " - " << i << "-th point added " << std::endl;
+                time = i*dt;
             }
-            else
-            {
-                std::cout<<"Out of Bounds! No further Movement in this direction!"<<std::endl;
-                break;
-            }
-            PointNbr+=1;
-            time+=dt;
+            
+            m_ptvVec[40].T = 0;
         }
 
-        //end point with last position value
-        PTV ptv;
-        switch (function) {
-            case 0:
-                ptv = GetPTVsin(Amplitude,PointNbr,Periode,dt,Resolution, offset);
-                break;
-            case 1:
-                ptv = GetPTVsin2(Amplitude,PointNbr,Periode,dt,Resolution, offset);
-            default:
-                break;
-        }
-
-        if (ptv.P<=MainPositions.Max&&ptv.P>=MainPositions.Min)
+        for (auto& ptv : m_ptvVec)
         {
-            auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, 0, time, &pErrorAddPvt);
-            if(!addPvt)
-                std::cout<<"Add PVT-endl Error: "<<pErrorAddPvt<<std::endl;
+            auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
+            if(!addPvt) std::cout<< time << " " << ptv.P <<  " - add to ipm-buffer error: " << pErrorAddPvt << std::endl;
         }
-        else
-        {
-            std::cout<<"Out of Bounds! No further Movement in this direction!"<<std::endl;
-            return 0;
-        }
-        
 
-        //std::cout << "Trajectory has been computed" << std::endl;
-        
         auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
-
-//        if (!StartIpmTraj)
-//            std::cout<<"StartIPModeTrajectory Error: "<<pErrorStartTrajectory<<std::endl;
-//        else
-//            std::cout<<"Starting Trajectory..."<<std::endl;
+        if (!StartIpmTraj) std::cout << "StartIPModeTrajectory Error: " << pErrorStartTrajectory << std::endl;
         
         
-//        unsigned int Timeout = timeout; //max waiting time in ms
+        unsigned int Timeout = timeout;
         unsigned int pErrorCode;
-        sleep(1.2);
-        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, (int) timeout, &pErrorCode);
+        //sleep(1.2);
+        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout+5000, &pErrorCode);
     }
     
     //Get buffer parameters for ipm
@@ -226,7 +148,7 @@ protected:
             default:
                 break;
         }
-        std::cout << ptv.P << " : " << ptv.V << " : " << ptv.T << std::endl;
+        //std::cout << ptv.P << " : " << ptv.V << " : " << ptv.T << std::endl;
         return ptv;
     }
     
