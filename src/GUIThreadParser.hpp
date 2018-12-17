@@ -67,7 +67,7 @@ public:
                 m_interface[2] = 1;
                 m_interface[3] = (value1.empty() ? -10 : std::stoi(value1));
                 
-                m_tasks["-ia"] = (value1.empty() ? -10 : std:s:stoi(value1));
+                m_tasks["-ia"] = (value1.empty() ? -10 : std::stoi(value1));
                 m_tasks["-ip"] = (value2.empty() ? 1000 : std::stoi(value2));
                 m_tasks["-if"] = (value3.empty() ? 1 : std::stoi(value3));
                 m_keepRunning = true;
