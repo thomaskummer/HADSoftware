@@ -198,7 +198,7 @@ protected:
         return{P,T,V};
     }
     
-    //Get IPMode PTV asyn |t|
+    //Get IPMode PTV async |t|
     PTV GetPTVasyncAbsT(double Amplitude,double PointNumber,double Periode, double async, double dt, double Resolution, const int& offset)
     {
         int t = (int) PointNumber * dt;
