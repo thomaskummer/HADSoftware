@@ -197,7 +197,7 @@ protected:
         if (Periode / dt == 2 * PointNumber)
         {
             std::cout << "endpoint" << std::endl;
-            P*= 0.98;
+            P*= 0.9;
         }
             
         std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
@@ -212,7 +212,7 @@ protected:
         int T = (int) dt;
         int V = (int) - Amplitude * std::abs(t - 0.5*Periode) / ((t - 0.5*Periode) * 0.5*Periode) * 60000/(4*Resolution);
         
-        std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        std::cout<<"  \t- [0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return {P,T,V};
     }
 
