@@ -194,7 +194,7 @@ protected:
         int T = (int) dt;
         int V = (int) - Amplitude * std::abs(t - 0.5*Periode) / ((t - 0.5*Periode) * 0.5*Periode) * 60000/(4*Resolution);
         
-        if ( Periode / dt <= (2 * PointNumber + 1) )
+        if ( (Periode / (2*dt)) - 1 <= PointNumber  &&  (Periode / (2*dt)) + 1 >= PointNumber )
         {
             std::cout << "endpoint" << P << " " << 0.98*P << " " << V << std::endl;
             P*= 0.98;
