@@ -47,8 +47,8 @@ public:
             std::cout << ">>> ";
             std::getline(std::cin, line);
             std::istringstream iss(line);
-            std::string task, value1, value2, value3;
-            iss >> task; // >> value1 >> value2 >> value3;
+            std::string task, value1, value2, value3, value4;
+            iss >> task; // >> value1 >> value2 >> value3 >> value4;
 
             if (!task.compare("move"))
             {
@@ -63,13 +63,15 @@ public:
             
             if (!task.compare("ipm"))
             {
-                iss >> value1; iss >> value2; iss >> value3;
+                iss >> value1; iss >> value2; iss >> value3; iss >> value4;
                 m_interface[2] = 1;
                 m_interface[3] = (value1.empty() ? -10 : std::stoi(value1));
                 
                 m_tasks["-ia"] = (value1.empty() ? -10 : std::stoi(value1));
                 m_tasks["-ip"] = (value2.empty() ? 1000 : std::stoi(value2));
                 m_tasks["-if"] = (value3.empty() ? 1 : std::stoi(value3));
+                m_tasks["-ias"] = (value4.empty() ? 0.5 : std::stoi(value4));
+
                 m_keepRunning = true;
                 m_taskSubmitted = true;
             }

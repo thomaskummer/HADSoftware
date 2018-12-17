@@ -46,6 +46,7 @@ public:
     void run(const int& offset = 0)
     {
         auto function = readArgument("-if", 1);
+        auto async = readArgument("-ias", 0.3);
 
         auto distance = readArgument("-ia", -20.0) mm;
         auto period = readArgument("-ip", 1000.0);
@@ -54,7 +55,7 @@ public:
         auto resolution = readArgument("-ir", 500);
         auto timeout = readArgument("-ito", (period > 2000 ? period - 1000 : period - 700));
 
-        runIPM(function, distance, period, timestep, runtime, resolution, timeout, offset);
+        runIPM(function, distance, period, async, timestep, runtime, resolution, timeout, offset);
     }
     
     //Get status of interpolated position mode
@@ -85,7 +86,7 @@ protected:
     std::vector<PTV> m_ptvVec;
     
     //Interpolated position mode
-    bool runIPM(int function, double Amplitude, double Periode, double dt, double runTime, double Resolution, double& timeout, const int& offset = 0)
+    bool runIPM(int function, double Amplitude, double Periode, double async, double dt, double runTime, double Resolution, double& timeout, const int& offset = 0)
     {
         unsigned int pErrorAddPvt, pErrorStartTrajectory;
 
@@ -96,7 +97,7 @@ protected:
         {
             for (unsigned int i(0); i <= runTime/dt; ++i)
             {
-                PTV ptv = motionTypeFunction(Amplitude,i,Periode,dt,Resolution, offset, function);
+                PTV ptv = motionTypeFunction(Amplitude,i,Periode, async,dt,Resolution, offset, function);
                 m_ptvVec.push_back(ptv);
                 //std::cout << time << " - " << i << "-th point added " << std::endl;
                 time = i*dt;
@@ -135,7 +136,7 @@ protected:
         <<pMaxBufferSize<<": MaxBufferSize "<<pErrorCode<<": ErrorCode"<<std::endl;
     }
     
-    PTV motionTypeFunction (double Amplitude,int i,double Periode, double dt, double Resolution, const int& offset, const int function)
+    PTV motionTypeFunction (double Amplitude,int i,double Periode, double async, double dt, double Resolution, const int& offset, const int function)
     {
         PTV ptv;
         switch (function)
@@ -147,6 +148,8 @@ protected:
                 ptv = GetPTVsin2(Amplitude,i,Periode,dt,Resolution, offset);
             case 2:
                 ptv = GetPTVabsT(Amplitude,i,Periode,dt,Resolution, offset);
+            case 3:
+                ptv = GetPTVasyncAbsT(Amplitude,i,Periode, async, dt,Resolution, offset);
             default:
                 break;
         }
@@ -192,12 +195,12 @@ protected:
     }
     
     //Get IPMode PTV asyn |t|
-    PTV GetPTVasynAbsT(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
+    PTV GetPTVasyncAbsT(double Amplitude,double PointNumber,double Periode, double async, double dt, double Resolution, const int& offset)
     {
         int t = (int) PointNumber * dt;
-        int P= (int) 0;
+        int P= (int) - Amplitude * std::abs(t - 0.5*Periode) / (0.5*Periode) + Amplitude;
         int T= (int) dt;
-        int V= (int) 0;
+        int V= (int) - Amplitude * std::abs(t - 0.5*Periode) / ((t - 0.5*Periode) * 0.5*Periode);
         
         //std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return{P,T,V};
