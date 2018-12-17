@@ -147,10 +147,13 @@ protected:
                 break;
             case 1:
                 ptv = GetPTVsin2(Amplitude,i,Periode,dt,Resolution, offset);
+                break;
             case 2:
                 ptv = GetPTVabsT(Amplitude,i,Periode,dt,Resolution, offset);
+                break;
             case 3:
                 ptv = GetPTVasyncAbsT(Amplitude,i,Periode, async, dt,Resolution, offset);
+                break;
             default:
                 break;
         }
