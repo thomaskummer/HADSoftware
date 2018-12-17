@@ -106,11 +106,12 @@ protected:
             m_ptvVec[40].T = 0;
         }
 
+        bool addPvt;
         for (auto& ptv : m_ptvVec)
         {
-            auto addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
-            if(!addPvt) std::cout<< time << " " << ptv.P <<  " - add to ipm-buffer error: " << pErrorAddPvt << std::endl;
+            addPvt = VCS_AddPvtValueToIpmBuffer(KeyHandle, 1, ptv.P, ptv.V, ptv.T, &pErrorAddPvt);
         }
+        if(!addPvt) std::cout << "add to ipm-buffer error: " << pErrorAddPvt << std::endl;
 
         auto StartIpmTraj = VCS_StartIpmTrajectory(KeyHandle, 1, &pErrorStartTrajectory);
         if (!StartIpmTraj) std::cout << "StartIPModeTrajectory Error: " << pErrorStartTrajectory << std::endl;
@@ -190,7 +191,7 @@ protected:
         int T= (int) dt;
         int V= (int) - Amplitude * std::abs(t - 0.5*Periode) / ((t - 0.5*Periode) * 0.5*Periode);
         
-        //std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return{P,T,V};
     }
     
@@ -202,7 +203,7 @@ protected:
         int T= (int) dt;
         int V= (int) - Amplitude * std::abs(t - 0.5*Periode) / ((t - 0.5*Periode) * 0.5*Periode);
         
-        //std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return{P,T,V};
     }
 
