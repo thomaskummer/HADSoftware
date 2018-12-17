@@ -165,12 +165,12 @@ protected:
     PTV GetPTVsin(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
     {
         Amplitude *= 0.5;
-        int P= (int) -(Amplitude*sin(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))-Amplitude + offset;
-        int T= (int) dt;
-        int V= (int) -(Amplitude*2.0*M_PI/Periode*cos(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))*1000.0/(4.0*Resolution)*60.0;
+        int P = (int) -(Amplitude*sin(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))-Amplitude + offset;
+        int T = (int) dt;
+        int V = (int) -(Amplitude*2.0*M_PI/Periode*cos(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))*1000.0/(4.0*Resolution)*60.0;
 
         //std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
-        return{P,T,V};
+        return {P,T,V};
     }
     
     //Get IPMode PTV sin^2(t)
@@ -183,31 +183,34 @@ protected:
         int V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
         
         //std::cout<<"  \t[1]PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
-        return{P,T,V};
+        return {P,T,V};
     }
     
     //Get IPMode PTV |t|
     PTV GetPTVabsT(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
     {
         int t = (int) PointNumber * dt;
-        int P= (int) - Amplitude * std::abs(t - 0.5*Periode) / (0.5*Periode) + Amplitude;
-        int T= (int) dt;
-        int V= (int) - Amplitude * std::abs(t - 0.5*Periode) / ((t - 0.5*Periode) * 0.5*Periode);
+        int P = (int) - Amplitude * std::abs(t - 0.5*Periode) / (0.5*Periode) + Amplitude;
+        int T = (int) dt;
+        int V = (int) - Amplitude * std::abs(t - 0.5*Periode) / ((t - 0.5*Periode) * 0.5*Periode) * 60000/(4*Resolution);
         
+        if (Periode / dt == 2 * PointNumber) P*=
+
+            
         std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
-        return{P,T,V};
+        return {P,T,V};
     }
     
     //Get IPMode PTV asyn |t|
     PTV GetPTVasyncAbsT(double Amplitude,double PointNumber,double Periode, double async, double dt, double Resolution, const int& offset)
     {
         int t = (int) PointNumber * dt;
-        int P= (int) - Amplitude * std::abs(t - 0.5*Periode) / (0.5*Periode) + Amplitude;
-        int T= (int) dt;
-        int V= (int) - Amplitude * std::abs(t - 0.5*Periode) / ((t - 0.5*Periode) * 0.5*Periode);
+        int P = (int) - Amplitude * std::abs(t - 0.5*Periode) / (0.5*Periode) + Amplitude;
+        int T = (int) dt;
+        int V = (int) - Amplitude * std::abs(t - 0.5*Periode) / ((t - 0.5*Periode) * 0.5*Periode) * 60000/(4*Resolution);
         
         std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
-        return{P,T,V};
+        return {P,T,V};
     }
 
 };
