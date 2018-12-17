@@ -177,8 +177,31 @@ protected:
         return{P,T,V};
     }
     
-};
+    //Get IPMode PTV |t|
+    PTV GetPTVabsT(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
+    {
+        Amplitude *= 0.5;
+        int P= (int) - Amplitude * std::abs(t - 0.5*Periode) / (0.5*Periode) + Amplitude;
+        int T= (int) dt;
+        int V= (int) - Amplitude * std::abs(t - 0.5*Periode) / ((t - 0.5*Periode) * 0.5*Periode);
+        
+        //std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        return{P,T,V};
+    }
+    
+    //Get IPMode PTV asyn |t|
+    PTV GetPTVasynAbsT(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
+    {
+        Amplitude *= 0.5;
+        int P= (int)
+        int T= (int) dt;
+        int V= (int)
+        
+        //std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        return{P,T,V};
+    }
 
+};
 
 }
 
