@@ -145,6 +145,8 @@ protected:
                 break;
             case 1:
                 ptv = GetPTVsin2(Amplitude,i,Periode,dt,Resolution, offset);
+            case 2:
+                ptv = GetPTVabsT(Amplitude,i,Periode,dt,Resolution, offset);
             default:
                 break;
         }
@@ -193,9 +195,9 @@ protected:
     PTV GetPTVasynAbsT(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
     {
         int t = (int) PointNumber * dt;
-        int P= (int)
+        int P= (int) 0;
         int T= (int) dt;
-        int V= (int)
+        int V= (int) 0;
         
         //std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return{P,T,V};
