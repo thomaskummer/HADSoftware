@@ -196,7 +196,7 @@ protected:
         
         if ( (Periode / (2*dt)) - 1 <= PointNumber  &&  (Periode / (2*dt)) + 1 >= PointNumber )
         {
-            if ( )(Periode / (2*dt)) == PointNumber ) V = 0;
+            if ( (Periode / (2*dt)) == PointNumber ) V = 0;
             
             std::cout << "endpoint" << P << " " << 0.98*P << " " << V << std::endl;
             P*= 0.95;
