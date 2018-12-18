@@ -24,18 +24,42 @@ cd build
 make
 ```
 
-## Run
+## Run & commandline arguments
 
 ```
 ./HeartrateController ...
 -h   : this help
 -n   : [ARG] number of program repetitions (default 1)
 -pm  : profile mode
--pd    : [ARG] distance to move (in mm, default 10)
+-pd    : [ARG] distance to move (in mm; default 10)
 -ipm : interpolated position mode
 -if    : [ARG] motion type (0 for sin(t), 1 for sin^2(t), default 0)
--ia    : [ARG] amplitude (in mm, default -20)
--ip    : [ARG] period, time for one contraction (in ms, default 1000)
+-ia    : [ARG] amplitude (in mm; default -20)
+-ip    : [ARG] period, time for one contraction (in ms; default 1000)
+-gui   : interactive mode (default if no arguments passed; used by the available gui/touchscreen)
+         
 
 example: ./HeartrateController -ipm -if 1 -ia 40 -n 2
 ```
+
+## Interactive mode
+
+```
+./HeartrateController -gui
+
+help
+
+ipm
+stop
+
+home-minus
+home-plus
+home-stop
+
+move
+
+exit
+
+
+```
+

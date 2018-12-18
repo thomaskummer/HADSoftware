@@ -98,7 +98,7 @@ public:
                 m_taskSubmitted = true;
             }
             
-            if (!task.compare("cr") || !task.compare("cont-plus-release") || !task.compare("cont-minus-release"))
+            if (!task.compare("cr") || !task.compare("cont-plus-release") || !task.compare("cont-minus-release") ||  || !task.compare("home-stop"))
             {
                 iss >> value1;
                 m_interface[10] = 1;
