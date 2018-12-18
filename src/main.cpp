@@ -39,15 +39,12 @@ int main(int argc, char** argv)
     HeartrateController hrc;
     hrc.readCmdLineArguments(argc, argv);
     
-    hrc.runControllerFromGUI();
-
-//    if (hrc.cmdLineParser().feature("-gui"))
-//    {
-//        hrc.runControllerFromGUI();
-//    }
-//    else hrc.runConrollerFromCmdLine();
-    
-//      maxonMotor.SetObject(0x6062,0x00,0,4);
-//      maxonMotor.GetObject(0x6064,0x00,4);
-//      maxonMotor.GetObject(0x6062,0x00,4);
+    if (hrc.cmdLineParser().feature("-gui"))
+    {
+        hrc.runControllerFromGUI();
+    }
+    else
+    {
+        hrc.runConrollerFromCmdLine();
+    }
 }
