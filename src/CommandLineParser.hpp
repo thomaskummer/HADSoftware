@@ -31,6 +31,8 @@ public:
             std::cout << "gui\n";
             issMode.str("-gui");
         }
+        else std::cout << "gudi\n";
+
 
         std::string mode;
         if (issMode >> mode) m_tasks.emplace(mode, 1.0);
