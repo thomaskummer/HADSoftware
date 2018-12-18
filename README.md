@@ -57,8 +57,10 @@ ipm: interpolated position mode (standard mode for asisting the heart)
 
 home-minus: motion in negative direction stopped by a Reed sensor
     - [ARG] motion velocity (default: 2)
+    
 home-plus: motion in positiv direction stopped by a Reed sensor
     - [ARG] motion velocity (default: 2)
+    
 home-stop: stop home-minus or home-plus motion
 
 move: moving a certain distance
