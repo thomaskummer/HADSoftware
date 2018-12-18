@@ -190,17 +190,14 @@ protected:
     PTV GetPTVabsT(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
     {
         int t = (int) PointNumber * dt;
-        int P = (int) - Amplitude * std::abs(t - 0.5*Periode) / (0.5*Periode) + Amplitude;
+        int P0 = (int) 4/M_PI * ( std::cos(0) + std::cos(0)/9 ) - M_PI/2;
+        int Pmin = (int) 4/M_PI * ( std::cos(M_PI) + std::cos(3*M_PI)/9 ) - M_PI/2;
+        int deltaP = std::abs(P0 - Pmin);
+        int P = (int) (Amplitude / deltaP) * ( 4/M_PI * ( std::cos(t * 2 * M_PI / Periode) + std::cos(3*t * 2 * M_PI / Periode)/9 ) - M_PI/2 - P0 ) + offset;
         int T = (int) dt;
-        int V = (int) - Amplitude * std::abs(t - 0.5*Periode) / ((t - 0.5*Periode) * 0.5*Periode) * 60000/(4*Resolution);
+        int V = (int) (4 / (3*M_PI)) * 60000/(4*Resolution);
         
-        if ( (Periode / (2*dt)) - 1 <= PointNumber  &&  (Periode / (2*dt)) + 1 >= PointNumber )
-        {
-            if ( (Periode / (2*dt)) == PointNumber ) V = 0;
-            
-            std::cout << "endpoint" << P << " " << 0.98*P << " " << V << std::endl;
-            P*= 0.95;
-        }
+
             
         std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return {P,T,V};
