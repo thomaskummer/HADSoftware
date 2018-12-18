@@ -47,19 +47,27 @@ example: ./HeartrateController -ipm -if 1 -ia 40 -n 2
 ```
 ./HeartrateController -gui
 
-help
+help: interactive commands explained
 
-ipm
-stop
+ipm: interpolated position mode (standard mode for asisting the heart)
+    - [ARG-1] amplitude (in mm; negative for heart contraction)
+    - [ARG-2] period or time for one cycle (in ms)
+    - [ARG-3] motion mode (0: sin(t), 1 : sin^2(t), 2:|x|; default: 1)
+    - [ARG-4] asymmetric parameter a for mode 2 (0 < a < 1; default: 0.5)
 
-home-minus
-home-plus
-home-stop
+home-minus: motion in negative direction stopped by a Reed sensor
+    - [ARG] motion velocity (default: 2)
+home-plus: motion in positiv direction stopped by a Reed sensor
+    - [ARG] motion velocity (default: 2)
+home-stop: stop home-minus or home-plus motion
 
-move
+move: moving a certain distance
+    - [ARG] distance (in cm; +/- sign matter; no default)
 
-exit
+stop: all modes are stopped after completion
 
+reset: EPOS 2 controller reset
 
+exit: leave interactive mode
 ```
 
