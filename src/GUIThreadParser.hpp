@@ -44,7 +44,7 @@ public:
 
         while (m_waitingForInput)
         {
-            std::cout << ">>> ";
+            std::cout << "\n>>> ";
             std::getline(std::cin, line);
             std::istringstream iss(line);
             std::string task, value1, value2, value3, value4;
@@ -98,7 +98,7 @@ public:
                 m_taskSubmitted = true;
             }
             
-            if (!task.compare("cr") || !task.compare("cont-plus-release") || !task.compare("cont-minus-release") ||  || !task.compare("home-stop"))
+            if (!task.compare("cr") || !task.compare("cont-plus-release") || !task.compare("cont-minus-release") || !task.compare("home-stop"))
             {
                 iss >> value1;
                 m_interface[10] = 1;

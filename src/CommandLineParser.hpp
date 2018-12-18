@@ -25,8 +25,9 @@ public:
     
     void readCommandLine(int argc, char** argv)
     {
-        if (argc < 2) argv[1] = "-gui";
         std::istringstream issMode (argv[1]);
+        if (argc < 2) issMode.str("-gui");
+
         std::string mode;
         if (issMode >> mode) m_tasks.emplace(mode, 1.0);
         

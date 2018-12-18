@@ -300,11 +300,12 @@ public:
     
     void printInteractiveHelp()
     {
-        std::cout << ">>> HeartrateController help" << std::endl;
-        std::cout << "\tmove  : ARG1 is the distance in mm, if \n\t\tARG1 is set to 0, the piston \n\t\tmoves to the absolute origin." << std::endl;
-        std::cout << "\tipm   : interpolated position mode. \n\t\tARG1 is the amplitude in mm (default -10), \n\t\tARG2 is the period in ms (default 1000), \n\t\tARG3 is the motion type with 0 for \n\t\tsin and 1 for sin^2 (default 1)." << std::endl;
-        std::cout << "\tstop  : terminates motion when cycle is finished."  << std::endl;
-        std::cout << "\texit  : exits this control tool."  << std::endl;
+        std::cout << ">>> HeartrateController help --> consult Readme.md" << std::endl;
+        
+//        std::cout << "\tmove  : ARG1 is the distance in mm, if \n\t\tARG1 is set to 0, the piston \n\t\tmoves to the absolute origin." << std::endl;
+//        std::cout << "\tipm   : interpolated position mode. \n\t\tARG1 is the amplitude in mm (default -10), \n\t\tARG2 is the period in ms (default 1000), \n\t\tARG3 is the motion type with 0 for \n\t\tsin and 1 for sin^2 (default 1)." << std::endl;
+//        std::cout << "\tstop  : terminates motion when cycle is finished."  << std::endl;
+//        std::cout << "\texit  : exits this control tool."  << std::endl;
     }
     
     
