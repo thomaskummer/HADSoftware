@@ -5,7 +5,7 @@ For heart assist device experiments at the Institute of Fluid Dynamics, both a M
 
 ## Download
 
-By cloning the following git repository, the EPOS-Linux-Library (from Maxon-Motor), the EPOS 2 controller code and the graphical user interface for the touchscreen, are downloaded.
+By cloning the following git repository, the EPOS-Linux-Library (from Maxon-Motor), the EPOS 2 controller framework and the graphical user interface for the touchscreen, are downloaded.
 
 ```
 git clone https://github.com/thomaskummer/HADSoftware.git
