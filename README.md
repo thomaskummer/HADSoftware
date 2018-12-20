@@ -1,4 +1,4 @@
-# Heartrate-Controller package for Maxon EPOS2
+# Heartrate-Controller framework for Maxon EPOS2
 
 For heart assist device experiments at the Institute of Fluid Dynamics, both a Maxon controller and a Maxon electric motor are employed. The motor drives a gear, which again drives as spindle that translates rotary motion into linear motion. Between the heart assist patches which move toward each other and the spindle, a Bowden cable used. This system allows for a lean patch design and can easily be wrapped around the heart. The Maxon controller is operated through this C++ package.
 
