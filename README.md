@@ -39,7 +39,7 @@ make
 If the above steps have successfully been completed, the system is ready to be used. There are three different ways of using it. Either through running the graphical user-interface which is found in the HADSoftware head directory, by executing the "HeartrateController" executeable from command-line with certain arguments or by running the interactive command-line mode by running "HeartrateController -gui". Further explanation can be found below.
 
 
-## Run HeartrateController with commandline arguments
+## 1. Run HeartrateController with commandline arguments
 
 ```
 ./HeartrateController ...
@@ -58,7 +58,7 @@ example: ./HeartrateController -ipm -if 1 -ia 40 -n 2
 ```
 
 
-## Run HeartrateController in interactive mode
+## 2. Run HeartrateController in interactive mode
 
 ```
 ./HeartrateController -gui
@@ -89,7 +89,7 @@ reset: EPOS 2 controller reset
 exit: leave interactive mode
 ```
 
-## Run the HeartrateController with graphical-user-interface
+## 3. Run the HeartrateController with graphical-user-interface
 
 ```
 cd HADSoftware
