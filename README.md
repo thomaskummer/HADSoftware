@@ -58,7 +58,7 @@ example: ./HeartrateController -ipm -if 1 -ia 40 -n 2
 ```
 
 
-## 2. Run HeartrateController in interactive mode
+## 2. Run HeartrateController interactive mode
 
 ```
 ./HeartrateController -gui
@@ -89,7 +89,7 @@ reset: EPOS 2 controller reset
 exit: leave interactive mode
 ```
 
-## 3. Run the HeartrateController with graphical-user-interface
+## 3. Run HeartrateController graphical-user-interface
 
 ```
 cd HADSoftware

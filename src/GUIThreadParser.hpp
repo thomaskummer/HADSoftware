@@ -35,6 +35,7 @@ public:
     void operator()()
     {
         std::cout << "gtp operator()" << std::endl;
+        readGUIActions();
     }
     
     void readGUIActions()
