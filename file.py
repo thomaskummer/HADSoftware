@@ -7,20 +7,20 @@ import os
 
 def exe(text, config=''):
 	path = os.path.realpath(text)
-	#print(path)
+	print(path)
 	a=subprocess.Popen([path, config], stdin=subprocess.PIPE, universal_newlines=True)
 	return a
 
 def vad():
-	path = os.path.realpath('') +'/build/HeartbeatController'
+	path = os.path.realpath('') +'/HADSoftware/build/HeartbeatController'
 	#path= '/home/alexmeier/Downloads/HADSoftware/build/HeartbeatController'
 	a=subprocess.Popen([path, '-gui'], stdin=subprocess.PIPE, universal_newlines=True)
 	#print(path)
 	return a
 
 def vadex():
-	path = os.path.realpath('') +'/build/HeartbeatController'
-	#path= '/home/alexmeier/Downloads/HADSoftware/build/HeartbeatController'
+	#path = os.path.realpath('') +'/HADSoftware/build/HeartbeatController'
+	path= '/home/thomas/Dokumente/HADSoftware/build/HeartbeatController'
 	a=subprocess.Popen([path, '-gui'], stdin=subprocess.PIPE, universal_newlines=True)
 	#print(path)
 	return a
