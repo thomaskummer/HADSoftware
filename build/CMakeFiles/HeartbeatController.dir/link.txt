@@ -1,0 +1,1 @@
+/usr/bin/g++  -O2 -std=c++11 -pthread -O3 -DNDEBUG   CMakeFiles/HeartbeatController.dir/src/main.cpp.o  -o HeartbeatController libMaxonHeartrateController.a -lEposCmd -L/opt/software/epos/lib/ 
