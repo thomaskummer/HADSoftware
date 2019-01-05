@@ -93,5 +93,5 @@ exit: leave interactive mode
 
 ```
 cd HADSoftware
-./GraphicalUserInterface
+./GraphicalUserInterface.py
 ```
