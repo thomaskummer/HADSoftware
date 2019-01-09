@@ -41,7 +41,7 @@ import file
 '''this allows to configure the gui before opening
 activate import and mysetup to use this feature'''
 import setup
-#mysetup=setup.setup()
+mysetup=setup.setup()
 
 
 
