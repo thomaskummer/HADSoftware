@@ -211,34 +211,34 @@ public:
             
             if ( gtp.keepRunning() )
             {
-                if ( sensorOne() || gtp["-vs"] < 0 )
-                {
-                    unsigned int pErrorMoveToPos;
-                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
-                
-                    gtp["-vs"] = 0.;
-                    gtp.keepRunning() = false;
-                    
-                    std::cout << "Sensor contact: minimal position attained" << std::endl;
-                }
-
-                if ( sensorTwo() || gtp["-vs"] > 0 )
-                {
-                    unsigned int pErrorMoveToPos;
-                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
-                    
-                    gtp["-vs"] = 0.;
-                    gtp.keepRunning() = false;
-                    
-                    std::cout << "Sensor contact: maximal position attained" << std::endl;
-                }
+//                if ( sensorOne() || gtp["-vs"] < 0 )
+//                {
+//                    unsigned int pErrorMoveToPos;
+//                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+//
+//                    gtp["-vs"] = 0.;
+//                    gtp.keepRunning() = false;
+//
+//                    std::cout << "Sensor contact: minimal position attained" << std::endl;
+//                }
+//
+//                if ( sensorTwo() || gtp["-vs"] > 0 )
+//                {
+//                    unsigned int pErrorMoveToPos;
+//                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+//
+//                    gtp["-vs"] = 0.;
+//                    gtp.keepRunning() = false;
+//
+//                    std::cout << "Sensor contact: maximal position attained" << std::endl;
+//                }
                 
                 if ( sensorOne() || sensorTwo() )
                 {
-//                    std::cout << "sensor state: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
-//                    unsigned int pErrorMoveToPos;
+                    std::cout << "sensor state: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
+                    unsigned int pErrorMoveToPos;
                     
-//                    char* pOperationMode;
+                    char* pOperationMode;
 //                    bool om = VCS_GetOperationMode(keyHandle(), 1, pOperationMode, &pErrorMoveToPos);
 //
 //                    std::cout << *pOperationMode << std::endl;
@@ -265,12 +265,12 @@ public:
 //                        bool ipmStop = VCS_StopIpmTrajectory(keyHandle(), 1, &pErrorMoveToPos);
 //                    }
                     
-//                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
-////                    bool pmStop = VCS_HaltPositionMovement(keyHandle(), 1, &pErrorMoveToPos);
-//
-//                    gtp["-vs"] = 0.;
-//
-//                    gtp.keepRunning() = false;
+                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+//                    bool pmStop = VCS_HaltPositionMovement(keyHandle(), 1, &pErrorMoveToPos);
+
+                    gtp["-vs"] = 0.;
+
+                    gtp.keepRunning() = false;
                 }
             }
             
