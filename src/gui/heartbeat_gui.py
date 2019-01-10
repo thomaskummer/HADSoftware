@@ -125,8 +125,10 @@ class HeartbeatGui(tk.Frame):
             '''checks if the exe is open if so sends a stop order'''
             if self.exeopenVar.get():
                 self.NOTSTOP.set(True)
-                self.process.stdin.write('stop\n')
-                self.process.stdin.flush()
+#                self.process.stdin.write('stop\n')
+#                self.process.stdin.write('\n')
+#                self.process.stdin.flush()
+                self.process.kill()
                 self.startstopVar.set(False)
                 
                 

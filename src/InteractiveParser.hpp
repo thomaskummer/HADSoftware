@@ -29,6 +29,7 @@ public:
         std::cout << "\n====================================================" << std::endl;
         std::cout << "Heartrate-controller for Maxon EPOS2 70/10" << std::endl;
         std::cout << "Institute of fluid dynamics - ETH Zurich" << std::endl;
+        std::cout << "Author: Thomas Kummer, Jan 2019" << std::endl;
         std::cout << "====================================================" << std::endl;
         
         std::string mode;

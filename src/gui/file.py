@@ -12,15 +12,15 @@ def exe(text, config=''):
 	return a
 
 def vad():
-	path = os.path.realpath('') +'/HADSoftware/build/HeartbeatController'
+	path = os.path.realpath('') +'/HeartbeatController'
 	#path= '/home/alexmeier/Downloads/HADSoftware/build/HeartbeatController'
 	a=subprocess.Popen([path, '-gui'], stdin=subprocess.PIPE, universal_newlines=True)
 	#print(path)
 	return a
 
 def vadex():
-	#path = os.path.realpath('') +'/HADSoftware/build/HeartbeatController'
-	path= '/home/thomas/Dokumente/HADSoftware/build/HeartbeatController'
+	path = os.path.realpath('') +'/HeartbeatController'
+    #path= '/home/thomas/Dokumente/HADSoftware/build/HeartbeatController'
 	a=subprocess.Popen([path, '-gui'], stdin=subprocess.PIPE, universal_newlines=True)
 	#print(path)
 	return a

@@ -38,6 +38,7 @@ public:
         std::cout << "\n====================================================" << std::endl;
         std::cout << "Heartrate-controller for Maxon EPOS2 70/10" << std::endl;
         std::cout << "Institute of fluid dynamics - ETH Zurich" << std::endl;
+        std::cout << "Author: Thomas Kummer, Jan 2019" << std::endl;
         std::cout << "====================================================\n" << std::endl;
     }
     
@@ -181,7 +182,7 @@ public:
                     m_motionMode->setArguments(gtp.map());
                     activateMotionMode();
                     run();
-                    gtp.interface(8) = 0;
+                    gtp.interface(12) = 0;
                 }
                 
                 // continuous-plus-release & continuous-minus-release
@@ -210,7 +211,33 @@ public:
             
             if ( gtp.keepRunning() )
             {
+<<<<<<< HEAD
                 if ( sensorMin() || gtp["-vs"] < 0 )
+=======
+//                if ( sensorOne() || gtp["-vs"] < 0 )
+//                {
+//                    unsigned int pErrorMoveToPos;
+//                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+//
+//                    gtp["-vs"] = 0.;
+//                    gtp.keepRunning() = false;
+//
+//                    std::cout << "Sensor contact: minimal position attained" << std::endl;
+//                }
+//
+//                if ( sensorTwo() || gtp["-vs"] > 0 )
+//                {
+//                    unsigned int pErrorMoveToPos;
+//                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+//
+//                    gtp["-vs"] = 0.;
+//                    gtp.keepRunning() = false;
+//
+//                    std::cout << "Sensor contact: maximal position attained" << std::endl;
+//                }
+                
+                if ( sensorOne() || sensorTwo() )
+>>>>>>> 612b4fa7e93db685a47982e46d2a98f17bb48f71
                 {
                     std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " : " << gtp["-vs"] << " ]" << std::endl;
                     
@@ -237,7 +264,7 @@ public:
 //                    std::cout << "sensor state: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
 //                    unsigned int pErrorMoveToPos;
                     
-//                    char* pOperationMode;
+                    char* pOperationMode;
 //                    bool om = VCS_GetOperationMode(keyHandle(), 1, pOperationMode, &pErrorMoveToPos);
 //
 //                    std::cout << *pOperationMode << std::endl;
