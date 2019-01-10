@@ -236,7 +236,7 @@ public:
                 
                 if ( sensorMin() || sensorMax() )
                 {
-                    std::cout << "sensor state: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
+                    std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " ]" << std::endl;
                     unsigned int pErrorMoveToPos;
                     
                     char* pOperationMode;
