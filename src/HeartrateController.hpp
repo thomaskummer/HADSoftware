@@ -493,7 +493,7 @@ protected:
     }
     
     //Minimal Position reached?
-    bool sensorMin()
+    bool sensorMax()
     {
         unsigned short LimitReached = GetLimitReached();
         LimitReached = LimitReached & 0x100;
