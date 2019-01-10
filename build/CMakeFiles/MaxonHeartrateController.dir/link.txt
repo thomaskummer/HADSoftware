@@ -1,0 +1,2 @@
+/usr/bin/ar qc libMaxonHeartrateController.a  CMakeFiles/MaxonHeartrateController.dir/src/main.cpp.o
+/usr/bin/ranlib libMaxonHeartrateController.a
