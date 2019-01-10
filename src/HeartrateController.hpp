@@ -211,35 +211,35 @@ public:
             
             if ( gtp.keepRunning() )
             {
-                if ( sensorMin() && gtp["-vs"] < 0 )
-                {
-                    std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " : " << gtp["-vs"] << " ]" << std::endl;
-                    
-                    unsigned int pErrorMoveToPos;
-                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
-
-                    gtp["-vs"] = 0.;
-                    gtp.keepRunning() = false;
-                }
-                
-                
-                if ( sensorMax() && gtp["-vs"] > 0 )
-                {
-                    std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " : " << gtp["-vs"] << " ]" << std::endl;
-                    
-                    unsigned int pErrorMoveToPos;
-                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
-                    
-                    gtp["-vs"] = 0.;
-                    gtp.keepRunning() = false;
-                }
+//                if ( sensorMin() && gtp["-vs"] < 0 )
+//                {
+//                    std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " : " << gtp["-vs"] << " ]" << std::endl;
+//
+//                    unsigned int pErrorMoveToPos;
+//                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+//
+//                    gtp["-vs"] = 0.;
+//                    gtp.keepRunning() = false;
+//                }
+//
+//
+//                if ( sensorMax() && gtp["-vs"] > 0 )
+//                {
+//                    std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " : " << gtp["-vs"] << " ]" << std::endl;
+//
+//                    unsigned int pErrorMoveToPos;
+//                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+//
+//                    gtp["-vs"] = 0.;
+//                    gtp.keepRunning() = false;
+//                }
                 
                 if ( sensorMin() || sensorMax() )
                 {
-//                    std::cout << "sensor state: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
-//                    unsigned int pErrorMoveToPos;
+                    std::cout << "sensor state: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
+                    unsigned int pErrorMoveToPos;
                     
-//                    char* pOperationMode;
+                    char* pOperationMode;
 //                    bool om = VCS_GetOperationMode(keyHandle(), 1, pOperationMode, &pErrorMoveToPos);
 //
 //                    std::cout << *pOperationMode << std::endl;
@@ -266,12 +266,12 @@ public:
 //                        bool ipmStop = VCS_StopIpmTrajectory(keyHandle(), 1, &pErrorMoveToPos);
 //                    }
                     
-//                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
 ////                    bool pmStop = VCS_HaltPositionMovement(keyHandle(), 1, &pErrorMoveToPos);
 //
-//                    gtp["-vs"] = 0.;
-//
-//                    gtp.keepRunning() = false;
+                    gtp["-vs"] = 0.;
+
+                    gtp.keepRunning() = false;
                 }
             }
             
