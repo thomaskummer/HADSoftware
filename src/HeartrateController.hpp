@@ -211,7 +211,7 @@ public:
             
             if ( gtp.keepRunning() )
             {
-                if ( sensorMin() || gtp["-vs"] < 0 )
+                if ( sensorMin() && gtp["-vs"] < 0 )
                 {
                     std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " : " << gtp["-vs"] << " ]" << std::endl;
                     
@@ -223,7 +223,7 @@ public:
                 }
                 
                 
-                if ( sensorMax() || gtp["-vs"] > 0 )
+                if ( sensorMax() && gtp["-vs"] > 0 )
                 {
                     std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " : " << gtp["-vs"] << " ]" << std::endl;
                     
