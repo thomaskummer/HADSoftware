@@ -384,10 +384,10 @@ class HeartbeatGui(tk.Frame):
     
     def ipmmodeSelect(self):
         '''the buttons for selection of the ipm function'''
-        self.ipmmodeButton1=tk.Radiobutton(self,text='sin',variable=self.ipmmodeVar, value=0,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
-        self.ipmmodeButton2=tk.Radiobutton(self,text='sin²',variable=self.ipmmodeVar, value=1,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
-        self.ipmmodeButton3=tk.Radiobutton(self,text='zigzag',variable=self.ipmmodeVar, value=2,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
-        self.ipmmodeButton4=tk.Radiobutton(self,text='assymetric',variable=self.ipmmodeVar, value=3,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
+        self.ipmmodeButton1=tk.Radiobutton(self,text='25 %',variable=self.ipmmodeVar, value=0,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
+        self.ipmmodeButton2=tk.Radiobutton(self,text='33 %',variable=self.ipmmodeVar, value=1,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
+        self.ipmmodeButton3=tk.Radiobutton(self,text='40 %',variable=self.ipmmodeVar, value=2,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
+        self.ipmmodeButton4=tk.Radiobutton(self,text='45 %',variable=self.ipmmodeVar, value=3,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
         self.ipmmodeButton1.grid(row=3, column=0, sticky=tk.N+tk.E+tk.S+tk.W)
         self.ipmmodeButton2.grid(row=4, column=0, sticky=tk.N+tk.E+tk.S+tk.W)
         self.ipmmodeButton3.grid(row=5, column=0, sticky=tk.N+tk.E+tk.S+tk.W)

@@ -144,16 +144,16 @@ protected:
         switch (function)
         {
             case 0:
-                ptv = GetPTVsin(Amplitude,i,Periode,dt,Resolution, offset);
+                ptv = GetPTVsin2_25(Amplitude,i,Periode,dt,Resolution, offset);
                 break;
             case 1:
-                ptv = GetPTVsin2(Amplitude,i,Periode,dt,Resolution, offset);
+                ptv = GetPTVsin2_33(Amplitude,i,Periode,dt,Resolution, offset);
                 break;
             case 2:
-                ptv = GetPTVabsT(Amplitude,i,Periode,dt,Resolution, offset);
+                ptv = GetPTVsin2_40(Amplitude,i,Periode,dt,Resolution, offset);
                 break;
             case 3:
-                ptv = GetPTVasyncAbsT(Amplitude,i,Periode, async, dt,Resolution, offset);
+                ptv = GetPTVsin2_45(Amplitude,i,Periode,dt,Resolution, offset);
                 break;
             default:
                 break;
@@ -162,91 +162,139 @@ protected:
         return ptv;
     }
     
-    //Get IPMode PTV sin(t)
-    PTV GetPTVsin(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
+    PTV GetPTVsin2_25(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
     {
         int t, P, T, V;
-        
-//        std::cout << m_time << " " << Periode << std::endl;
-
+        double sysDiasFrac = 0.25;
         t = (int) PointNumber * dt;
-        //std::cout << t << " " << Periode << std::endl;
-
-        if (t < Periode / 3.)
+        
+        if (t <= Periode * sysDiasFrac )
         {
             Periode *= 2.0;
-            Periode *= (2.0/3.0);
+            Periode *= sysDiasFrac * 2.;
+            
             P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode ), 2.0) + offset;
             T = (int) dt;
             V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
-//            std::cout << "abc \n";
+            std::cout << t << " a " << P << " " << V << " " << Periode << std::endl;
+
         }
-        if (t > Periode / 3.)
+        
+        if (t > Periode * sysDiasFrac )
         {
             Periode *= 2.0;
-
-            t += Periode/6.;
-            Periode *= (4.0/3.0);
-
+            t += Periode * (0.5 - sysDiasFrac);// * (1/2);
+            Periode *= (1 - sysDiasFrac) * 2.;
             
             P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode), 2.0) + offset;
             T = (int) dt;
             V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
-            //td::cout << (t + Periode/3.) / (Periode*(4.0/3.0)) << " " << std::sin(2.0 * M_PI * (t + Periode/3.) / (Periode*(4.0/3.0)) ) << std::endl;
+            std::cout << t << " b " << P << " " << V << " " << Periode << std::endl;
 
         }
-//        std::cout << "     " << t << " " << Periode/3. << std::endl;
-
-        //std::cout << t << " " << P << " " << V << std::endl;
-
-//        Amplitude *= 0.5;
-//        int P = (int) -(Amplitude*sin(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))-Amplitude + offset;
-//        int T = (int) dt;
-//        int V = (int) -(Amplitude*2.0*M_PI/Periode*cos(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))*1000.0/(4.0*Resolution)*60.0;
-
-        //std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        
         return {P,T,V};
     }
-    
-    //Get IPMode PTV sin^2(t)
-    PTV GetPTVsin2(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
-    {
-        Periode *= 2.0;
-        int t = (int) PointNumber * dt;
-        int P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode), 2.0) + offset;
-        int T = (int) dt;
-        int V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
-        
-        //std::cout<<"  \t[1]PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
-        return {P,T,V};
-    }
-    
-    //Get IPMode PTV |t|
-    PTV GetPTVabsT(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
-    {
-        int t = (int) PointNumber * dt;
-        int P0 = (int) 4/M_PI * ( std::cos(0) + std::cos(0)/9 ) - M_PI/2;
-        int Pmin = (int) 4/M_PI * ( std::cos(M_PI) + std::cos(3*M_PI)/9 ) - M_PI/2;
-        int deltaP = std::abs(P0 - Pmin);
-        int P = (int) (Amplitude / deltaP) * ( 4/M_PI * ( std::cos(t * 2 * M_PI / Periode) + std::cos(3*t * 2 * M_PI / Periode)/9 ) - M_PI/2 - P0 ) + offset;
-        int T = (int) dt;
-        int V = (int) (4 / (3*M_PI)) * 60000/(4*Resolution);
-        
 
+    PTV GetPTVsin2_33(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
+    {
+        int t, P, T, V;
+        double sysDiasFrac = 0.33;
+        t = (int) PointNumber * dt;
+        
+        if (t <= Periode * sysDiasFrac )
+        {
+            Periode *= 2.0;
+            Periode *= sysDiasFrac * 2.;
             
-        std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+            P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode ), 2.0) + offset;
+            T = (int) dt;
+            V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
+            std::cout << t << " a " << P << " " << V << " " << Periode << std::endl;
+            
+        }
+        
+        if (t > Periode * sysDiasFrac )
+        {
+            Periode *= 2.0;
+            t += Periode * (0.5 - sysDiasFrac);// * (1/2);
+            Periode *= (1 - sysDiasFrac) * 2.;
+            
+            P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode), 2.0) + offset;
+            T = (int) dt;
+            V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
+            std::cout << t << " b " << P << " " << V << " " << Periode << std::endl;
+            
+        }
+        
         return {P,T,V};
     }
-    
-    //Get IPMode PTV async |t|
-    PTV GetPTVasyncAbsT(double Amplitude,double PointNumber,double Periode, double async, double dt, double Resolution, const int& offset)
+
+    PTV GetPTVsin2_40(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
     {
-        int t = (int) PointNumber * dt;
-        int P = (int) - Amplitude * std::abs(t - 0.5*Periode) / (0.5*Periode) + Amplitude;
-        int T = (int) dt;
-        int V = (int) - Amplitude * std::abs(t - 0.5*Periode) / ((t - 0.5*Periode) * 0.5*Periode) * 60000/(4*Resolution);
+        int t, P, T, V;
+        double sysDiasFrac = 0.40;
+        t = (int) PointNumber * dt;
         
-        std::cout<<"  \t- [0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
+        if (t <= Periode * sysDiasFrac )
+        {
+            Periode *= 2.0;
+            Periode *= sysDiasFrac * 2.;
+            
+            P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode ), 2.0) + offset;
+            T = (int) dt;
+            V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
+            std::cout << t << " a " << P << " " << V << " " << Periode << std::endl;
+            
+        }
+        
+        if (t > Periode * sysDiasFrac )
+        {
+            Periode *= 2.0;
+            t += Periode * (0.5 - sysDiasFrac);// * (1/2);
+            Periode *= (1 - sysDiasFrac) * 2.;
+            
+            P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode), 2.0) + offset;
+            T = (int) dt;
+            V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
+            std::cout << t << " b " << P << " " << V << " " << Periode << std::endl;
+            
+        }
+        
+        return {P,T,V};
+    }
+
+    PTV GetPTVsin2_45(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
+    {
+        int t, P, T, V;
+        double sysDiasFrac = 0.45;
+        t = (int) PointNumber * dt;
+        
+        if (t <= Periode * sysDiasFrac )
+        {
+            Periode *= 2.0;
+            Periode *= sysDiasFrac * 2.;
+            
+            P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode ), 2.0) + offset;
+            T = (int) dt;
+            V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
+            std::cout << t << " a " << P << " " << V << " " << Periode << std::endl;
+            
+        }
+        
+        if (t > Periode * sysDiasFrac )
+        {
+            Periode *= 2.0;
+            t += Periode * (0.5 - sysDiasFrac);// * (1/2);
+            Periode *= (1 - sysDiasFrac) * 2.;
+            
+            P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode), 2.0) + offset;
+            T = (int) dt;
+            V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
+            std::cout << t << " b " << P << " " << V << " " << Periode << std::endl;
+            
+        }
+        
         return {P,T,V};
     }
 
