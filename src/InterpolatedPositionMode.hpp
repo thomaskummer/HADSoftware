@@ -101,6 +101,7 @@ protected:
                 m_ptvVec.push_back(ptv);
                 //std::cout << time << " - " << i << "-th point added " << std::endl;
                 time = i*dt;
+                m_time = time;
             }
             
             m_ptvVec[40].T = 0;
@@ -164,10 +165,30 @@ protected:
     //Get IPMode PTV sin(t)
     PTV GetPTVsin(double Amplitude,double PointNumber,double Periode, double dt, double Resolution, const int& offset)
     {
-        Amplitude *= 0.5;
-        int P = (int) -(Amplitude*sin(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))-Amplitude + offset;
-        int T = (int) dt;
-        int V = (int) -(Amplitude*2.0*M_PI/Periode*cos(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))*1000.0/(4.0*Resolution)*60.0;
+        int t, P, T, V;
+        
+        if (m_time < Periode / 3.)
+        {
+            Periode *= 2.0;
+            t = (int) PointNumber * dt;
+            P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / (Periode*(2.0/3.0)) ), 2.0) + offset;
+            T = (int) dt;
+            V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / (Periode*(2.0/3.0))) / (Periode*(2.0/3.0)) * 60000.0 / (4.0 * Resolution);
+            
+        }
+        else
+        {
+            Periode *= 2.0;
+            t = (int) PointNumber * dt;
+            P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / (Periode*(4.0/3.0)) ), 2.0) + offset;
+            T = (int) dt;
+            V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / (Periode*(4.0/3.0))) / (Periode*(4.0/3.0)) * 60000.0 / (4.0 * Resolution);
+        }
+        
+//        Amplitude *= 0.5;
+//        int P = (int) -(Amplitude*sin(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))-Amplitude + offset;
+//        int T = (int) dt;
+//        int V = (int) -(Amplitude*2.0*M_PI/Periode*cos(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))*1000.0/(4.0*Resolution)*60.0;
 
         //std::cout<<"  \t[0] PointNumber: " << PointNumber << "  \tT: " << T << "  \tP: " << P << "  \tV: " << V<< std::endl;
         return {P,T,V};
