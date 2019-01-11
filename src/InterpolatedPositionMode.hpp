@@ -167,24 +167,38 @@ protected:
     {
         int t, P, T, V;
         
-        if (m_time < Periode / 3.)
+//        std::cout << m_time << " " << Periode << std::endl;
+
+        t = (int) PointNumber * dt;
+        //std::cout << t << " " << Periode << std::endl;
+
+        if (t < Periode / 3.)
         {
             Periode *= 2.0;
-            t = (int) PointNumber * dt;
-            P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / (Periode*(2.0/3.0)) ), 2.0) + offset;
+            Periode *= (2.0/3.0);
+            P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode ), 2.0) + offset;
             T = (int) dt;
-            V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / (Periode*(2.0/3.0))) / (Periode*(2.0/3.0)) * 60000.0 / (4.0 * Resolution);
+            V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
+//            std::cout << "abc \n";
+        }
+        if (t > Periode / 3.)
+        {
+            Periode *= 2.0;
+
+            t += Periode/6.;
+            Periode *= (4.0/3.0);
+
             
-        }
-        else
-        {
-            Periode *= 2.0;
-            t = (int) PointNumber * dt;
-            P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / (Periode*(4.0/3.0)) ), 2.0) + offset;
+            P = (int) - Amplitude * std::pow(std::sin(2.0 * M_PI * t / Periode), 2.0) + offset;
             T = (int) dt;
-            V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / (Periode*(4.0/3.0))) / (Periode*(4.0/3.0)) * 60000.0 / (4.0 * Resolution);
+            V = (int) - 2.0 * M_PI * Amplitude * std::sin(4.0 * M_PI * t / Periode) / Periode * 60000.0 / (4.0 * Resolution);
+            //td::cout << (t + Periode/3.) / (Periode*(4.0/3.0)) << " " << std::sin(2.0 * M_PI * (t + Periode/3.) / (Periode*(4.0/3.0)) ) << std::endl;
+
         }
-        
+//        std::cout << "     " << t << " " << Periode/3. << std::endl;
+
+        //std::cout << t << " " << P << " " << V << std::endl;
+
 //        Amplitude *= 0.5;
 //        int P = (int) -(Amplitude*sin(PointNumber*dt*2.0*M_PI/Periode-M_PI/2.0))-Amplitude + offset;
 //        int T = (int) dt;
