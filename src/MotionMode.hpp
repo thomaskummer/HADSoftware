@@ -63,8 +63,7 @@ protected:
     Positions MainPositions={-500000, 500000, 0};
     std::map<std::string, double> m_args;
 
-    int m_time;
-
+    
     int PositionIs_Fct()
     {
         unsigned int PositionIsError;

@@ -41,7 +41,7 @@ import file
 '''this allows to configure the gui before opening
 activate import and mysetup to use this feature'''
 import setup
-mysetup=setup.setup()
+#mysetup=setup.setup()
 
 
 
@@ -252,19 +252,19 @@ class HeartbeatGui(tk.Frame):
             self.autoButton1.grid()
             self.autoButton2.grid()
             
-        self.tabButton1=tk.Radiobutton(self, text='Continuous', command=getContinuous, variable=self.modeVar, value=1, indicatoron=False, selectcolor=self.color, offrelief=tk.RAISED, bg='grey88', activebackground='grey88',highlightbackground=self.color)
-        self.tabButton4=tk.Radiobutton(self, text='PM', command=getPM, variable=self.modeVar, value=2, indicatoron=False, selectcolor=self.color, offrelief=tk.RAISED, bg='grey88', activebackground='grey88', highlightbackground=self.color)
-        self.tabButton3=tk.Radiobutton(self, text='IPM', command=getIPM, variable=self.modeVar, value=3, indicatoron=False, selectcolor=self.color, offrelief=tk.RAISED, bg='grey88', activebackground='grey88', highlightbackground=self.color)
-        self.tabButton2=tk.Radiobutton(self, text='Auto', command=getAuto, variable=self.modeVar, value=4, indicatoron=False, selectcolor=self.color, offrelief=tk.RAISED, bg='grey88', activebackground='grey88', highlightbackground=self.color)
+        self.tabButton1=tk.Radiobutton(self, text='Motion by touch', command=getContinuous, variable=self.modeVar, value=1, indicatoron=False, selectcolor=self.color, offrelief=tk.RAISED, bg='grey88', activebackground='grey88',highlightbackground=self.color)
+        self.tabButton4=tk.Radiobutton(self, text='Motion by distance', command=getPM, variable=self.modeVar, value=2, indicatoron=False, selectcolor=self.color, offrelief=tk.RAISED, bg='grey88', activebackground='grey88', highlightbackground=self.color)
+        self.tabButton3=tk.Radiobutton(self, text='Heart contraction', command=getIPM, variable=self.modeVar, value=3, indicatoron=False, selectcolor=self.color, offrelief=tk.RAISED, bg='grey88', activebackground='grey88', highlightbackground=self.color)
+        self.tabButton2=tk.Radiobutton(self, text='Motion to limit sensors', command=getAuto, variable=self.modeVar, value=4, indicatoron=False, selectcolor=self.color, offrelief=tk.RAISED, bg='grey88', activebackground='grey88', highlightbackground=self.color)
         
         self.tabButton1.grid(row=0, column=0, sticky=tk.N+tk.E+tk.S+tk.W)
-        self.tabButton2.grid(row=0, column=1, sticky=tk.N+tk.E+tk.S+tk.W)
-        self.tabButton3.grid(row=0, column=2, sticky=tk.N+tk.E+tk.S+tk.W)
-        self.tabButton4.grid(row=0, column=3, sticky=tk.N+tk.E+tk.S+tk.W)
+        self.tabButton2.grid(row=0, column=2, sticky=tk.N+tk.E+tk.S+tk.W)
+        self.tabButton3.grid(row=0, column=3, sticky=tk.N+tk.E+tk.S+tk.W)
+        self.tabButton4.grid(row=0, column=1, sticky=tk.N+tk.E+tk.S+tk.W)
         
     def topHeader(self):
         '''a general widget'''
-        self.topLabel=tk.Label(self,text='Define your configuration:', anchor=tk.W, bg=self.color)
+        self.topLabel=tk.Label(self,text='', anchor=tk.W, bg=self.color) # Define your configuration:
         self.topLabel.grid(row=1, column=0, sticky=tk.N+tk.E+tk.S+tk.W)
     
     def openSelect(self):
@@ -301,10 +301,10 @@ class HeartbeatGui(tk.Frame):
             if self.exeopenVar.get():
                 if self.startstopVar.get():
                     '''if the motor is already working, this stops the movement'''
-                    self.process.stdin.write('stop\n')
+                    self.process.stdin.write('Finish\n')
                     self.process.stdin.flush()
                     self.startstopVar.set(False)
-                    self.startButton.config(text='Start')
+                    self.startButton.config(text='Launch')
                 else:
                     '''if the motor is not working, sends a command according to the selected mode'''
                     if self.modeVar.get()==1:
@@ -340,13 +340,13 @@ class HeartbeatGui(tk.Frame):
     
     def continuousSelect(self):
         '''the buttons for speed and direction of continuous mode'''
-        self.continuousButton1=tk.Button(self, text='open', bg=self.color, activebackground=self.color)
+        self.continuousButton1=tk.Button(self, text='Open device', bg=self.color, activebackground=self.color)
         self.continuousButton1.grid(row=5, column=1, sticky=tk.N+tk.E+tk.S+tk.W)
-        self.continuousButton2=tk.Button(self, text='close', bg=self.color, activebackground=self.color)
+        self.continuousButton2=tk.Button(self, text='Close device', bg=self.color, activebackground=self.color)
         self.continuousButton2.grid(row=5, column=2, sticky=tk.N+tk.E+tk.S+tk.W)
-        self.continuousSpeedButton1=tk.Radiobutton(self, text='slow',variable=self.continuousSpeedVar, indicatoron=False, value=2, bg=self.color, activebackground=self.color, selectcolor='white')
+        self.continuousSpeedButton1=tk.Radiobutton(self, text='Slow',variable=self.continuousSpeedVar, indicatoron=False, value=2, bg=self.color, activebackground=self.color, selectcolor='white')
         self.continuousSpeedButton1.grid(row=3, column=1, sticky=tk.N+tk.E+tk.S+tk.W)
-        self.continuousSpeedButton2=tk.Radiobutton(self, text='fast',variable=self.continuousSpeedVar, indicatoron=False, value=4, bg=self.color,  activebackground=self.color, selectcolor='white')
+        self.continuousSpeedButton2=tk.Radiobutton(self, text='Fast',variable=self.continuousSpeedVar, indicatoron=False, value=4, bg=self.color,  activebackground=self.color, selectcolor='white')
         self.continuousSpeedButton2.grid(row=3, column=2, sticky=tk.N+tk.E+tk.S+tk.W)
         if self.modeVar.get()!=1:
             self.continuousButton1.grid_remove()
@@ -360,9 +360,9 @@ class HeartbeatGui(tk.Frame):
     
     def continuousHeader(self):
         '''the labels for continuous mode'''
-        self.continuousLabel1=tk.Label(self, text='Select the speed:', bg=self.color, activebackground=self.color)
+        self.continuousLabel1=tk.Label(self, text='Select velocity', bg=self.color, activebackground=self.color)
         self.continuousLabel1.grid(row=2, column=1, columnspan=2, sticky=tk.N+tk.E+tk.S+tk.W)
-        self.continuousLabel2=tk.Label(self, text='Press and hold to move:', bg=self.color, activebackground=self.color)
+        self.continuousLabel2=tk.Label(self, text='Touch to move', bg=self.color, activebackground=self.color)
         self.continuousLabel2.grid(row=4, column=1, columnspan=2, sticky=tk.N+tk.E+tk.S+tk.W)
         if self.modeVar.get()!=1:
             self.continuousLabel1.grid_remove()
@@ -377,17 +377,17 @@ class HeartbeatGui(tk.Frame):
     
     def pmHeader(self):
         '''the label for pm mode'''
-        self.pmLabel=tk.Label(self, text='Choose a distance to move [mm]:', bg=self.color)
+        self.pmLabel=tk.Label(self, text='Motion distance [mm]', bg=self.color)
         self.pmLabel.grid(row=2, column=1, columnspan=3, sticky=tk.N+tk.E+tk.S+tk.W)
         if self.modeVar.get()!=2:
             self.pmLabel.grid_remove()
     
     def ipmmodeSelect(self):
         '''the buttons for selection of the ipm function'''
-        self.ipmmodeButton1=tk.Radiobutton(self,text='25 %',variable=self.ipmmodeVar, value=0,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
-        self.ipmmodeButton2=tk.Radiobutton(self,text='33 %',variable=self.ipmmodeVar, value=1,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
+        self.ipmmodeButton1=tk.Radiobutton(self,text='20 %',variable=self.ipmmodeVar, value=0,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
+        self.ipmmodeButton2=tk.Radiobutton(self,text='30 %',variable=self.ipmmodeVar, value=1,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
         self.ipmmodeButton3=tk.Radiobutton(self,text='40 %',variable=self.ipmmodeVar, value=2,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
-        self.ipmmodeButton4=tk.Radiobutton(self,text='45 %',variable=self.ipmmodeVar, value=3,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
+        self.ipmmodeButton4=tk.Radiobutton(self,text='50 %',variable=self.ipmmodeVar, value=3,  command=None, indicatoron=False, bg=self.color, activebackground=self.color, selectcolor='white')
         self.ipmmodeButton1.grid(row=3, column=0, sticky=tk.N+tk.E+tk.S+tk.W)
         self.ipmmodeButton2.grid(row=4, column=0, sticky=tk.N+tk.E+tk.S+tk.W)
         self.ipmmodeButton3.grid(row=5, column=0, sticky=tk.N+tk.E+tk.S+tk.W)
@@ -400,7 +400,7 @@ class HeartbeatGui(tk.Frame):
         
     def ipmmodeHeader(self):
         '''the label of the ipm function'''
-        self.ipmmodeLabel=tk.Label(self,text='Choose mode:', bg=self.color)
+        self.ipmmodeLabel=tk.Label(self,text='Select systole/diastoly ratio', bg=self.color)
         self.ipmmodeLabel.grid(row=2, column=0, sticky=tk.N+tk.E+tk.S+tk.W)
         if self.modeVar.get()!=3:
             self.ipmmodeLabel.grid_remove()
@@ -414,7 +414,7 @@ class HeartbeatGui(tk.Frame):
         
     def hrHeader(self):
         '''the label of the ipm heart rate'''
-        self.hrLabel=tk.Label(self,text='Choose heart rate [bpm]:', bg=self.color)
+        self.hrLabel=tk.Label(self,text='Set heart rate [bpm]', bg=self.color)
         self.hrLabel.grid(row=2, column=1, columnspan=3, sticky=tk.N+tk.E+tk.S+tk.W)
         if self.modeVar.get()!=3:
             self.hrLabel.grid_remove()
@@ -428,15 +428,15 @@ class HeartbeatGui(tk.Frame):
         
     def ampHeader(self):
         '''the label of the ipm amplitude'''
-        self.ampLabel=tk.Label(self,text='Choose amplitude [mm]:', bg=self.color)
+        self.ampLabel=tk.Label(self,text='Set amplitude [mm]', bg=self.color)
         self.ampLabel.grid(row=5, column=1, columnspan=3, sticky=tk.N+tk.E+tk.S+tk.W)
         if self.modeVar.get()!=3:
             self.ampLabel.grid_remove()
         
     def autoSelect(self):
         '''the buttons for automatic mode'''
-        self.autoButton1=tk.Button(self, text='AutoOpen', command=self.autoOpen, bg=self.color, activebackground=self.color, highlightbackground=self.color)
-        self.autoButton2=tk.Button(self, text='AutoClose', command=self.autoClose, bg=self.color, activebackground=self.color, highlightbackground=self.color)
+        self.autoButton1=tk.Button(self, text='Open device completely', command=self.autoOpen, bg=self.color, activebackground=self.color, highlightbackground=self.color)
+        self.autoButton2=tk.Button(self, text='Close device completely', command=self.autoClose, bg=self.color, activebackground=self.color, highlightbackground=self.color)
         self.autoButton1.grid(row=3, column=1, sticky=tk.N+tk.E+tk.S+tk.W)
         self.autoButton2.grid(row=3, column=2, sticky=tk.N+tk.E+tk.S+tk.W)
         if self.modeVar.get()!=4:
@@ -445,7 +445,7 @@ class HeartbeatGui(tk.Frame):
 
     def autoHeader(self):
         '''the label for automatic mode'''
-        self.autoLabel=tk.Label(self, text='Press to automatically open or close:', bg=self.color)
+        self.autoLabel=tk.Label(self, text='Press to automatically move to limits', bg=self.color)
         self.autoLabel.grid(row=2, column=1, columnspan=2, sticky=tk.N+tk.E+tk.S+tk.W)
         if self.modeVar.get()!=4:
             self.autoLabel.grid_remove()
@@ -454,7 +454,7 @@ class HeartbeatGui(tk.Frame):
         '''the quit button'''
         def quitDialogue():
             '''creates a pop up window asking for confirmation'''
-            quitVar=messagebox.askokcancel("Confirm", "Do you really want to quit?")    
+            quitVar=messagebox.askokcancel("Confirm", "Are you sure to quit?")
             '''if closing is confirmed, terminates the HeartbeatController and the GUI'''
             if quitVar:
                 if self.exeopenVar.get():
