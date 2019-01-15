@@ -143,16 +143,16 @@ protected:
         switch (function)
         {
             case 0:
-                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.25,dt,Resolution, offset);
+                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.2,dt,Resolution, offset);
                 break;
             case 1:
-                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.33,dt,Resolution, offset);
+                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.3,dt,Resolution, offset);
                 break;
             case 2:
-                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.40,dt,Resolution, offset);
+                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.4,dt,Resolution, offset);
                 break;
             case 3:
-                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.45,dt,Resolution, offset);
+                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.5,dt,Resolution, offset);
                 break;
             default:
                 break;

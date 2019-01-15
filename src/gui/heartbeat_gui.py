@@ -133,7 +133,7 @@ class HeartbeatGui(tk.Frame):
                 
                 
             else:
-                messagebox.showinfo('Information', 'No need to worry, no exe is working')
+                messagebox.showinfo('Information', 'Heart beat controller is not running.')
         self.emergencyButton = tk.Button(self, text='Emergency Stop', command=emergencyStop, bg='red', activebackground='red', highlightbackground=self.color)
         self.emergencyButton.grid(row=4, column=4, rowspan=2, sticky=tk.N+tk.E+tk.S+tk.W)
     
