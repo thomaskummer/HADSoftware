@@ -234,12 +234,19 @@ public:
 //                    gtp.keepRunning() = false;
 //                }
                 
-                if ( sensorMin() || sensorMax() )
-                {
-                    std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " ]" << std::endl;
-                    unsigned int pErrorMoveToPos;
-                    
-                    char* pOperationMode;
+                
+                
+                // temp commit
+//                if ( sensorMin() || sensorMax() )
+//                {
+//                    std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " ]" << std::endl;
+//                    unsigned int pErrorMoveToPos;
+//
+//                    char* pOperationMode;
+                // tempcomit end
+                
+                
+                
 //                    bool om = VCS_GetOperationMode(keyHandle(), 1, pOperationMode, &pErrorMoveToPos);
 //
 //                    std::cout << *pOperationMode << std::endl;
