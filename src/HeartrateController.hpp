@@ -234,7 +234,7 @@ public:
 //                    gtp.keepRunning() = false;
 //                }
                 bool sens(false);
-                if (sens) // ( sensorMin() || sensorMax() )
+                if ( sensorMin() || sensorMax() )
                 {
                     std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " ]" << std::endl;
                     unsigned int pErrorMoveToPos;
