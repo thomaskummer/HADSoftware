@@ -13,6 +13,7 @@
 #include <fstream>
 #include <assert.h>
 #include <stdio.h>
+#include <time.h>
 #include <iomanip>
 #include <vector>
 
@@ -38,7 +39,7 @@ public:
         std::cout << "\n====================================================" << std::endl;
         std::cout << "Heartrate-controller for Maxon EPOS2 70/10" << std::endl;
         std::cout << "Institute of fluid dynamics - ETH Zurich" << std::endl;
-        std::cout << "Author: Thomas Kummer, Jan 2019" << std::endl;
+        std::cout << "Author: Thomas Kummer, March 2019" << std::endl;
         std::cout << "====================================================\n" << std::endl;
     }
     
@@ -113,9 +114,25 @@ public:
         int PositionIs;
         auto GetPositionIs = VCS_GetPositionIs(KeyHandle, 1, &PositionIs, &PositionIsError);
         // std::cout << GetPositionIs << " " << PositionIsError <<" Position: " << PositionIs << std::endl;
-        std::cout << "Motion completed - new coordinate is " << PositionIs << std::endl;
+        double length (95.0);
+        double x0 (20.0); // (27.0);
+        double xp = ( length + PositionIs / 1600. - x0) / length * 100.;
+        std::cout << "Current piston coordinate: "; // << PositionIs / 1600 << " mm, ";
+        std::cout << (100 + PositionIs / 1600 - x0) << " mm, ";
+        std::cout << std::setprecision(3) << xp << " %" << std::endl;
+
     }
     
+    void printCurrent()
+    {
+        unsigned int PositionIsError;
+        short int PositionIs;
+        auto GetPositionIs = VCS_GetCurrentIs(KeyHandle, 1, &PositionIs, &PositionIsError);
+        std::cout << "Electric current: " << PositionIs << " mA";
+        VCS_GetCurrentIsAveraged(KeyHandle, 1, &PositionIs, &PositionIsError);
+        std::cout << ", avg. current: " << PositionIs << " mA" << std::endl;
+    }
+
     void runConrollerFromCmdLine()
     {
         setup();
@@ -129,29 +146,121 @@ public:
         printPosition();
     }
     
+    template<class type>
+    void exportVector(const std::string& filename, const type& vec, const bool& append = true) const
+    {
+        system("mkdir -p EindhovenExperiments");
+        if ( !append ) std::ofstream file ("EindhovenExperiments/" + filename);
+        std::ofstream file ("EindhovenExperiments/" + filename, std::ofstream::out | std::ofstream::app);
+        
+        if (file.is_open())
+        {
+            file << std::setprecision(8) << std::setw(1) << std::scientific;
+            for ( auto i : vec )
+            {
+                file << i << " ";
+            }
+            file << "\n";
+            file.close();
+        }
+        else std::cout << "Unable to open file";
+    }
+    
+    std::string dateTimeFilename()
+    {
+        std::time_t rawtime;
+        struct tm * timeinfo;
+        char buffer [80];
+        time ( &rawtime );
+        
+        timeinfo = localtime ( &rawtime );
+        strftime (buffer,80,"Eindhoven_%F_%H-%M_Current.dat",timeinfo);
+        
+        std::cout << "buffer name: " << buffer << std::endl;
+        std::string filename = buffer;
+        
+        return filename;
+    }
+    
     void runControllerFromGUI()
     {
         setup();
+        printPosition();
+        printCurrent();
 
         GUIThreadParser gtp;
         std::thread gtpThread( &GUIThreadParser::readGUIActions , &gtp ); // std::thread gtpThread( (GUIThreadParser()) );
         
         sleep(1);
         
+//#include <iostream>
+//#include <ctime>
+//#include <ratio>
+//#include <chrono>
+        
+            using namespace std::chrono;
+            
+            steady_clock::time_point t1 = steady_clock::now();
+            
+            std::cout << "printing out 1000 stars...\n";
+            for (int i=0; i<1000; ++i) std::cout << "*";
+            std::cout << std::endl;
+            
+            steady_clock::time_point t2 = steady_clock::now();
+            duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+            
+            std::cout << "It took me " << time_span.count() << " seconds.";
+            std::cout << std::endl;
+        
+        
+        auto filename (dateTimeFilename());
+        unsigned int i(0);
+        double time(0.);
         while (gtp.waitingForInput())
         {
+            //printCurrent();
+            
+            unsigned int elCurrentError;
+            short int elCurrent;
+            short int avgElCurrent;
+            VCS_GetCurrentIs(KeyHandle, 1, &elCurrent, &elCurrentError);
+            VCS_GetCurrentIsAveraged(KeyHandle, 1, &avgElCurrent, &elCurrentError);
+
+            steady_clock::time_point t2 = steady_clock::now();
+            duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+            
+            std::vector<double> elCurrentVec;
+	    elCurrentVec.push_back(time+=time_span.count());
+	    elCurrentVec.push_back(elCurrent);
+	    elCurrentVec.push_back(avgElCurrent);
+            
+	    exportVector(filename, elCurrentVec, i++);
             
             if ( gtp.taskSubmitted() )
             {
                 gtp.taskReceived();
                 
-                // move
+                // movestop
                 if ( gtp.interface(0) )
                 {
                     setMotionMode("ProfileMode");
                     m_motionMode->setArguments(gtp.map());
                     activateMotionMode();
                     run();
+                    printPosition();
+                    printCurrent();
+                    gtp.interface(0) = 0;
+                }
+                
+                // move-to
+                if ( gtp.interface(14) )
+                {
+                    setMotionMode("ProfileMode");
+                    m_motionMode->setArguments(gtp.map());
+                    activateMotionMode();
+                    run();
+                    printPosition();
+                    printCurrent();
                     gtp.interface(0) = 0;
                 }
                 
@@ -162,111 +271,13 @@ public:
                     m_motionMode->setArguments(gtp.map());
                     activateMotionMode();
                     while (gtp.keepRunning()) run();
+                    printCurrent();
                     gtp.interface(2) = 0;
                 }
                 
                 // continuous-plus-push
                 if ( gtp.interface(8) )
-                {
-                    setMotionMode("ProfileVelocityMode");
-                    m_motionMode->setArguments(gtp.map());
-                    activateMotionMode();
-                    run();
-                    gtp.interface(8) = 0;
-                }
-                
-                // continuous-minus-push & home
-                if ( gtp.interface(12) )
-                {
-                    setMotionMode("ProfileVelocityMode");
-                    m_motionMode->setArguments(gtp.map());
-                    activateMotionMode();
-                    run();
-                    gtp.interface(12) = 0;
-                }
-                
-                // continuous-plus-release & continuous-minus-release
-                if ( gtp.interface(10) )
-                {
-                    unsigned int pErrorMoveToPos;
-                    bool halt = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
-                    gtp.interface(10) = 0;
-                }
-                    
-                // help
-                if ( gtp.interface(4) )
-                {
-                    printInteractiveHelp();
-                    gtp.interface(4) = 0;
-                }
-                
-                // reset
-                if ( gtp.interface(6) )
-                {
-                    reset();
-                    gtp.interface(6) = 0;
-                }
-
-            }
-            
-            if ( gtp.keepRunning() )
-            {
-//                if ( sensorMin() && gtp["-vs"] < 0 )
-//                {
-//                    std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " : " << gtp["-vs"] << " ]" << std::endl;
-//
-//                    unsigned int pErrorMoveToPos;
-//                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
-//
-//                    gtp["-vs"] = 0.;
-//                    gtp.keepRunning() = false;
-//                }
-//
-//
-//                if ( sensorMax() && gtp["-vs"] > 0 )
-//                {
-//                    std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " : " << gtp["-vs"] << " ]" << std::endl;
-//
-//                    unsigned int pErrorMoveToPos;
-//                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
-//
-//                    gtp["-vs"] = 0.;
-//                    gtp.keepRunning() = false;
-//                }
-                
-                if ( sensorMin() || sensorMax() )
-                {
-                    std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " ]" << std::endl;
-                    unsigned int pErrorMoveToPos;
-                    
-                    char* pOperationMode;
-//                    bool om = VCS_GetOperationMode(keyHandle(), 1, pOperationMode, &pErrorMoveToPos);
-//
-//                    std::cout << *pOperationMode << std::endl;
-                    
-//                    if ( *pOperationMode == '1' )
-//                    {
-//                        std::cout << "sensor state 1: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
-//
-//                        bool pmStop = VCS_HaltPositionMovement(keyHandle(), 1, &pErrorMoveToPos);
-//                    }
-//
-//                    if ( *pOperationMode == '3' )
-//                    {
-//                        std::cout << "sensor state 3: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
-//
-//                        bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
-//                        gtp["-vs"] = 0.;
-//                    }
-//
-//                    if ( *pOperationMode == '7' )
-//                    {
-//                        std::cout << "sensor state 7: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
-//
-//                        bool ipmStop = VCS_StopIpmTrajectory(keyHandle(), 1, &pErrorMoveToPos);
-//                    }
-                    
-                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+                {CS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
 ////                    bool pmStop = VCS_HaltPositionMovement(keyHandle(), 1, &pErrorMoveToPos);
 //
                     gtp["-vs"] = 0.;
@@ -353,6 +364,115 @@ protected:
     
     // Open device
     void open()
+                    setMotionMode("ProfileVelocityMode");
+                    m_motionMode->setArguments(gtp.map());
+                    activateMotionMode();
+                    run();
+                    gtp.interface(8) = 0;
+                }
+                
+                // continuous-minus-push & home
+                if ( gtp.interface(12) )
+                {
+                    setMotionMode("ProfileVelocityMode");
+                    m_motionMode->setArguments(gtp.map());
+                    activateMotionMode();
+                    run();
+                    gtp.interface(12) = 0;
+                }
+                
+                // continuous-plus-release & continuous-minus-release
+                if ( gtp.interface(10) )
+                {
+                    unsigned int pErrorMoveToPos;
+                    bool halt = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+                    gtp.interface(10) = 0;
+                }
+                
+//                // calibrate
+//                if ( gtp.interface(12) )
+//                {
+//                    setMotionMode("ProfileVelocityMode");
+//                    m_motionMode->setArguments(gtp.map());
+//                    activateMotionMode();
+//                    run();
+//                    gtp.interface(12) = 0;
+//                }
+                
+                // help
+                if ( gtp.interface(4) )
+                {
+                    printInteractiveHelp();
+                    gtp.interface(4) = 0;
+                }
+                
+                // reset
+                if ( gtp.interface(6) )
+                {
+                    reset();
+                    gtp.interface(6) = 0;
+                }
+
+            }
+            
+            if ( gtp.keepRunning() )
+            {
+//                if ( sensorMin() && gtp["-vs"] < 0 )
+//                {
+//                    std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " : " << gtp["-vs"] << " ]" << std::endl;
+//
+//                    unsigned int pErrorMoveToPos;
+//                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+//
+//                    gtp["-vs"] = 0.;
+//                    gtp.keepRunning() = false;
+//                }
+//
+//
+//                if ( sensorMax() && gtp["-vs"] > 0 )
+//                {
+//                    std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " : " << gtp["-vs"] << " ]" << std::endl;
+//
+//                    unsigned int pErrorMoveToPos;
+//                    bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+//
+//                    gtp["-vs"] = 0.;
+//                    gtp.keepRunning() = false;
+//                }
+                
+                if ( sensorMin() || sensorMax() )
+                {
+                    // std::cout << "sensor state: [ " << sensorMin() << " : " << sensorMax() << " ]" << std::endl;
+                    unsigned int pErrorMoveToPos;
+                    
+                    char* pOperationMode;
+//                    bool om = VCS_GetOperationMode(keyHandle(), 1, pOperationMode, &pErrorMoveToPos);
+//
+//                    std::cout << *pOperationMode << std::endl;
+                    
+//                    if ( *pOperationMode == '1' )
+//                    {
+//                        std::cout << "sensor state 1: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
+//
+//                        bool pmStop = VCS_HaltPositionMovement(keyHandle(), 1, &pErrorMoveToPos);
+//                    }
+//
+//                    if ( *pOperationMode == '3' )
+//                    {
+//                        std::cout << "sensor state 3: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
+//
+//                        bool vmStop = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+//                        gtp["-vs"] = 0.;
+//                    }
+//
+//                    if ( *pOperationMode == '7' )
+//                    {
+//                        std::cout << "sensor state 7: [ " << sensorOne() << " : " << sensorTwo() << " ]" << std::endl;
+//
+//                        bool ipmStop = VCS_StopIpmTrajectory(keyHandle(), 1, &pErrorMoveToPos);
+//                    }
+                    
+                    bool vmStop = V
     {
         unsigned int pErrorCodeOpen;
         
@@ -431,7 +551,7 @@ protected:
         //std::cout << state << " " << pErrorState << std::endl;
         
         std::cout << "EPOS2-Controller parameters set" << std::endl;
-        std::cout << "Current absolut position: " << PositionIs_Fct() << std::endl;
+        std::cout << "Absolut position: " << PositionIs_Fct() << std::endl;
 
     }
     

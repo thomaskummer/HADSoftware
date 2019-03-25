@@ -51,11 +51,22 @@ public:
             std::string task, value1, value2, value3, value4;
             iss >> task; // >> value1 >> value2 >> value3 >> value4;
 
-            if (!task.compare("move"))
+            if (!task.compare("move") || !task.compare("mv"))
             {
                 iss >> value1;
                 m_interface[0] = 1;
                 m_interface[1] = std::stoi(value1);
+                
+                m_tasks["-pd"] = std::stoi(value1);
+                m_keepRunning = true;
+                m_taskSubmitted = true;
+            }
+            
+            if (!task.compare("move-to") || !task.compare("mvto"))
+            {
+                iss >> value1;
+                m_interface[14] = 1;
+                m_interface[15] = std::stoi(value1);
                 
                 m_tasks["-pd"] = std::stoi(value1);
                 m_keepRunning = true;
