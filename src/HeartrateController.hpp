@@ -26,7 +26,7 @@
 #include "InterpolatedPositionMode.hpp"
 
 
-#define mm * -1600h
+#define mm * -1600
 
 
 namespace HeartrateControllerSpace {
