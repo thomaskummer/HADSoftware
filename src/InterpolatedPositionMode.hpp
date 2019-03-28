@@ -50,7 +50,7 @@ public:
 
         auto distance = readArgument("-ia", -20.0) mm;
         auto period = readArgument("-ip", 1000.0);
-        auto timestep = readArgument("-it", period/40.);
+        auto timestep = readArgument("-it", period/20.);
         auto runtime = readArgument("-irt", period);
         auto resolution = readArgument("-ir", 500);
         auto timeout = readArgument("-ito", (period > 2000 ? period - 1000 : period - 700));
