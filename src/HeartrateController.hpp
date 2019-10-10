@@ -149,16 +149,18 @@ public:
     template<class type>
     void exportVector(const std::string& filename, const type& vec, const bool& append = true) const
     {
-        system("mkdir -p EindhovenExperiments");
-        if ( !append ) std::ofstream file ("EindhovenExperiments/" + filename);
-        std::ofstream file ("EindhovenExperiments/" + filename, std::ofstream::out | std::ofstream::app);
+        system("mkdir -p Experiment_Results");
+        if ( !append ) std::ofstream file ("Experiment_Results/" + filename);
+        std::ofstream file ("Experiment_Results/" + filename, std::ofstream::out | std::ofstream::app);
 
         if (file.is_open())
         {
-            file << std::setprecision(8) << std::setw(1) << std::scientific;
+//            file << std::setprecision(8) << std::setw(1) << std::scientific;
+            int a(0);
             for ( auto i : vec )
             {
-                file << i << " ";
+                file << i << (a < 1 ? "," : "");
+                ++a;
             }
             file << "\n";
             file.close();
@@ -174,24 +176,30 @@ public:
         time ( &rawtime );
 
         timeinfo = localtime ( &rawtime );
-        strftime (buffer,80,"Eindhoven_%F_%H-%M_Current.dat",timeinfo);
+        strftime (buffer,80,"Results_%F_%H-%M.dat",timeinfo);
 
-        std::cout << "buffer name: " << buffer << std::endl;
+        std::cout << "buffer filename: " << buffer << std::endl;
         std::string filename = buffer;
 
         return filename;
     }
 
+    //    template<InputThread>
+    //    const std::string requestInputInThread(InputThread& it)
+    //    {
+    //        it.requestInput();
+    //    }
+    
     void runControllerFromGUI()
     {
         setup();
         printPosition();
         printCurrent();
 
-        GUIThreadParser gtp;
-        std::thread gtpThread( &GUIThreadParser::readGUIActions , &gtp ); // std::thread gtpThread( (GUIThreadParser()) );
-
-        sleep(1);
+//        GUIThreadParser gtp;
+//        std::thread gtpThread( &GUIThreadParser::readGUIActions , &gtp ); // std::thread gtpThread( (GUIThreadParser()) );
+//
+//        sleep(1);
 
 //#include <iostream>
 //#include <ctime>
@@ -216,6 +224,12 @@ public:
         auto filename (dateTimeFilename());
         unsigned int i(0);
         double time(0.);
+        
+        GUIThreadParser gtp;
+        std::thread gtpThread( &GUIThreadParser::readGUIActions , &gtp ); // std::thread gtpThread( (GUIThreadParser()) );
+
+        sleep(1);
+        
         while (gtp.waitingForInput())
         {
             //printCurrent();
@@ -232,7 +246,7 @@ public:
             std::vector<double> elCurrentVec;
 	    elCurrentVec.push_back(time+=time_span.count());
 	    elCurrentVec.push_back(elCurrent);
-	    elCurrentVec.push_back(avgElCurrent);
+//	    elCurrentVec.push_back(avgElCurrent);
 
 	    exportVector(filename, elCurrentVec, i++);
 
@@ -247,8 +261,8 @@ public:
                     m_motionMode->setArguments(gtp.map());
                     activateMotionMode();
                     run();
-                    printPosition();
-                    printCurrent();
+//                    printPosition();
+//                    printCurrent();
                     gtp.interface(0) = 0;
                 }
 
@@ -559,8 +573,8 @@ protected:
     {
         unsigned int pErrorCode;
         unsigned int pDeviceErrorCode;
-        unsigned char DeviceNbError=GetNbDeviceError();
-        for(unsigned int ErrorNumber=1; ErrorNumber<=DeviceNbError; ErrorNumber++)
+        unsigned char DeviceNbError = GetNbDeviceError();
+        for(unsigned int ErrorNumber = 1; ErrorNumber <= DeviceNbError; ErrorNumber++)
         {
             auto GetErrorCode=VCS_GetDeviceErrorCode(KeyHandle, 1, ErrorNumber, &pDeviceErrorCode, &pErrorCode);
             if(!GetErrorCode)
