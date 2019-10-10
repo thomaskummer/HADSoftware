@@ -37,6 +37,17 @@ public:
         std::cout << "gtp operator()" << std::endl;
         readGUIActions();
     }
+        
+    void requestInput()
+    {
+        std::cout << ">>> ";
+    }
+
+    void requestInput(std::string& line)
+    {
+        std::cout << ">>> ";
+        std::getline(std::cin, line);
+    }
     
     void readGUIActions()
     {
@@ -45,8 +56,7 @@ public:
 
         while (m_waitingForInput)
         {
-            std::cout << "\n>>> ";
-            std::getline(std::cin, line);
+            requestInput(line);
             std::istringstream iss(line);
             std::string task, value1, value2, value3, value4;
             iss >> task; // >> value1 >> value2 >> value3 >> value4;
@@ -88,6 +98,12 @@ public:
                 m_taskSubmitted = true;
             }
             
+            if (!task.compare("ipm-frequency"))
+            {
+                iss >> value1;
+                m_tasks["-if"] = (value1.empty() ? 1 : std::stoi(value1));
+            }
+
             if (!task.compare("cp") || !task.compare("cont-plus-push") || !task.compare("home-plus"))
             {
                 iss >> value1;
