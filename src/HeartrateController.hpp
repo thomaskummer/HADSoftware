@@ -39,7 +39,7 @@ public:
         std::cout << "\n====================================================" << std::endl;
         std::cout << "Heartrate-controller for Maxon EPOS2 70/10" << std::endl;
         std::cout << "Institute of fluid dynamics - ETH Zurich" << std::endl;
-        std::cout << "Author: Thomas Kummer, March 2019" << std::endl;
+        std::cout << "Author: Thomas Kummer, October 2019" << std::endl;
         std::cout << "====================================================\n" << std::endl;
     }
 
@@ -527,7 +527,7 @@ protected:
 
         // Set sensor parameter
         unsigned int pErrorSensorParam;
-        auto sensorParam = VCS_SetIncEncoderParameter(KeyHandle, 1, 50, 0, &pErrorSensorParam);
+        auto sensorParam = VCS_SetIncEncoderParameter(KeyHandle, 1, 500, 0, &pErrorSensorParam);
         //std::cout << sensorParam << " " << pErrorSensorParam << std::endl;
 
         // Set position regulator gain
