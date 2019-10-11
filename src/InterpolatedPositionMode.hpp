@@ -50,10 +50,10 @@ public:
 
         auto distance = readArgument("-ia", -20.0) mm;
         auto period = readArgument("-ip", 1000.0);
-        auto timestep = readArgument("-it", period/40.);
+        auto timestep = readArgument("-it", period/20.);
         auto runtime = readArgument("-irt", period);
         auto resolution = readArgument("-ir", 500);
-        auto timeout = readArgument("-ito", (period > 2000 ? period - 1000 : period - 700));
+        auto timeout = readArgument("-ito", period); //(period > 2000 ? period - 1000 : period - 700));
 
         runIPM(function, distance, period, async, timestep, runtime, resolution, timeout, offset);
     }
@@ -93,18 +93,22 @@ protected:
         int PointNbr=1;
         double time (0);
         
-        if (m_ptvVec.size() < 1)
-        {
-            for (unsigned int i(0); i <= runTime/dt; ++i)
+        unsigned int pErrorClearBuffer;
+        auto ClearIpmBuffer = VCS_ClearIpmBuffer(KeyHandle, 1, &pErrorClearBuffer);
+        
+        m_ptvVec.clear();
+//        if (m_ptvVec.size() < 1)
+//        {
+            for (unsigned int i(0); i <= 20; ++i)
             {
-                PTV ptv = motionTypeFunction(Amplitude,i,Periode, async,dt,Resolution, offset, function);
+                PTV ptv = motionTypeFunction(Amplitude, i, Periode, async, dt, Resolution, offset, function);
                 m_ptvVec.push_back(ptv);
                 //std::cout << time << " - " << i << "-th point added " << std::endl;
                 time = i*dt;
             }
             
-            m_ptvVec[40].T = 0;
-        }
+            m_ptvVec[20].T = 0;
+//        }
 
         bool addPvt;
         for (auto& ptv : m_ptvVec)
@@ -120,7 +124,7 @@ protected:
         unsigned int Timeout = timeout;
         unsigned int pErrorCode;
         //sleep(1.2);
-        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout+5000, &pErrorCode);
+        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, Timeout, &pErrorCode);
     }
     
     //Get buffer parameters for ipm
@@ -140,23 +144,25 @@ protected:
     PTV motionTypeFunction (double Amplitude,int i,double Periode, double async, double dt, double Resolution, const int& offset, const int function)
     {
         PTV ptv;
-        switch (function)
-        {
-            case 0:
-                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.2,dt,Resolution, offset);
-                break;
-            case 1:
-                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.3,dt,Resolution, offset);
-                break;
-            case 2:
-                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.4,dt,Resolution, offset);
-                break;
-            case 3:
-                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.5,dt,Resolution, offset);
-                break;
-            default:
-                break;
-        }
+        ptv = GetPTVsin2asymetric(Amplitude,i,Periode,async,dt,Resolution, offset);
+        
+//        switch (function)
+//        {
+//            case 0:
+//                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.2,dt,Resolution, offset);
+//                break;
+//            case 1:
+//                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.3,dt,Resolution, offset);
+//                break;
+//            case 2:
+//                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.4,dt,Resolution, offset);
+//                break;
+//            case 3:
+//                ptv = GetPTVsin2asymetric(Amplitude,i,Periode,0.5,dt,Resolution, offset);
+//                break;
+//            default:
+//                break;
+//        }
         //std::cout << ptv.P << " : " << ptv.V << " : " << ptv.T << std::endl;
         return ptv;
     }

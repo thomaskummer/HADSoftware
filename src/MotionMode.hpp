@@ -54,11 +54,11 @@ public:
 
     virtual void activateMode() = 0;
     
+
     virtual void run(const int& offset = 0) = 0;
     
-    
 protected:
-    
+
     void* KeyHandle;
     Positions MainPositions={-500000, 500000, 0};
     std::map<std::string, double> m_args;

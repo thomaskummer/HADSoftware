@@ -130,7 +130,7 @@ public:
         auto GetPositionIs = VCS_GetCurrentIs(KeyHandle, 1, &PositionIs, &PositionIsError);
         std::cout << "Electric current: " << PositionIs << " mA";
         VCS_GetCurrentIsAveraged(KeyHandle, 1, &PositionIs, &PositionIsError);
-        std::cout << ", avg. current: " << PositionIs << " mA" << std::endl;
+        std::cout << ", avg. el. current: " << PositionIs << " mA" << std::endl << ">>> ";
     }
 
     void runConrollerFromCmdLine()
@@ -149,7 +149,7 @@ public:
     template<class type>
     void exportVector(const std::string& filename, const type& vec, const bool& append = true) const
     {
-        system("mkdir -p Experiment_Results");
+        int resDirExp = system("mkdir -p Experiment_Results");
         if ( !append ) std::ofstream file ("Experiment_Results/" + filename);
         std::ofstream file ("Experiment_Results/" + filename, std::ofstream::out | std::ofstream::app);
 
@@ -243,12 +243,12 @@ public:
             steady_clock::time_point t2 = steady_clock::now();
             duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
 
-            std::vector<double> elCurrentVec;
-	    elCurrentVec.push_back(time+=time_span.count());
-	    elCurrentVec.push_back(elCurrent);
-//	    elCurrentVec.push_back(avgElCurrent);
-
-	    exportVector(filename, elCurrentVec, i++);
+//            std::vector<double> elCurrentVec;
+//            elCurrentVec.push_back(time+=time_span.count());
+//            elCurrentVec.push_back(elCurrent);
+//    	    //elCurrentVec.push_back(avgElCurrent);
+//
+//            exportVector(filename, elCurrentVec, i++);
 
             if ( gtp.taskSubmitted() )
             {
@@ -284,62 +284,78 @@ public:
                     setMotionMode("InterpolatedPositionMode");
                     m_motionMode->setArguments(gtp.map());
                     activateMotionMode();
-                    while (gtp.keepRunning()) run();
-                    printCurrent();
+                    
+                    const double periodDesired = gtp["-ip"];
+                    while (gtp.keepRunning())
+                    {
+                        steady_clock::time_point t1 = steady_clock::now();
+                        
+                        m_motionMode->setArguments(gtp.map());
+                        run();
+                        
+                        steady_clock::time_point t2 = steady_clock::now();
+                        duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+                        
+                        const double dt = 1000. * time_span.count();
+                        //std::cout << "It took " << dt << " ms - instead of " << gtp["-ip"] << std::endl;
+                        
+//                        gtp["-ip"] += 0.1 * ( periodDesired - dt );
+                    }
+                    //printCurrent();
                     gtp.interface(2) = 0;
                 }
 
                 // continuous-plus-push
                 if ( gtp.interface(8) )
                 {
-                  setMotionMode("ProfileVelocityMode");
-                  m_motionMode->setArguments(gtp.map());
-                  activateMotionMode();
-                  run();
-                  gtp.interface(8) = 0;
-              }
+                      setMotionMode("ProfileVelocityMode");
+                      m_motionMode->setArguments(gtp.map());
+                      activateMotionMode();
+                      run();
+                      gtp.interface(8) = 0;
+                }
 
-              // continuous-minus-push & home
-              if ( gtp.interface(12) )
-              {
-                  setMotionMode("ProfileVelocityMode");
-                  m_motionMode->setArguments(gtp.map());
-                  activateMotionMode();
-                  run();
-                  gtp.interface(12) = 0;
-              }
+                  // continuous-minus-push & home
+                if ( gtp.interface(12) )
+                {
+                      setMotionMode("ProfileVelocityMode");
+                      m_motionMode->setArguments(gtp.map());
+                      activateMotionMode();
+                      run();
+                      gtp.interface(12) = 0;
+                }
 
-              // continuous-plus-release & continuous-minus-release
-              if ( gtp.interface(10) )
-              {
-                  unsigned int pErrorMoveToPos;
-                  bool halt = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
-                  gtp.interface(10) = 0;
-              }
+                  // continuous-plus-release & continuous-minus-release
+                if ( gtp.interface(10) )
+                {
+                      unsigned int pErrorMoveToPos;
+                      bool halt = VCS_HaltVelocityMovement(keyHandle(), 1, &pErrorMoveToPos);
+                      gtp.interface(10) = 0;
+                }
 
-//                // calibrate
-//                if ( gtp.interface(12) )
-//                {
-//                    setMotionMode("ProfileVelocityMode");
-//                    m_motionMode->setArguments(gtp.map());
-//                    activateMotionMode();
-//                    run();
-//                    gtp.interface(12) = 0;
-//                }
+                //                // calibrate
+                //                if ( gtp.interface(12) )
+                //                {
+                //                    setMotionMode("ProfileVelocityMode");
+                //                    m_motionMode->setArguments(gtp.map());
+                //                    activateMotionMode();
+                //                    run();
+                //                    gtp.interface(12) = 0;
+                //                }
 
-              // help
-              if ( gtp.interface(4) )
-              {
-                  printInteractiveHelp();
-                  gtp.interface(4) = 0;
-              }
+                // help
+                if ( gtp.interface(4) )
+                {
+                      printInteractiveHelp();
+                      gtp.interface(4) = 0;
+                }
 
-              // reset
-              if ( gtp.interface(6) )
-              {
-                  reset();
-                  gtp.interface(6) = 0;
-              }
+                // reset
+                if ( gtp.interface(6) )
+                {
+                      reset();
+                      gtp.interface(6) = 0;
+                }
 
           }
 
