@@ -19,6 +19,7 @@ add_library(MaxonHeartrateController
     src/HeartrateController.hpp
     src/MotionMode.hpp
     src/ProfileMode.hpp
+    src/ProfilePositionMode.hpp
     src/InterpolatedPositionMode.hpp
 )
 

@@ -22,6 +22,7 @@
 #include "GUIThreadParser.hpp"
 #include "MotionMode.hpp"
 #include "ProfileMode.hpp"
+#include "ProfilePositionMode.hpp"
 #include "ProfileVelocityMode.hpp"
 #include "InterpolatedPositionMode.hpp"
 
@@ -196,29 +197,25 @@ public:
         printPosition();
         printCurrent();
 
-//        GUIThreadParser gtp;
-//        std::thread gtpThread( &GUIThreadParser::readGUIActions , &gtp ); // std::thread gtpThread( (GUIThreadParser()) );
-//
-//        sleep(1);
-
+        
 //#include <iostream>
 //#include <ctime>
 //#include <ratio>
 //#include <chrono>
 
-            using namespace std::chrono;
+        using namespace std::chrono;
 
-            steady_clock::time_point t1 = steady_clock::now();
+        steady_clock::time_point t1 = steady_clock::now();
 
-            //std::cout << "printing out 1000 stars...\n";
-            //for (int i=0; i<1000; ++i) std::cout << "*";
-            //std::cout << std::endl;
+        //std::cout << "printing out 1000 stars...\n";
+        //for (int i=0; i<1000; ++i) std::cout << "*";
+        //std::cout << std::endl;
 
-            steady_clock::time_point t2 = steady_clock::now();
-            duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+        steady_clock::time_point t2 = steady_clock::now();
+        duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
 
-            //std::cout << "It took me " << time_span.count() << " seconds.";
-            //std::cout << std::endl;
+        //std::cout << "It took me " << time_span.count() << " seconds.";
+        //std::cout << std::endl;
 
 
         auto filename (dateTimeFilename());
@@ -278,6 +275,20 @@ public:
                     gtp.interface(0) = 0;
                 }
 
+                // ppm
+                if ( gtp.interface(16) )
+                {
+                    setMotionMode("ProfilePositionMode");
+                    activateMotionMode();
+                    
+                    while (gtp.keepRunning())
+                    {
+                        m_motionMode->setArguments(gtp.map());
+                        run();
+                    }
+                    gtp.interface(16) = 0;
+                }
+                
                 // ipm
                 if ( gtp.interface(2) )
                 {
@@ -555,6 +566,8 @@ protected:
         auto sensorType = VCS_SetSensorType(KeyHandle, 1, 1, &pErrorSensorType);
         //std::cout << sensorType << " " << pErrorSensorType << std::endl;
 
+//        auto sensorHall = VCS_SetHallSensorParameter(KeyHandle, 1, 0, &pErrorSensorType);
+        
         // Set sensor parameter
         unsigned int pErrorSensorParam;
         auto sensorParam = VCS_SetIncEncoderParameter(KeyHandle, 1, 500, 0, &pErrorSensorParam);

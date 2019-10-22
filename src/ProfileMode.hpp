@@ -28,7 +28,7 @@ public:
     {
         unsigned int pErrorProfilePosMode;
         auto profilePosMode = VCS_ActivateProfilePositionMode(KeyHandle, 1, &pErrorProfilePosMode);
-        //std::cout << profilePosMode << " " << pErrorProfilePosMode << std::endl;
+        if (!profilePosMode) std::cout << profilePosMode << " " << pErrorProfilePosMode << std::endl;
         
         // Set sensor parameter
 //        InputFileParser inputFile("data");
@@ -71,7 +71,7 @@ protected:
         if (position >= MainPositions.Min && position <= MainPositions.Max)
         {
             MoveToPos = VCS_MoveToPosition(KeyHandle, 1, position, absoluteMovement, immediately, &pErrorMoveToPos);
-            std::cout <<"MoveToPos: "<< MoveToPos << " ErrorCode:  "  << pErrorMoveToPos << std::endl;
+            if (pErrorMoveToPos) std::cout <<"MoveToPos: "<< MoveToPos << " ErrorCode:  "  << pErrorMoveToPos << std::endl;
             Wait();
             //printPosition();
             return 1;

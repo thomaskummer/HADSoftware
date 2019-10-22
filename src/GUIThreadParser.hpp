@@ -83,6 +83,20 @@ public:
                 m_taskSubmitted = true;
             }
             
+            if (!task.compare("ppm") || !task.compare("position-profile-mode"))
+            {
+                iss >> value1; iss >> value2;
+        
+                m_interface[16] = 1;
+                m_interface[17] = (value1.empty() ? 10 : std::stoi(value1));
+                
+                m_tasks["-ppa"] = (value1.empty() ? 10 : std::stoi(value1));
+                m_tasks["-ppf"] = (value2.empty() ? 30 : std::stoi(value2));
+
+                m_keepRunning = true;
+                m_taskSubmitted = true;
+            }
+        
             if (!task.compare("ipm"))
             {
                 iss >> value1; iss >> value2; iss >> value3; iss >> value4;
@@ -92,7 +106,7 @@ public:
                 m_tasks["-ia"] = (value1.empty() ? -10 : std::stoi(value1));
                 m_tasks["-ip"] = (value2.empty() ? 60000. / 72. : 60000. / std::stod(value2));
                 m_tasks["-if"] = (value3.empty() ? 1 : std::stoi(value3));
-                m_tasks["-ias"] = (value4.empty() ? 0.3 : std::stod(value4));
+                m_tasks["-ias"] = (value4.empty() ? 0.35 : std::stod(value4));
 
                 m_keepRunning = true;
                 m_taskSubmitted = true;
@@ -101,7 +115,7 @@ public:
             if (!task.compare("cd"))
             {
                 iss >> value1; iss >> value2;
-                
+
                 if (value1 == "bpm") {
                     m_tasks["-ip"] = (value2.empty() ? 60000. / 72. : 60000. / std::stod(value2));
                 }
@@ -110,6 +124,12 @@ public:
                 }
                 else if (value1 == "syf" || value1 == "systolic-fraction") {
                     m_tasks["-ias"] = (value2.empty() ? 0.3 : std::stod(value2));
+                }
+                else if (value1 == "ppa" || value1 == "pp-a") {
+                    m_tasks["-ppa"] = (value2.empty() ? 10 : std::stoi(value2));
+                }
+                else if (value1 == "ppf" || value1 == "pp-f") {
+                    m_tasks["-ppf"] = (value2.empty() ? 60 : std::stoi(value2));
                 }
                 else std::cout << "Provide valid argument to cd" << std::endl;
             }

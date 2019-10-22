@@ -54,8 +54,8 @@ public:
 
     virtual void activateMode() = 0;
     
-
     virtual void run(const int& offset = 0) = 0;
+    
     
 protected:
 

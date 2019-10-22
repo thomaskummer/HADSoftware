@@ -12,9 +12,11 @@
 #include <iostream>
 #include <fstream>
 #include <assert.h>
+#include <time.h>
 
 
 namespace HeartrateControllerSpace {
+
 
 class InterpolatedPositionMode : public MotionMode {
 public:
@@ -45,17 +47,57 @@ public:
     //move cylinder backward. Move at least by 1000 at a time, works well (smaller steps won't be recognized)
     void run(const int& offset = 0)
     {
+        if (m_firstTimestep) {
+            m_frequency = std::vector<double> (2, 5000);
+            m_amplitude = 1.; //readArgument("-ia", -20.0);
+            m_sysFrac= readArgument("-ias", 0.3);
+            m_firstTimestep = false;
+        }
+        
         auto function = readArgument("-if", 1);
-        auto async = readArgument("-ias", 0.3);
+        auto async = readArgument("-ias", 0.35);
 
         auto distance = readArgument("-ia", -20.0) mm;
         auto period = readArgument("-ip", 1000.0);
-        auto timestep = readArgument("-it", period/20.);
-        auto runtime = readArgument("-irt", period);
-        auto resolution = readArgument("-ir", 500);
-        auto timeout = readArgument("-ito", period); //(period > 2000 ? period - 1000 : period - 700));
 
-        runIPM(function, distance, period, async, timestep, runtime, resolution, timeout, offset);
+        const double period_diff = period - m_frequency[0];
+        if ( period_diff > 0 )
+        {
+            m_frequency[0] += std::min(period_diff , 800.);
+        }
+        else
+        {
+            m_frequency[0] += std::max(period_diff , -800.);
+        }
+//        timeout = m_frequency[0] -700;
+        
+        auto timestep = readArgument("-it", m_frequency[0]/40.);
+        auto runtime = readArgument("-irt", m_frequency[0]);
+        auto resolution = readArgument("-ir", 480);
+        auto timeout = readArgument("-ito", m_frequency[0]); //(period > 2000 ? period - 1000 : period - 700));
+//        timeout -= 100.;
+        
+        using namespace std::chrono;
+        steady_clock::time_point t1 = steady_clock::now();
+
+        // Smooth out frequency
+//        for (int i(m_frequency.size() - 1); i >= 0; --i) m_frequency[i] = m_frequency[i-1];
+//        m_frequency[0] = period;
+//        double avg_frequency (0.);
+//        for (int i(0); i < m_frequency.size(); ++i) avg_frequency += m_frequency[i] / m_frequency.size();
+//        m_frequency[0] = avg_frequency;
+
+        
+        runIPM(function, distance, m_frequency[0], async, timestep, runtime, resolution, timeout, offset);
+        
+        steady_clock::time_point t2 = steady_clock::now();
+        duration<double> time_span = 1000. * duration_cast<duration<double>>(t2 - t1);
+        const double dt = time_span.count();
+        std::cout << "It took " << dt << " ms - instead of " << period << std::endl;
+        
+//        m_frequency[0] += 0.3 * (period - dt);
+//        gtp["-ip"] += 0.1 * ( periodDesired - dt );
+        
     }
     
     //Get status of interpolated position mode
@@ -85,6 +127,11 @@ protected:
     
     std::vector<PTV> m_ptvVec;
     
+    std::vector<double> m_frequency;
+    double m_amplitude;
+    double m_sysFrac;
+    bool m_firstTimestep = true;
+    
     //Interpolated position mode
     bool runIPM(int function, double Amplitude, double Periode, double async, double dt, double runTime, double Resolution, double& timeout, const int& offset = 0)
     {
@@ -99,7 +146,7 @@ protected:
         m_ptvVec.clear();
 //        if (m_ptvVec.size() < 1)
 //        {
-            for (unsigned int i(0); i <= 20; ++i)
+            for (unsigned int i(0); i <= 40; ++i)
             {
                 PTV ptv = motionTypeFunction(Amplitude, i, Periode, async, dt, Resolution, offset, function);
                 m_ptvVec.push_back(ptv);
@@ -107,7 +154,7 @@ protected:
                 time = i*dt;
             }
             
-            m_ptvVec[20].T = 0;
+            m_ptvVec[40].T = 0;
 //        }
 
         bool addPvt;
