@@ -50,13 +50,13 @@ public:
         unsigned int pErrorSetPosProfile1;
         auto posProfile1 = VCS_SetPositionProfile(KeyHandle, 1, 10000, m_acc_sys, m_acc_sys, &pErrorSetPosProfile1);
         
-        SetPosition_ProfileMode(distance);
+        SetPosition_ProfileMode(distance, frequency);
         // std::cout << "From " << PositionIs/(1600) << " to " << NewPosition/(1600) << " by " << -distance/(1600) << " mm" << std::endl;
         
         unsigned int pErrorSetPosProfile2;
         auto posProfile2 = VCS_SetPositionProfile(KeyHandle, 1, 2200, m_acc_dia, m_acc_dia, &pErrorSetPosProfile2);
         
-        SetPosition_ProfileMode(-distance);
+        SetPosition_ProfileMode(-distance, frequency);
         
     
         steady_clock::time_point t2 = steady_clock::now();
@@ -79,13 +79,23 @@ protected:
     int m_acc_dia;
     
     //move cylinder to x using ProfileMode (ActivateProfileMode must be called first)
-    void SetPosition_ProfileMode(int position, bool absoluteMovement = false, bool immediately = false)
+    void SetPosition_ProfileMode(int position, int frequency, bool absoluteMovement = false, bool immediately = false)
     {
         unsigned int pErrorMoveToPos;
 
         auto moveToPos = VCS_MoveToPosition(KeyHandle, 1, position, absoluteMovement, immediately, &pErrorMoveToPos);
         if (!moveToPos) std::cout <<"MoveToPos: "<< moveToPos << " ErrorCode:  "  << pErrorMoveToPos << std::endl;
-        Wait();
+        
+        
+        // Wait();
+        // unsigned int Timeout = 3000; //max waiting time in ms
+        unsigned int pErrorCode;
+        
+        const double timeout = 60000. / double(frequency);
+        
+        auto WaitForTarget= VCS_WaitForTargetReached(KeyHandle, 1, timeout, &pErrorCode);
+        if (!WaitForTarget)
+            std::cout << "Error in Wait Function! Error Code: " << pErrorCode << std::endl;
     }
     
 };
